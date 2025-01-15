@@ -9,13 +9,24 @@
         </div>
         <div class="nav">
             <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon" />
-            <UIcon name="humbleicons:user" class="userIcon" />
+            <UIcon name="humbleicons:user" class="userIcon" @click="showModal = true"/>
+            <Popup v-show="showModal" @close-modal="showModal = false" />
         </div>
     </header>
     </template>
+<script>
 
-<script setup>
-// Pas besoin de script ici si tu n'as pas de logique
+import Popup from './Popup.vue'
+
+export default {
+  components: { Popup },
+  data() {
+    return {
+      showModal: false,
+    }
+  },
+}
+
 </script>
 
 <style scoped>
