@@ -11,7 +11,4 @@ export default defineNuxtConfig({
     },
     display: 'swap', // Pour charger la police avant le contenu
   },
-  devtools: { enabled: true },
-  modules: ["@nuxt/ui"],
-  compatibilityDate: "2025-01-14"
 })
