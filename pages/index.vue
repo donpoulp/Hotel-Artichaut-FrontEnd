@@ -24,4 +24,6 @@ import Spa from "~/components/Spa.vue";
 </template>
 
 <style scoped>
+
+
 </style>
