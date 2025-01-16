@@ -4,9 +4,11 @@
             <UIcon name="flag:gb-4x3" class="langueIcon" />
             <p>English</p>
         </div>
+      <NuxtLink to="/">
         <div class="mainLogoContainer">
-            <img src="/public/Logo.png" alt="logo" class="logo">
+          <img src="/public/Logo.png" alt="logo" class="logo">
         </div>
+      </NuxtLink>
         <div class="nav">
             <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon" />
             <UIcon name="humbleicons:user" class="userIcon" @click="showModal = true"/>

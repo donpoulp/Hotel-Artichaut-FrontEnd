@@ -8,17 +8,13 @@ import Spa from "~/components/Spa.vue";
 
 <template>
     <Welcome/>
-
   <div class="flex flex-col bg-[#D8D27D] py-20 px-10">
-
     <Strongest/>
-
-    <div class="flex flex-row py-20 px-32">
+    <div class="flex flex-row py-20 justify-between px-60">
       <Hostel/>
       <Restaurant/>
       <Spa/>
     </div>
-
   </div>
 
 </template>
