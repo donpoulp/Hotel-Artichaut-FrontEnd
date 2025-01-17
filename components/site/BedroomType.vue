@@ -27,18 +27,18 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
             <div class="bedroomTypeCart">
                 <div class="bedroomTypeImg">
                   <div>
-                    <img class="bedroomTypeImg1" src="/public/image%2026.png">
+                    <img class="bedroomTypeImg1" src="/image%2026.png">
                     <div class="whiteline1"></div>
-                    <img class="bedroomTypeImg2" src="/public/image%2025.png">
+                    <img class="bedroomTypeImg2" src="/image%2025.png">
                   </div>
                   <div class="whiteline2"></div>
                   <div>
-                    <img class="bedroomTypeImg3" src="/public/image%2024.png">
+                    <img class="bedroomTypeImg3" src="/image%2024.png">
                   </div>
                 </div>
               <div class="bedroomTypeContent">
                 <div class="textBedroomType">{{ bedroomType.description }}</div>
-                <Button class="Button" title="Reserver" route='bedroomType-id' :route_params="{ id: bedroomType.id }" width="250px" height="80px" fontSize="35px"/>
+                <Button class="Button" title="Reserver" route='site-bedroomType-id' :route_params="{ id: bedroomType.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>
           </Slide>

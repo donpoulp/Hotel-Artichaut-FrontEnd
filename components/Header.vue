@@ -4,9 +4,9 @@
             <UIcon name="flag:gb-4x3" class="langueIcon" />
             <p>English</p>
         </div>
-      <NuxtLink to="/">
+      <NuxtLink to="/site">
         <div class="mainLogoContainer">
-          <img src="/public/Logo.png" alt="logo" class="logo">
+          <img src="/Logo.png" alt="logo" class="logo">
         </div>
       </NuxtLink>
         <div class="nav">
@@ -18,7 +18,7 @@
     </template>
 <script>
 
-import Popup from './Popup.vue'
+import Popup from './site/Popup.vue'
 
 export default {
   components: { Popup },

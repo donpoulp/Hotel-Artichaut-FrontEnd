@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import Welcome from "~/components/Welcome.vue";
-import Strongest from "~/components/Strongest.vue";
-import Restaurant from "~/components/Restaurant.vue";
-import Hostel from "~/components/Hostel.vue";
-import Spa from "~/components/Spa.vue";
+import Welcome from "~/components/site/Welcome.vue";
+import Strongest from "~/components/site/Strongest.vue";
+import Restaurant from "~/components/site/Restaurant.vue";
+import Hostel from "~/components/site/Hostel.vue";
+import Spa from "~/components/site/Spa.vue";
+import BedroomType from "~/components/site/BedroomType.vue";
 </script>
 
 <template>
@@ -18,6 +19,7 @@ import Spa from "~/components/Spa.vue";
   </div>
 
   <BedroomType></BedroomType>
+
 </template>
 
 <style scoped>
