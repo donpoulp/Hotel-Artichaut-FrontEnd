@@ -1,25 +1,50 @@
 <template>
     <div class="modal-overlay" @click="$emit('close-modal')">
         <div class="modal" @click.stop="">
+            <template v-if="!showModalSignUp">
+                <UIcon 
+                    name="material-symbols:cancel-outline" 
+                    class="closeIcon" 
+                    @click="$emit('close-modal')"
+                />
+                
+                <form>
+                    <div class="inputs">
+                        <p>Sign In</p>
+                        <input type="text" placeholder="Identifier">
+                        <input type="password" placeholder="Password">
+                    </div>
+                    <div class="buttons">
+                        <button type="submit">Sign In</button>
+                        <p @click="openSignUp">Sign Up</p>
+                    </div>
+                </form>
+            </template>
             
-                <UIcon name="material-symbols:cancel-outline" class="closeIcon" @click="$emit('close-modal')"/>
-            
-            <form>
-                <div class="inputs">
-                    <p>Sign In</p>
-                    <input type="text" placeholder="Identifier">
-                    <input type="password" placeholder="Password">
-                </div>
-                <div class="buttons">
-                    <button>Sign In</button>
-                    <button>Sign Up</button>
-                </div>
-            </form>
+            <template v-else>
+                <Signup @close-modal-signup="showModalSignUp = false" />
+            </template>
         </div>
     </div>
 </template>
 
 <script>
+import Signup from './Signup.vue'
+
+export default {
+  components: { Signup },
+  data() {
+    return {
+      showModal: false,
+      showModalSignUp: false,
+    }
+  },
+  methods: {
+    openSignUp() {
+      this.showModalSignUp = true;
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -40,6 +65,7 @@
     position: relative;
     left:20px;
     top:10px;
+    cursor: pointer;
 }
 
 .modal {
@@ -81,7 +107,7 @@ font-size: 26px;
     height: 200PX;
 }
 
-.buttons button {
+.buttons button, .buttons p {
     font-family: Noto Serif;
     font-size: 22px;
     width: 195px;
@@ -91,6 +117,10 @@ font-size: 26px;
     margin-right: 30px;
     color: #D8D27D;
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 ::placeholder {

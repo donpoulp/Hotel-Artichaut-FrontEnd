@@ -18,6 +18,7 @@
 
 import Popup from './Popup.vue'
 
+
 export default {
   components: { Popup },
   data() {
@@ -68,4 +69,13 @@ header {
     width: 80px;
     height: 100px;
 }
+
+.userIcon {
+    cursor: pointer;
+}
+
+.cartIcon {
+    cursor: pointer;
+}
+
 </style>
