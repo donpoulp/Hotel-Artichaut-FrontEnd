@@ -2,7 +2,20 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', 'vue3-carousel-nuxt'],
+
+  runtimeConfig: {
+    // Public keys that are exposed to the client
+    public: {
+      apiBaseUrl: process.env.API_URL,
+    }
+  },
+
+  modules: ['@nuxt/ui', 'vue3-carousel-nuxt', "@pinia/nuxt"],
+
+  colorMode: {
+    preference: 'light'
+  },
+
   googleFonts: {
     families: {
       'Luxurious+Script': true,
