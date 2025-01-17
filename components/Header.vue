@@ -70,4 +70,20 @@ header {
     width: 80px;
     height: 100px;
 }
+
+.cartCount{
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  color: #F0F0E8;
+  font-size: 20px;
+  background-color: #072527;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  z-index: 9999;
+  margin-top: 3.7%;
+  margin-right: 8%;
+}
 </style>

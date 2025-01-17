@@ -17,6 +17,7 @@ import Spa from "~/components/Spa.vue";
     </div>
   </div>
 
+  <BedroomType></BedroomType>
 </template>
 
 <style scoped>

@@ -43,7 +43,7 @@
 
 .footer p, ul, li {
     font-family: Noto Serif;
-    font-variation-settings: 'wght' 300;
+    font-weight: 300;
     font-size: 22px;
 }
 
@@ -72,8 +72,8 @@
 }
 
 ul {
-  text-align: center;
-  margin: 0 auto;
+  text-align: center; /* Centre le contenu horizontalement */
+  margin: 0 auto; /* Centre l'élément si nécessaire */
 }
 
 
