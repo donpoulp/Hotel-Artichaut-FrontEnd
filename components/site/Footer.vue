@@ -22,7 +22,7 @@
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
         </div>
         <div>
-            <img src="/public/maps.png" alt="maps">
+            <img src="/maps.png" alt="maps">
         </div>
 
     </div>

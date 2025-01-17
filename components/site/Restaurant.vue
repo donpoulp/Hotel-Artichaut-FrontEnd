@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <NuxtLink to="/RestaurantDescription">
+  <NuxtLink to="/site/RestaurantDescription">
     <div class="flex justify-center items-end h-full "
                 style="background-image: url(/img/restaurant.png); background-repeat: no-repeat; background-size: cover; height: 637px; width: 392px">
       <div class="p-4 w-full bg-black bg-opacity-50">

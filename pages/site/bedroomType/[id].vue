@@ -14,7 +14,7 @@ const { status, data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedro
   <section class="RoomPageSection">
     <div class="RoomPageTop">
       <div>
-        <img class="RoomPageImg" src="/public/image%2020.png">
+        <img class="RoomPageImg" src="/image%2020.png">
       </div>
       <div class="RoomPageContent">
         <h3>{{ bedroomsType[0].name }}</h3>
@@ -37,7 +37,7 @@ const { status, data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedro
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
         <Slide v-for="bedroom in bedroomsType" :key="bedroom">
-          <img class="bedroomTypeImg1" src="/public/image%2026.png">
+          <img class="bedroomTypeImg1" src="/image%2026.png">
         </Slide>
         <template #addons class="addonsCarrousel">
           <Navigation />
