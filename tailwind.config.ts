@@ -11,6 +11,7 @@ export default <Partial<Config>>{
             fontFamily: {
                 'luxurious': ['Luxurious Script', 'cursive'],
                 'noto': ['Noto Serif', 'serif'],
+                'antic': ['Antic Didone', 'serif'],
             },
             fontWeight: {
                 light: '100',
