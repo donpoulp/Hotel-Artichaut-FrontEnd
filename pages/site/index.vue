@@ -5,6 +5,7 @@ import Restaurant from "~/components/site/Restaurant.vue";
 import Hostel from "~/components/site/Hostel.vue";
 import Spa from "~/components/site/Spa.vue";
 import BedroomType from "~/components/site/BedroomType.vue";
+import News from "~/components/site/News.vue";
 </script>
 
 <template>
@@ -17,8 +18,11 @@ import BedroomType from "~/components/site/BedroomType.vue";
       <Spa/>
     </div>
   </div>
-
+  
   <BedroomType></BedroomType>
+
+  <News></News>
+  
 </template>
 
 <style scoped>
