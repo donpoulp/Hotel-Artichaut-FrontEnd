@@ -19,6 +19,7 @@ import BedroomType from "~/components/site/BedroomType.vue";
   </div>
 
   <BedroomType></BedroomType>
+
 </template>
 
 <style scoped>

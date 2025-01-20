@@ -4,7 +4,7 @@
             <UIcon name="flag:gb-4x3" class="langueIcon" />
             <p>English</p>
         </div>
-      <NuxtLink to="/public">
+      <NuxtLink to="/site">
         <div class="mainLogoContainer">
             <img src="/public/Logo.png" alt="logo" class="logo">
         </div>
