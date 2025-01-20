@@ -16,12 +16,12 @@ export default defineNuxtConfig({
     preference: 'light'
   },
 
-  googleFonts: {
-    families: {
-      'Luxurious+Script': true,
-      'Noto+Serif': { wght: [300, 400, 700], }, // Ajoute Noto Serif avec deux variantes (normal et bold)
-      'Antic+Didone': true,
-    },
-    display: 'swap', // Pour charger la police avant le contenu
-  },
+  // googleFonts: {
+  //   families: {
+  //     'Luxurious+Script': true,
+  //     'Noto+Serif': { wght: [300, 400, 700], }, // Ajoute Noto Serif avec deux variantes (normal et bold)
+  //     'Antic+Didone': true,
+  //   },
+  //   display: 'swap', // Pour charger la police avant le contenu
+  // },
 })
