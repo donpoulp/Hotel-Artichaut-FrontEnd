@@ -1,4 +1,4 @@
-import {useHeroStore} from "~/stores/hero.js";
+import {useHeroStore} from "~/store/hero.js";
 import {defineNuxtPlugin} from "#app";
 import {useStrongestStore} from "~/store/strongest.js";
 

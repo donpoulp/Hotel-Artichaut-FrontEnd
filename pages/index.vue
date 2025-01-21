@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import Welcome from "~/components/Welcome.vue";
-import Strongest from "~/components/Strongest.vue";
+import Welcome from "~/components/site/Welcome.vue";
+import Strongest from "~/components/site/Strongest.vue";
 import Restaurant from "~/components/Restaurant.vue";
 import Hostel from "~/components/Hostel.vue";
-import Spa from "~/components/Spa.vue";
+import Spa from "~/components/site/Spa.vue";
 </script>
 
 <template>

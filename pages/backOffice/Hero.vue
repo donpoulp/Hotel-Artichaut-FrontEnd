@@ -2,6 +2,7 @@
 import { z } from 'zod'
 import { reactive } from 'vue'
 import Welcome from "~/components/site/Welcome.vue";
+import {useHeroStore} from "~/store/hero.js";
 
 definePageMeta({
 layout: 'back-office',
