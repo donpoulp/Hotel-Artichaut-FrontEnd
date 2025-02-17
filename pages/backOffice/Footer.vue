@@ -1,37 +1,43 @@
 <script setup>
 import { z } from 'zod'
 import { reactive } from 'vue'
+import {useFooterStore} from "~/store/footer.js";
+import Footer from "~/components/site/Footer.vue";
 import Welcome from "~/components/site/Welcome.vue";
-import {useHeroStore} from "~/store/hero.js";
 
 definePageMeta({
-layout: 'back-office',
+  layout: 'back-office',
 })
 
-const heroStore = useHeroStore();
+const footerStore = useFooterStore();
 
 const schema = z.object({
   title: z.string(),
-  description: z.string(),
-  picture: z.string(),
+  text: z.string(),
+  titleReseau: z.string(),
+  iconReseau: z.string(),
+  linkReseau: z.string(),
 })
 
 const state = reactive({
   title: undefined,
-  description: undefined,
-  picture: undefined,
+  text: undefined,
+  titleReseau: undefined,
+  iconReseau: undefined,
+  linkReseau: undefined,
 })
 
 async function onSubmit(event) {
-  await heroStore.updateHeroData( {
-        title: state.title,
-        description: state.description,
-        picture: state.picture,
+  await footerStore.updateFooterData({
+    title: state.title,
+    text: state.text,
+    titleReseau: state.titleReseau,
+    iconReseau: state.iconReseau,
+    linkReseau: state.linkReseau,
   });
-  console.log(event.data)
+  // console.log(event.data)
 }
 </script>
-
 
 <template>
   <div class="bg-white">
@@ -39,7 +45,7 @@ async function onSubmit(event) {
     <div class="flex flex-col px-20 pt-10">
       <h1 class="text-black text-3xl font-noto">Preview</h1>
       <div class="py-2">
-        <Welcome :title="heroStore.data[0].title" :description="heroStore.data[0].description" :picture="heroStore.data[0].picture" />
+        <Footer :title="footerStore.data[0].title" :text="footerStore.data[0].text" :titleReseau="footerStore.data[0].titleReseau" :iconReseau="footerStore.data[0].iconReseau" :linkReseau="footerStore.data[0].linkReseau" />
         style="height: 588px; width: 1039px;"
       </div>
     </div>
@@ -47,7 +53,7 @@ async function onSubmit(event) {
     <div class="text-black pb-20 pt-10">
       <h2 class="text-2xl font-noto px-20 text-black">Modify</h2>
 
-      {{heroStore.data[0]}}
+      {{footerStore.data[0]}}
 
       <UForm :schema="schema" :state="state" class="space-y-4 text-black px-20" @submit.prevent="onSubmit">
 
@@ -57,14 +63,22 @@ async function onSubmit(event) {
             <UInput v-model="state.title" class="custom-input"/>
           </UFormGroup>
 
-          <UFormGroup label="Picture" class="custom-label">
-            <UInput v-model="state.picture" class="custom-input"/>
+          <UFormGroup label="Text" class="custom-label">
+            <UInput v-model="state.text" class="custom-input"/>
           </UFormGroup>
 
         </div>
 
-        <UFormGroup label="Content">
-          <UInput v-model="state.description" class="custom-input"/>
+        <UFormGroup label="Social Title">
+          <UInput v-model="state.titleReseau" class="custom-input"/>
+        </UFormGroup>
+
+        <UFormGroup label="Social Icon">
+          <UInput v-model="state.iconReseau" class="custom-input"/>
+        </UFormGroup>
+
+        <UFormGroup label="Social Link">
+          <UInput v-model="state.linkReseau" class="custom-input"/>
         </UFormGroup>
 
         <UButton type="submit">

@@ -3,11 +3,11 @@ import {useHeroStore} from "~/store/hero";
 
 const heroStore = useHeroStore();
 
-const props = defineProps({
-  title: String,
-  description: String,
-  picture: String,
-})
+// const props = defineProps({
+//   title: String,
+//   description: String,
+//   picture: String,
+// })
 
 </script>
 

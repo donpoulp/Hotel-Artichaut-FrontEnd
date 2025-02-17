@@ -14,7 +14,7 @@ const items = [
 
   }], [{
     label: 'Footer',
-
+    to : '/backOffice/Footer',
   }]
 ]
 </script>

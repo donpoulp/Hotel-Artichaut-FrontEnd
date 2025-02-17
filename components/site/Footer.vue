@@ -1,7 +1,14 @@
+<script setup lang="ts">
+import {useFooterStore} from "~/store/footer";
+
+const footerStore = useFooterStore();
+
+</script>
+
 <template>
     <div class="footer">
         <div class="sectionSocialMedia">
-            <p>Hôtel Artichaut</p>
+            <p>{{ footerStore.data[0].title }}</p>
             <div class="socialMedia">
                 <UIcon name="ic:baseline-facebook" class="socialMediaIcon" />
                 <UIcon name="ri:instagram-fill" class="socialMediaIcon" />
@@ -19,7 +26,7 @@
             <p>© 2025 Hôtel Artichaut</p>
         </div>
         <div class="sectionLorem">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+            <p>{{ footerStore.data[0].text }}</p>
         </div>
         <div>
             <img src="/maps.png" alt="maps">
@@ -27,9 +34,6 @@
 
     </div>
 </template>
-
-
-
 
 
 <style scoped>
