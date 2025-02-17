@@ -7,7 +7,7 @@ const carouselConfig = {
   wrapAround: true
 }
 
-const { status, data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
+const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 </script>
 
 <template>
@@ -16,7 +16,7 @@ const { status, data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedro
       <div>
         <img class="RoomPageImg" src="/image%2020.png">
       </div>
-      <div class="RoomPageContent">
+      <div class="RoomPageContent text-black">
         <h3>{{ bedroomsType[0].name }}</h3>
         <p>{{ bedroomsType[0].description }}</p>
       </div>

@@ -1,18 +1,18 @@
 import {defineStore} from 'pinia'
 import {useApiFetch} from "~/composables/useApiFetch.ts";
 
-export const useStrongestStore = defineStore('strongest', {
+export const useHeroStore = defineStore('cms', {
     state: () => {
         return {
             data: {}
         }
     },
     actions: {
-        async loadStrongestData(){
-            this.data = (await useApiFetch(`/strongest/1`)).data.value
+        async loadHeroData(){
+            this.data = (await useApiFetch(`/hero/1`)).data.value
         },
-        async updateStrongestData(newData){
-            await useApiFetch(`/strongest/d640d4d4-73a2-457c-8c7f-c8135e7f13a9`, {
+        async updateHeroData(newData){
+            await useApiFetch(`/hero/1`, {
                 method: 'PUT',
                 body: JSON.stringify(newData)
             });
