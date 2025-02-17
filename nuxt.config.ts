@@ -7,19 +7,37 @@ export default defineNuxtConfig({
   googleFonts: {
     families: {
       'Luxurious+Script': true,
-      'Noto+Serif': { wght: [300, 400, 700], }, // Ajoute Noto Serif avec deux variantes (normal et bold)
+      'Noto+Serif': { wght: [300, 400, 700] },
       'Antic+Didone': true,
     },
-    display: 'swap', // Pour charger la police avant le contenu
+    display: 'swap'
+  },
+
+  hooks: {
+    'pages:extend'(pages) {
+      const indexRouteIndex = pages.findIndex(page => page.path === '/');
+      if (indexRouteIndex !== -1) {
+        pages.splice(indexRouteIndex, 1);
+      }
+      pages.push({
+        name: 'index',
+        path: '/',
+        file: '~/pages/site/index.vue'
+      });
+    }
+  },
 
   runtimeConfig: {
-    // Public keys that are exposed to the client
     public: {
       apiBaseUrl: process.env.API_URL,
     }
   },
 
+  // Configuration du mode couleur
   colorMode: {
-    preference: 'light'
+    preference: 'light',
+    fallback: 'light',
+    classSuffix: '', // Important pour @nuxt/ui
+    forcedLight: true // Force le mode clair
   },
-}})
+})
