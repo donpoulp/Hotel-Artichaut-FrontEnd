@@ -44,7 +44,6 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
           </Slide>
           <template #addons class="addonsCarrousel">
             <Navigation />
-            <Pagination />
           </template>
         </Carousel>
       </div>
