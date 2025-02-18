@@ -33,11 +33,13 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
 
     <div class="left-side-bar-line"></div>
 
-    <div class="left-side-bar-dashboard">
-      <div v-if="$route.path == '/backOffice/reservation'" class="selected-left-side-bar"></div>
-      <UIcon name="i-ph:book-bold" class="dashboard-icon"></UIcon>
-      <h5>Reservation</h5>
-    </div>
+    <NuxtLink to="/backOffice/Reservation">
+      <div class="left-side-bar-dashboard">
+        <div v-if="$route.path == '/backOffice/Reservation'" class="selected-left-side-bar"></div>
+        <UIcon name="i-ph:book-bold" class="dashboard-icon"></UIcon>
+        <h5>Reservation</h5>
+      </div>
+    </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 

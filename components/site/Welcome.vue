@@ -13,8 +13,9 @@ const heroStore = useHeroStore();
 
 <template>
 
-  <div class="flex flex-col items-center justify-center h-screen bg-center font-noto relative">
-<!--       style="background-image: url({{picture}}); background-repeat: no-repeat; background-size: cover">-->
+<!-- remplacer par image bdd-->
+  <div class="flex flex-col items-center justify-center h-screen bg-center font-noto relative"
+       style="background-image: url(/img/welcome.png); background-repeat: no-repeat; background-size: cover">
 
     <div class="bg-black bg-opacity-50 h h-screen flex items-center">
       <div class="flex flex-col space-y-10">
