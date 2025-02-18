@@ -1,42 +1,44 @@
 <script setup lang="ts">
+import {useStrongestStore} from "~/store/strongest";
+import {useStrongestSectionStore} from "~/store/strongest-section";
 
+const strongestStore = useStrongestStore();
+const strongestSectionStore = useStrongestSectionStore();
 </script>
 
 
 <template>
-  <UContainer class="text-center bg-white opacity-50">
-<!--  <div class="flex flex-row text-center space-x-10 bg-white opacity-50 text-black">-->
-    <div class="flex flex-row space-x-4 text-black font-antic px-5">
-      <div class="flex flex-col items-center py-4">
-        <UIcon name="i-ph:bowl-food-thin" class="h-20 w-20" />
-        <p>
-          Duis pellentesque ante et tellus ultrices, vitae sodales massa vehicula. Sed mi nisl, mattis non vulputate ut,
-          ultrices malesuada tortor.
-        </p>
-      </div>
-      <div class="flex flex-col items-center py-4">
-        <UIcon name="i-ph:house-thin" class="h-20 w-20" />
-        <p>
-          Duis pellentesque ante et tellus ultrices, vitae sodales massa vehicula. Sed mi nisl, mattis non vulputate ut,
-          ultrices malesuada tortor.
-        </p>
-      </div>
-      <div class="flex flex-col items-center py-4">
-        <UIcon name="i-ph:door-thin" class="h-20 w-20" />
-        <p>
-          Duis pellentesque ante et tellus ultrices, vitae sodales massa vehicula. Sed mi nisl, mattis non vulputate ut,
-          ultrices malesuada tortor.
-        </p>
+  <section class="back-office-strongest">
+    <div class="back-office-strongest-div1">
+      <div class="back-office-strongest-div2">
+        <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
+          <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
+          <p class="w-[350px]">{{ strongest_section.text }}</p>
+        </div>
       </div>
     </div>
-  </UContainer>
+  </section>
 </template>
 
 
 <style scoped>
-
-p {
-  font-size: 21px;
+.back-office-strongest-div1{
+  background-color: v-bind(strongestStore.data.background_color_1);
+  opacity: v-bind(strongestStore.data.background_opacity_1+'%');
+  padding: 3% 5%;
 }
-
+.back-office-strongest-div2{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  background-color: v-bind(strongestStore.data.background_color_2);
+  opacity: v-bind(strongestStore.data.background_opacity_2+'%');
+  padding: 1% 3%;
+}
+.back-office-strongest-section{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
 </style>

@@ -10,14 +10,12 @@ import News from "~/components/site/News.vue";
 
 <template>
     <Welcome/>
-  <div class="flex flex-col bg-[#D8D27D] py-20 px-10">
-    <Strongest/>
-    <div class="flex flex-row py-20 justify-between px-60">
+    <Strongest class="z-50"/>
+    <div class="flex flex-row py-20 justify-between px-60 bg-[#D8D27D]">
       <Hostel/>
       <Restaurant/>
       <Spa/>
     </div>
-  </div>
 
   <BedroomType></BedroomType>
   <News></News>
