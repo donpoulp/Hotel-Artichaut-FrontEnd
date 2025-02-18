@@ -52,7 +52,7 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
 </template>
 
 <style scoped>
-\\ regle tailwind desactiver \\
+/*regle tailwind desactiver*/
 img, video {
   max-width: none!important;
   height: auto!important;
