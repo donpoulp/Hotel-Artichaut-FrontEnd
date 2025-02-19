@@ -11,5 +11,13 @@ export const useReservationStore = defineStore('reservation', {
         async loadReservationData(){
             this.data = (await useApiFetch(`/reservation`)).data.value
         },
+
+        // async updateReservationData(newData){
+        //     await useApiFetch(`/reservation/{id}`, {
+        //         method: 'PUT',
+        //         body: JSON.stringify(newData)
+        //     });
+        //     this.data = newData;
+        // }
     }
 })
