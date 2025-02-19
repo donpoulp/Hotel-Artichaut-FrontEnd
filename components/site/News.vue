@@ -5,7 +5,7 @@
         <Carousel v-bind="carouselConfig">
             <Slide v-for="newsItem in news" :key="newsItem.id" class="news">
                 <div class="newsContent" label="Open" @click="openModal(newsItem)">
-                    <img :src="getImageUrl(newsItem.picture.picturePath)" alt="Image News" />
+                    <img :src="newsItem.picture.picturePath" alt="Image News" />
                     <div class="newsTitle">{{ newsItem.title }}</div>
                 </div>
                 <div class=""></div>
@@ -27,13 +27,7 @@
     <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
     <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
         <img class="w-full h-[40vh]"
-            src="https://handicap.gouv.fr/sites/handicap/files/styles/w_1200/public/2024-04/Vacances-adaptees-organisees-VAO-personnes-handicapes-majeures.jpg.webp?itok=jsuUCfhW"
-            alt="">
-        <img class="w-[45%] h-[17vh]"
-            src="https://cdn.prod.website-files.com/5e37f203adaca35c6914317f/623496f99ac1719d56ef98ff_stimuler-autonomie-personnes-agees.jpg"
-            alt="">
-        <img class="w-[45%] h-[17vh]"
-            src="https://entreprise.maif.fr/files/live/sites/entreprise-Maif/files/images/engagement-solidarites/sous-engagements/soutenir-les-personnes-en-situation-de-handicap/soutenir-les-personnes-en-situation-de-handicap-eng.jpg"
+            :src="selectedNews.picture.picturePath"
             alt="">
     </div>
 </div>
@@ -47,14 +41,22 @@
 const isOpen = ref(false)
 const selectedNews = ref(null)
 
-const getImageUrl = (relativePath) => {
-    return `http://127.0.0.1:8000${relativePath}`
+onMounted(() => {
+    console.log('News data:', news.value)
+})
+
+
+const getImageUrl = (imgName) => {
+    return `http://127.0.0.1:8000/storage/${imgName}.png`
 }
 
 const { status, data: news } = useFetch('http://127.0.0.1:8000/api/news', {
     lazy: true,
     params: { include: 'pictures' }
 })
+
+
+
 
 const openModal = (newsItem) => {
     selectedNews.value = newsItem
@@ -85,7 +87,7 @@ const carouselConfig = {
 }
 
 .newsContent {
-    width: 372px;
+    width: 370px;
     height: 258px;
     background-color: rgb(255, 255, 255);
     display: flex;
