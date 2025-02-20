@@ -1,45 +1,72 @@
 <template>
+    <div class="newsContainer">
+        <h2>Our News</h2>
 
-<div class="newsContainer">
-    <h2>Our News</h2>
-    
-    <Carousel v-bind="carouselConfig">
-        <Slide v-for="newsItem in news" :key="newsItem.id" class="news">
-            <div class="newsContent" @click="showModalNews = true">
-                <img :src="getImageUrl(newsItem.picture.picturePath)" alt="Image News" />
-                <div class="newsTitle">{{ newsItem.title }}</div>
-                <PopupNews v-show="showModalNews" @close-modal="showModalNews = false" />
-            </div>
-        </Slide>
-    
-        <template #addons class="addonsCarrousel">
-    
-    <Pagination />
-    <Navigation />
-    </template>
-</Carousel>
+        <Carousel v-bind="carouselConfig">
+            <Slide v-for="newsItem in news" :key="newsItem.id" class="news">
+                <div class="newsContent" label="Open" @click="openModal(newsItem)">
+                    <img :src="newsItem.picture.picturePath" alt="Image News" />
+                    <div class="newsTitle">{{ newsItem.title }}</div>
+                </div>
+                <div class=""></div>
+            </Slide>
+
+            <template #addons class="addonsCarrousel">
+                <Pagination />
+                <Navigation />
+            </template>
+        </Carousel>
+
+    </div>
+    <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
+        <div class="bg-[#ede798] h-full w-full">
+            <template v-if="selectedNews">
+    <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews.title }}</h1>
+</template>
+<div class="flex justify-evenly">
+    <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
+    <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
+        <img class="w-full h-[40vh]"
+            :src="selectedNews.picture.picturePath"
+            alt="">
+    </div>
 </div>
+
+        </div>
+
+    </UModal>
 </template>
 
 <script setup>
-import PopupNews from './PopupNews.vue'
+const isOpen = ref(false)
+const selectedNews = ref(null)
 
-const getImageUrl = (relativePath) => {
-  return `http://127.0.0.1:8000${relativePath}`;
-}
-
-const { status, data: news } = useFetch('http://127.0.0.1:8000/api/news', {lazy: true,
-    params:{include:'pictures'}
+onMounted(() => {
+    console.log('News data:', news.value)
 })
 
-const carouselConfig = {
-  itemsToShow: 3,
-  wrapAround: true
+
+const getImageUrl = (imgName) => {
+    return `http://127.0.0.1:8000/storage/${imgName}.png`
 }
 
-console.log(news)
+const { status, data: news } = useFetch('http://127.0.0.1:8000/api/news', {
+    lazy: true,
+    params: { include: 'pictures' }
+})
 
 
+
+
+const openModal = (newsItem) => {
+    selectedNews.value = newsItem
+    isOpen.value = true
+}
+
+const carouselConfig = {
+    itemsToShow: 3,
+    wrapAround: true
+}
 </script>
 
 <style scoped>
@@ -60,14 +87,15 @@ console.log(news)
 }
 
 .newsContent {
-    width: 372px;
+    width: 370px;
     height: 258px;
     background-color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     position: relative;
-    overflow: hidden;  
+    overflow: hidden;
+    cursor: pointer;
 }
 
 .newsContent img {
@@ -97,6 +125,4 @@ console.log(news)
 .carousel__pagination {
     display: none;
 }
-
 </style>
-
