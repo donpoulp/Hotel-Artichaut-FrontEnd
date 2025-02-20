@@ -9,10 +9,10 @@ export const useBedroomStore = defineStore('bedroom', {
     },
     actions: {
         async loadBedroomData(){
-            this.data = (await useApiFetch(`/bedroom/1`)).data.value
+            this.data = (await useApiFetch(`/bedroom`)).data.value
         },
         async updateBedroomData(bedroomData){
-            await useApiFetch(`/bedroom/1`, {
+            await useApiFetch(`/bedroom/`, {
                 method: 'PUT',
                 body: JSON.stringify(bedroomData)
             });

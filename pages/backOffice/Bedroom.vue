@@ -1,18 +1,24 @@
 <template>
-    <table>
-<tr v-for="bedroom in bedroomStore.data">
-    <td class="bedroom">{{bedroom.id}}</td>
-    <td>{{bedroom.number}}</td>
-</tr>
+    <UTable :rows="rows" :ui="{wrapper:'w-[500px] mx-auto'}"">
+        
+    </UTable>
 
-    </table>
+    <UPagination v-model="page" :page-count="pageCount" :total="$bedroom.data.length"></UPagination>
+  
+    
 </template>
 
 <script setup>
-import {useBedroomStore} from "~/store/bedroom";
+import { useBedroomStore } from "~/store/bedroom";
 
+const bedroom = useBedroomStore()
 
-const bedroomStore = useBedroomStore();
+const page = ref(1)
+const pageCount = 5
+
+const rows = computed(() => {
+  return bedroom.data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
+})
 
 definePageMeta({
   layout: 'back-office',
