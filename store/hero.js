@@ -1,7 +1,7 @@
 import {defineStore} from 'pinia'
 import {useApiFetch} from "~/composables/useApiFetch.ts";
 
-export const useHeroStore = defineStore('cms', {
+export const useHeroStore = defineStore('hero', {
     state: () => {
         return {
             data: {}
