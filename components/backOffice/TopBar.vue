@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <section class="top-bar">
-
+  <section class="top-bar flex flex-row justify-end">
+    <UButton color="black" to="/site">go to site</UButton>
   </section>
 </template>
 

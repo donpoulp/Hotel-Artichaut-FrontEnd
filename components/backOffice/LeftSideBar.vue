@@ -53,11 +53,13 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
 
     <div class="left-side-bar-line"></div>
 
+    <NuxtLink to="/backOffice/user">
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice/user'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:user-circle-duotone" class="dashboard-icon"></UIcon>
       <h5>User</h5>
     </div>
+    </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 
