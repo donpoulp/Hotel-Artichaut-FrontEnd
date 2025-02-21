@@ -29,7 +29,6 @@ const state = reactive({
 })
 
 async function onSubmit(strongest) {
-  console.log(strongest)
   await strongestStore.updateStrongestData(strongest);
   reloadNuxtApp()
 }
@@ -80,7 +79,7 @@ async function onSubmit_section(section) {
     <h2 class="mt-4">Modify</h2>
       <div class="back-office-strongest-modify flex flex-col w-[59%]">
         <div v-for="strongest_section in strongestSectionStore.data">
-          <UForm :schema="schema_section" :state="state_section" class="flex flex-row w-full border-2">
+          <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center w-full border-2">
           <div class="flex text-center items-center whitespace-nowrap p-8 border-r-2">
             Section : {{strongest_section.id}}
           </div>
@@ -88,9 +87,9 @@ async function onSubmit_section(section) {
             <div class="p-2 flex text-center items-center">Contenu :</div>
             <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.text" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
           </div>
-          <div class="flex flex-col w-[300px] h-full p-2">
+          <div class="h-full flex flex-col w-[300px] p-4">
            <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
-            <UButton @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
+            <UButton block @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
           </div>
           </UForm>
         </div>
@@ -160,7 +159,7 @@ async function onSubmit_section(section) {
   border: #45474B 1px solid;
 }
 .textearea-strongest :deep(textarea){
-  height: 100%;
+  height: 100px;
   background-color: gray;
 }
 .buttonSubmit{
