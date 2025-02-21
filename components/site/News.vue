@@ -5,7 +5,7 @@
         <Carousel v-bind="carouselConfig">
             <Slide v-for="newsItem in news" :key="newsItem.id" class="news">
                 <div class="newsContent" label="Open" @click="openModal(newsItem)">
-                    <img :src="newsItem.picture.picturePath" alt="Image News" />
+                    <img :src="newsItem.picture[0].picturePath" alt="Image News" />
                     <div class="newsTitle">{{ newsItem.title }}</div>
                 </div>
                 <div class=""></div>
@@ -27,7 +27,7 @@
     <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
     <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
         <img class="w-full h-[40vh]"
-            :src="selectedNews.picture.picturePath"
+            :src="selectedNews.picture[0].picturePath"
             alt="">
     </div>
 </div>
@@ -41,9 +41,7 @@
 const isOpen = ref(false)
 const selectedNews = ref(null)
 
-onMounted(() => {
-    console.log('News data:', news.value)
-})
+
 
 
 const getImageUrl = (imgName) => {

@@ -1,9 +1,15 @@
 <template>
-    <UTable :rows="rows" :ui="{wrapper:'w-[500px] mx-auto'}"">
+    <UTable :rows="rows" :ui="{wrapper:'mx-auto text-white', th: {
+      base: 'text-center rtl:text-right font-antic !text-[2em]'},
+      td: {
+    base: 'whitespace-nowrap text-center !text-[1.5em]'}
+       }"">
         
     </UTable>
 
-    <UPagination v-model="page" :page-count="pageCount" :total="$bedroom.data.length"></UPagination>
+    <UPagination v-model="page" :page-count="pageCount" :total="$bedroom.data.length" :ui="{
+    wrapper: 'flex items-center -space-x-px justify-center w-full'
+  }"></UPagination>
   
     
 </template>
@@ -14,7 +20,7 @@ import { useBedroomStore } from "~/store/bedroom";
 const bedroom = useBedroomStore()
 
 const page = ref(1)
-const pageCount = 5
+const pageCount = 10
 
 const rows = computed(() => {
   return bedroom.data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
@@ -27,7 +33,5 @@ definePageMeta({
 </script>
 
 <style scoped>
-.bedroom {
-    color: white;
-}
+
 </style>
