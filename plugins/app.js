@@ -5,6 +5,7 @@ import {useFooterStore} from "~/store/footer.js";
 import {useStrongestSectionStore} from "~/store/strongest-section.js";
 import {useNewsStore} from "~/store/news.js";
 import {useReservationStore} from "~/store/reservation.js";
+import {useUserStore} from "~/store/user.js";
 
 export default defineNuxtPlugin(async () => {
 
@@ -14,6 +15,7 @@ export default defineNuxtPlugin(async () => {
     const footerStore = useFooterStore();
     const reservationStore = useReservationStore();
     const newsStore = useNewsStore();
+    const userStore = useUserStore();
 
     await strongestSectionStore.loadStrongestSectionData()
     await strongestStore.loadStrongestData()
@@ -21,6 +23,7 @@ export default defineNuxtPlugin(async () => {
     await footerStore.loadFooterData()
     await newsStore.loadNewsData()
     await reservationStore.loadReservationData()
+    await userStore.loadUserData()
 
     return {
         provide:{
@@ -30,6 +33,7 @@ export default defineNuxtPlugin(async () => {
             footer : useFooterStore(),
             reservation : useReservationStore(),
             news : useNewsStore(),
+            user : useUserStore()
         }
     }
 })

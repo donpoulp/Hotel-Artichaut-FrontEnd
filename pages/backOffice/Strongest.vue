@@ -86,6 +86,7 @@ async function onSubmit_section(section) {
           <div class="flex flex-row">
             <div class="p-2 flex text-center items-center">Contenu :</div>
             <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.text" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
+            <span class="text-right">{{strongest_section.text.length}}/143 caractère</span>
           </div>
           <div class="h-full flex flex-col w-[300px] p-4">
            <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>

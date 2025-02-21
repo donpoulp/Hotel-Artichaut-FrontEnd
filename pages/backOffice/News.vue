@@ -28,7 +28,6 @@ async function onSubmit(news) {
     reloadNuxtApp()
   }
 }
-
 </script>
 
 <template>
@@ -49,9 +48,10 @@ async function onSubmit(news) {
               <div class="mr-2">Title : </div>
               <UInput v-model="news.title"></UInput>
             </div>
-            <div class="flex flex-col p-8 border-r-2">
+            <div class="flex flex-col p-8 border-r-2 kiki">
               <div class="mb-1">Description : </div>
               <UTextarea v-model="news.description" class="w-[310px] textarea_backoffice_news"></UTextarea>
+              <span class="text-right">{{news.description.length}}/350 caractère</span>
             </div>
             <div>
               <div class="w-full p-8">
@@ -69,7 +69,6 @@ async function onSubmit(news) {
 <style scoped>
 .textarea_backoffice_news :deep(textarea) {
   height: 150px;
-  background-color: #45474B;
 }
 .buttonSubmit{
   background: rgba(13, 86, 73, 0.9);
