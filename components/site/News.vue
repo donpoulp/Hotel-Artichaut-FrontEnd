@@ -62,38 +62,6 @@ const carouselConfig = {
     </UModal>
 </template>
 
-<script setup>
-const isOpen = ref(false)
-const selectedNews = ref(null)
-
-onMounted(() => {
-    console.log('News data:', news.value)
-})
-
-
-const getImageUrl = (imgName) => {
-    return `http://127.0.0.1:8000/storage/${imgName}.png`
-}
-
-const { status, data: news } = useFetch('http://127.0.0.1:8000/api/news', {
-    lazy: true,
-    params: { include: 'pictures' }
-})
-
-
-
-
-const openModal = (newsItem) => {
-    selectedNews.value = newsItem
-    isOpen.value = true
-}
-
-const carouselConfig = {
-    itemsToShow: 3,
-    wrapAround: true
-}
-</script>
-
 <style scoped>
 .newsContainer {
     height: 516px;
