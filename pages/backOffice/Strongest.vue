@@ -77,18 +77,18 @@ async function onSubmit_section(section) {
 
 
     <h2 class="mt-4">Modify</h2>
-      <div class="back-office-strongest-modify flex flex-col w-[59%]">
+      <div class="back-office-strongest-modify flex flex-col w-[70%]">
         <div v-for="strongest_section in strongestSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center w-full border-2">
-          <div class="flex text-center items-center whitespace-nowrap p-8 border-r-2">
+          <div class="flex text-center items-center whitespace-nowrap p-8">
             Section : {{strongest_section.id}}
           </div>
-          <div class="flex flex-row">
+          <div class="flex flex-row border-r-2 border-l-2">
             <div class="p-2 flex text-center items-center">Contenu :</div>
             <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.text" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
-            <span class="text-right">{{strongest_section.text.length}}/143 caractère</span>
+            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section.text.length}}/143 caractère</span>
           </div>
-          <div class="h-full flex flex-col w-[300px] p-4">
+          <div class="h-full flex flex-col w-[300px] p-4 ml-4">
            <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
             <UButton block @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
           </div>
@@ -99,11 +99,17 @@ async function onSubmit_section(section) {
     <UModal v-model="isOpen">
       <div class="p-4">
         <UForm :schema="schema" :state="state">
-          <UInput v-model="strongestStore.data.background_color_1"/>
-          <UInput v-model="strongestStore.data.background_opacity_1"/>
-          <UButton @click="onSubmit({background_color_1: strongestStore.data.background_color_1, background_opacity_1: strongestStore.data.background_opacity_1, background_color_2: strongestStore.data.background_color_2, background_opacity_2: strongestStore.data.background_opacity_2})">
-            Valider
-          </UButton>
+          <UFormGroup label="color">
+            <UInput v-model="strongestStore.data.background_color_1"/>
+          </UFormGroup>
+          <UFormGroup label="opacity" class="mt-3">
+            <UInput v-model="strongestStore.data.background_opacity_1"/>
+          </UFormGroup>
+          <div class="flex justify-center">
+            <UButton @click="onSubmit({background_color_1: strongestStore.data.background_color_1, background_opacity_1: strongestStore.data.background_opacity_1, background_color_2: strongestStore.data.background_color_2, background_opacity_2: strongestStore.data.background_opacity_2})">
+              Valider
+            </UButton>
+          </div>
         </UForm>
       </div>
     </UModal>

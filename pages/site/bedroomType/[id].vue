@@ -25,7 +25,7 @@ const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
           <ButtonWithIcon width="175px" height="50px" fontSize="22px" title="Service" icon="ph:arrows-vertical-bold"></ButtonWithIcon>
-          <Button width="175px" height="50px" fontSize="22px" title="View all services"></Button>
+          <Button width="175px" height="50px" fontSize="22px" title="View all services" route="site-Services"></Button>
         </div>
         <div class="RoomPageBtnBoxRight">
           <div class="RoomPageBtnBoxRightBtnCart"><UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" /><Button width="175px" height="50px" fontSize="22px" title="Choose date"></Button></div>

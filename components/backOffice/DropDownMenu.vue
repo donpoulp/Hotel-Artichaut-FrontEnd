@@ -7,8 +7,9 @@ const items = [
   }], [{
     label: 'Strongest point',
     to: '/backOffice/Strongest',
-    //class: 'bg-[#D8D27D] hover:bg-[#0D5649] hover:opacity-70 active:bg-[#0D5649] active:opacity-100 focus:outline-none focus:ring focus:ring-[#0D5649] focus-opacity-80'
-
+  }], [{
+    label: 'About',
+    to: '/backOffice/About',
   }], [{
     label: 'News',
     to : '/backOffice/News',
