@@ -11,10 +11,15 @@ export const useBedroomStore = defineStore('bedroom', {
         async loadBedroomData(){
             this.data = (await useApiFetch(`/bedroom`)).data.value
         },
-        async updateBedroomData(bedroomData){
-            await useApiFetch(`/bedroom/`, {
+        async updateBedroomData(bedroomData, id){
+            await useApiFetch(`/bedroom/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(bedroomData)
+            });
+        },
+        async deleteBedroomData(id){
+            await useApiFetch(`/bedroom/${id}`, {
+                method: 'DELETE'
             });
         }
     }
