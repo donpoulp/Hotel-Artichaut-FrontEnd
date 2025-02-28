@@ -15,20 +15,33 @@ const carouselConfig = {
   itemsToShow: 3,
   wrapAround: true
 }
+
+console.log(newsStore.data)
 </script>
 
 <template>
     <div class="newsContainer">
         <h2>Our News</h2>
 
-        <Carousel v-bind="carouselConfig">
+        <Carousel v-bind="carouselConfig" name="News">
             <Slide v-for="newsItem in newsStore.data" :key="newsItem.id" class="news">
                 <div class="newsContent" label="Open" @click="openModal(newsItem)">
-                  <!-- img source : :src="getImageUrl(newsItem.picture.picturePath)" -->
-                    <img alt="Image News" />
+                    <img :src="newsItem.picture[0].picturePath" alt="Image News" />
                     <div class="newsTitle">{{ newsItem.title }}</div>
                 </div>
-                <div class=""></div>
+              <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
+                <div class="bg-[#ede798] h-full w-full">
+                  <template v-if="selectedNews">
+                    <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews.title }}</h1>
+                  </template>
+                  <div class="flex justify-evenly">
+                    <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
+                    <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
+                      <img class="w-full h-[40vh]" :src="selectedNews.picture[1].picturePath" alt="">
+                    </div>
+                  </div>
+                </div>
+              </UModal>
             </Slide>
 
             <template #addons class="addonsCarrousel">
@@ -36,31 +49,7 @@ const carouselConfig = {
                 <Navigation />
             </template>
         </Carousel>
-
     </div>
-    <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
-        <div class="bg-[#ede798] h-full w-full">
-            <template v-if="selectedNews">
-    <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews.title }}</h1>
-</template>
-<div class="flex justify-evenly">
-    <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
-    <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
-        <img class="w-full h-[40vh]"
-            src="https://handicap.gouv.fr/sites/handicap/files/styles/w_1200/public/2024-04/Vacances-adaptees-organisees-VAO-personnes-handicapes-majeures.jpg.webp?itok=jsuUCfhW"
-            alt="">
-        <img class="w-[45%] h-[17vh]"
-            src="https://cdn.prod.website-files.com/5e37f203adaca35c6914317f/623496f99ac1719d56ef98ff_stimuler-autonomie-personnes-agees.jpg"
-            alt="">
-        <img class="w-[45%] h-[17vh]"
-            src="https://entreprise.maif.fr/files/live/sites/entreprise-Maif/files/images/engagement-solidarites/sous-engagements/soutenir-les-personnes-en-situation-de-handicap/soutenir-les-personnes-en-situation-de-handicap-eng.jpg"
-            alt="">
-    </div>
-</div>
-
-        </div>
-
-    </UModal>
 </template>
 
 <style scoped>
