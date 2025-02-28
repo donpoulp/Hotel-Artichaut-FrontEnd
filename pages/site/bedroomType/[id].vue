@@ -17,8 +17,8 @@ const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'
         <img class="RoomPageImg" src="/image%2020.png">
       </div>
       <div class="RoomPageContent text-black">
-        <h3>{{ bedroomsType[0].name }}</h3>
-        <p>{{ bedroomsType[0].description }}</p>
+        <h3>{{ bedroomsType[0].nameEn }}</h3>
+        <p>{{ bedroomsType[0].descriptionEn }}</p>
       </div>
     </div>
     <div class="RoomPageBtn">

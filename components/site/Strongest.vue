@@ -13,7 +13,7 @@ const strongestSectionStore = useStrongestSectionStore();
       <div class="back-office-strongest-div2">
         <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
           <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
-          <p class="w-[350px]">{{ strongest_section.text }}</p>
+          <p class="w-[350px]">{{ strongest_section.textEn }}</p>
         </div>
       </div>
     </div>

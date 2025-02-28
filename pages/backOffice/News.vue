@@ -46,12 +46,12 @@ async function onSubmit(news) {
             </div>
             <div class="flex flex-row justify-center items-center p-8">
               <div class="mr-2">Title : </div>
-              <UInput v-model="news.title"></UInput>
+              <UInput v-model="news.titleEn"></UInput>
             </div>
             <div class="flex flex-col p-8 border-r-2 border-l-2">
               <div class="mb-1">Description : </div>
-              <UTextarea rows="8" maxrows="8" v-model="news.description" class="w-[310px] textarea_backoffice_news"></UTextarea>
-              <span class="text-right">{{news.description.length}}/350 caractère</span>
+              <UTextarea rows="8" maxrows="8" v-model="news.descriptionEn" class="w-[310px] textarea_backoffice_news"></UTextarea>
+              <span class="text-right">{{news.descriptionEn.length}}/350 caractère</span>
             </div>
             <div>
               <div class="p-6">

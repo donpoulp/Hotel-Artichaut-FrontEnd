@@ -67,7 +67,7 @@ async function onSubmit_section(section) {
         <div class="back-office-strongest-div2">
           <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
             <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
-            <p class="w-[350px]">{{ strongest_section.text }}</p>
+            <p class="w-[350px]">{{ strongest_section.textEn }}</p>
           </div>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
         </div>
@@ -85,8 +85,8 @@ async function onSubmit_section(section) {
           </div>
           <div class="flex flex-row border-r-2 border-l-2">
             <div class="p-2 flex text-center items-center">Contenu :</div>
-            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.text" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
-            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section.text.length}}/143 caractère</span>
+            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.textEn" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
+            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section.textEn.length}}/143 caractère</span>
           </div>
           <div class="h-full flex flex-col w-[300px] p-4 ml-4">
            <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
