@@ -4,7 +4,7 @@
 
 <template>
   <section class="top-bar flex flex-row justify-end">
-    <UButton color="black" to="/site">go to site</UButton>
+    <UButton color="green" to="/site" class="m-3">go to site</UButton>
   </section>
 </template>
 
