@@ -12,12 +12,14 @@ export default defineNuxtPlugin(async () => {
     const heroStore = useHeroStore();
     const footerStore = useFooterStore();
     const reservationStore = useReservationStore();
+    const userStore = useReservationStore();
 
     await strongestSectionStore.loadStrongestSectionData()
     await strongestStore.loadStrongestData()
     await heroStore.loadHeroData()
     await footerStore.loadFooterData()
     await reservationStore.loadReservationData()
+    await userStore.loadReservationData()
 
     return {
         provide:{
@@ -25,7 +27,8 @@ export default defineNuxtPlugin(async () => {
             strongest : useStrongestStore(),
             hero : useHeroStore(),
             footer : useFooterStore(),
-            reservation : useReservationStore()
+            reservation : useReservationStore(),
+            user : useStrongestStore()
         }
     }
 })
