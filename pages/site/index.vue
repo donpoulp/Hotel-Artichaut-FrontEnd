@@ -6,18 +6,13 @@ import Hostel from "~/components/site/Hostel.vue";
 import Spa from "~/components/site/Spa.vue";
 import BedroomType from "~/components/site/BedroomType.vue";
 import News from "~/components/site/News.vue";
+import About from "~/components/site/About.vue";
 </script>
 
 <template>
     <Welcome/>
-  <div class="flex flex-col bg-[#D8D27D] py-20 px-10">
-    <Strongest/>
-    <div class="flex flex-row py-20 justify-between px-60">
-      <Hostel/>
-      <Restaurant/>
-      <Spa/>
-    </div>
-  </div>
+    <Strongest class="z-50"/>
+    <About></About>
 
   <BedroomType></BedroomType>
   <News></News>

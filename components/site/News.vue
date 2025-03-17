@@ -1,14 +1,45 @@
+<script setup>
+import {useNewsStore} from "~/store/news.js";
+
+const isOpen = ref(false)
+const selectedNews = ref(null)
+
+const newsStore = useNewsStore()
+
+const openModal = (newsItem) => {
+  selectedNews.value = newsItem
+  isOpen.value = true
+}
+
+const carouselConfig = {
+  itemsToShow: 3,
+  wrapAround: true
+}
+</script>
+
 <template>
     <div class="newsContainer">
         <h2>Our News</h2>
 
-        <Carousel v-bind="carouselConfig">
-            <Slide v-for="newsItem in news" :key="newsItem.id" class="news">
+        <Carousel v-bind="carouselConfig" name="News">
+            <Slide v-for="newsItem in newsStore.data" :key="newsItem.id" class="news">
                 <div class="newsContent" label="Open" @click="openModal(newsItem)">
-                    <img :src="newsItem.picture.picturePath" alt="Image News" />
-                    <div class="newsTitle">{{ newsItem.title }}</div>
+                    <img :src="newsItem.picture[0].picturePath" alt="Image News" />
+                    <div class="newsTitle">{{ newsItem.titleEn }}</div>
                 </div>
-                <div class=""></div>
+              <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
+                <div class="bg-[#ede798] h-full w-full">
+                  <template v-if="selectedNews">
+                    <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews.titleEn }}</h1>
+                  </template>
+                  <div class="flex justify-evenly">
+                    <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.descriptionEn }}</p>
+                    <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
+                      <img class="w-full h-[40vh]" :src="selectedNews.picture[1].picturePath" alt="">
+                    </div>
+                  </div>
+                </div>
+              </UModal>
             </Slide>
 
             <template #addons class="addonsCarrousel">
@@ -16,58 +47,8 @@
                 <Navigation />
             </template>
         </Carousel>
-
     </div>
-    <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
-        <div class="bg-[#ede798] h-full w-full">
-            <template v-if="selectedNews">
-    <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews.title }}</h1>
 </template>
-<div class="flex justify-evenly">
-    <p class="w-[35vw] font-antic text-[2vw] text-black text-center !align-baseline">{{ selectedNews.description }}</p>
-    <div class="flex flex-row flex-wrap w-[35vw] h-[60vh] items-center justify-between">
-        <img class="w-full h-[40vh]"
-            :src="selectedNews.picture.picturePath"
-            alt="">
-    </div>
-</div>
-
-        </div>
-
-    </UModal>
-</template>
-
-<script setup>
-const isOpen = ref(false)
-const selectedNews = ref(null)
-
-onMounted(() => {
-    console.log('News data:', news.value)
-})
-
-
-const getImageUrl = (imgName) => {
-    return `http://127.0.0.1:8000/storage/${imgName}.png`
-}
-
-const { status, data: news } = useFetch('http://127.0.0.1:8000/api/news', {
-    lazy: true,
-    params: { include: 'pictures' }
-})
-
-
-
-
-const openModal = (newsItem) => {
-    selectedNews.value = newsItem
-    isOpen.value = true
-}
-
-const carouselConfig = {
-    itemsToShow: 3,
-    wrapAround: true
-}
-</script>
 
 <style scoped>
 .newsContainer {

@@ -2,7 +2,7 @@
     <header>
         <div class="langue">
             <UIcon name="flag:gb-4x3" class="langueIcon" />
-            <p>English</p>
+            <p class="text-white">English</p>
         </div>
       <NuxtLink to="/site">
         <div class="mainLogoContainer">
@@ -10,8 +10,8 @@
         </div>
       </NuxtLink>
         <div class="nav">
-            <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon" />
-            <UIcon name="humbleicons:user" class="userIcon" @click="showModal = true"/>
+            <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" />
+            <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
             <Popup v-show="showModal" @close-modal="showModal = false" />
         </div>
     </header>

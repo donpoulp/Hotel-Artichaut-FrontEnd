@@ -1,22 +1,21 @@
 import {defineStore} from 'pinia'
 import {useApiFetch} from "~/composables/useApiFetch.ts";
 
-export const useHeroStore = defineStore('hero', {
+export const useAboutStore = defineStore('about', {
     state: () => {
         return {
             data: []
         }
     },
     actions: {
-        async loadHeroData(){
-            this.data = (await useApiFetch(`/hero/1`)).data.value
+        async loadAboutData(){
+            this.data = (await useApiFetch(`/about`)).data.value
         },
-        async updateHeroData(newData){
-            await useApiFetch(`/hero/1`, {
+        async updateAboutData(newData){
+            await useApiFetch(`/about/1`, {
                 method: 'PUT',
                 body: JSON.stringify(newData)
-            });
-            this.data = newData;
+            })
         }
     }
 })

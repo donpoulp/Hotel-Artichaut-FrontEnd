@@ -1,24 +1,34 @@
 <script setup lang="ts">
+import {useAboutDescriptionStore} from "~/store/about_description";
+
+const aboutDescStore = useAboutDescriptionStore();
+let restaurant
+let articShow
+
+  aboutDescStore?.data?.forEach((item) => {
+    if (item.title === 'Restaurant & Bar') {
+      restaurant = item
+    }if (item.title === "L\'Artic Show"){
+      articShow = item
+    }
+  })
+
 </script>
 
 
 <template>
-
-  <div class="flex flex-col items-center justify-center py-20 px-20" style="background-color: #F0F0E8;">
-    <h1 class="font-antic">Restaurant & Bar</h1>
-    <h2 class="font-noto text-black text-center">The Hôtel Artichaut, an essential stopover for gastronomy, offers you
-      its exceptional restaurant: L'Artic Show,
-      which has been awarded a star in the Michelin Guide.</h2>
+  <div class="flex flex-col items-center justify-center py-20 px-20" :style="{backgroundColor: restaurant?.background_color, opacity: restaurant?.background_opacity}">
+    <h1 class="font-antic">{{ restaurant?.title }}</h1>
+    <h2 class="font-noto text-black text-center">{{ restaurant?.description }}</h2>
   </div>
 
-  <div class="div flex flex-row items-center" style="background-color: #F0F0E8;">
-    <img class="test" src="/img/restaubar.png" alt="Restaurant"/>
+  <div class="div flex flex-row items-center" :style="{backgroundColor: articShow?.background_color, opacity: articShow?.background_opacity}">
+    <img class="test" :src="articShow.picture?.[0]?.picturePath" alt="Restaurant"/>
 
     <div class="flex flex-col items-center">
-      <h2 class="text-black font-noto">L'Artic Show</h2>
+      <h2 class="text-black font-noto">{{ articShow?.title }}</h2>
       <p class="text-black font-noto text-center">
-        The Hôtel Artichaut, an essential stopover for gastronomy, offers you its exceptional restaurant: L'Artic Show,
-        which has been awarded a star in the Michelin Guide.
+        {{ articShow?.description }}
       </p>
     </div>
   </div>
