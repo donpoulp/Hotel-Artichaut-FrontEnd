@@ -37,7 +37,7 @@ async function onSubmit() {
     <div class="flex flex-col px-20 pt-10">
       <h1 class="text-3xl font-noto">Preview</h1>
       <div class="py-2">
-        <Welcome :title="heroStore.data[0].title" :description="heroStore.data[0].description" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
+        <Welcome :title="heroStore.data[0].titleEn" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
       </div>
     </div>
 
@@ -48,16 +48,16 @@ async function onSubmit() {
 
         <div class="flex flex-row space-x-4">
           <UFormGroup label="Title" class="custom-label">
-            <UInput v-model="heroStore.data[0].title" class="custom-input"/>
+            <UInput v-model="heroStore.data[0].titleEn" class="custom-input"/>
           </UFormGroup>
 
           <UFormGroup label="Picture" class="custom-label">
-            <UInput v-model="state.picture" class="custom-input"/>
+            <UInput v-model="state.picture" class="custom-input" type="file"/>
           </UFormGroup>
         </div>
 
         <UFormGroup label="Content">
-          <UInput v-model="heroStore.data[0].description" class="custom-input"/>
+          <UInput v-model="heroStore.data[0].descriptionEn" class="custom-input"/>
         </UFormGroup>
 
         <UButton type="submit">

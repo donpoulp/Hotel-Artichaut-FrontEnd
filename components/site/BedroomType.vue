@@ -23,7 +23,7 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
         <Carousel v-bind="carouselConfig">
           <Slide v-for="bedroomType in bedroomsTypes" :key="bedroomType" class="bedroomTypeCartSection">
 
-            <h2 class="littletitleBedroomType">{{ bedroomType.name }}</h2>
+            <h2 class="littletitleBedroomType">{{ bedroomType.nameEn }}</h2>
             <div class="bedroomTypeCart">
                 <div class="bedroomTypeImg">
                   <div>
@@ -37,7 +37,7 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
                   </div>
                 </div>
               <div class="bedroomTypeContent">
-                <div class="textBedroomType">{{ bedroomType.description }}</div>
+                <div class="textBedroomType">{{ bedroomType.descriptionEn }}</div>
                 <Button class="Button" title="Reserver" route='site-bedroomType-id' :route_params="{ id: bedroomType.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>

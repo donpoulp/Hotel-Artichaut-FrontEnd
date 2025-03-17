@@ -43,7 +43,7 @@ async function onSubmit() {
     <div class="flex flex-col px-20 pt-10">
       <h1 class="text-3xl font-noto pb-4">Preview</h1>
       <div class="py-2">
-        <Footer :title="footerStore.data[0].title" :text="footerStore.data[0].text" :titleReseau="footerStore.data[0].titleReseau" :iconReseau="footerStore.data[0].iconReseau" :linkReseau="footerStore.data[0].linkReseau" />
+        <Footer :title="footerStore.data[0].titleEn" :text="footerStore.data[0].textEn" :titleReseau="footerStore.data[0].titleReseauEn" :iconReseau="footerStore.data[0].iconReseau" :linkReseau="footerStore.data[0].linkReseau" />
       </div>
     </div>
 
@@ -54,11 +54,11 @@ async function onSubmit() {
 
         <div class="flex flex-row space-x-4">
           <UFormGroup label="Title" class="custom-label">
-            <UInput v-model="footerStore.data[0].title" class="custom-input"/>
+            <UInput v-model="footerStore.data[0].titleEn" class="custom-input"/>
           </UFormGroup>
 
           <UFormGroup label="Text" class="custom-label">
-            <UInput v-model="footerStore.data[0].text" class="custom-input"/>
+            <UInput v-model="footerStore.data[0].textEn" class="custom-input"/>
           </UFormGroup>
         </div>
 

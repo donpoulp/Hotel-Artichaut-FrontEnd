@@ -6,7 +6,7 @@ const footerStore = useFooterStore();
 </script>
 
 <template>
-    <div class="footer">
+    <div class="footer text-white">
         <div class="sectionSocialMedia">
             <p>{{ footerStore.data[0].title }}</p>
             <div class="socialMedia">
