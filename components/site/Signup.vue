@@ -10,7 +10,7 @@
 
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
-      <UFormGroup label="First Name">
+      <UFormGroup label="First Name" required>
         <UInput v-model="stateR.firstName"/>
       </UFormGroup>
 
@@ -18,16 +18,16 @@
         <UInput v-model="stateR.lastName"/>
       </UFormGroup>
 
-      <UFormGroup label="Email">
+      <UFormGroup label="Email" required>
         <UInput v-model="stateR.email"/>
+      </UFormGroup>
+
+      <UFormGroup label="Password" required>
+        <UInput v-model="stateR.password" type="password"/>
       </UFormGroup>
 
       <UFormGroup label="Email Bis">
         <UInput v-model="stateR.emailBis"/>
-      </UFormGroup>
-
-      <UFormGroup label="Password">
-        <UInput v-model="stateR.password"/>
       </UFormGroup>
 
       <UFormGroup label="Phone Number">
@@ -114,5 +114,9 @@ async function onSubmitRegister(data) {
 
 .btn {
   background: rgba(13, 86, 73, 0.9);
+}
+
+.btn:hover {
+  background: rgba(16, 106, 90, 0.9);
 }
 </style>

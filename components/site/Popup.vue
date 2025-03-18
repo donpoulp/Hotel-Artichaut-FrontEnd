@@ -8,19 +8,25 @@
             @click="$emit('close-modal')"
         />
 
+<!--        <div v-if="errorMessage" class="error-message">-->
+<!--          {{ errorMessage }}-->
+<!--        </div>-->
+
         <UForm class="px-44 space-y-4" :schema="schema" :state="state" @submit="onSubmit">
           <p class="font-antic text-center text-3xl pt-36">Sign In</p>
-
           <UFormGroup label="Email" required>
             <UInput placeholder="Enter your email" v-model="state.email"/>
           </UFormGroup>
           <UFormGroup label="Password" required>
-            <UInput placeholder="Enter your password" v-model="state.password"/>
+            <UInput placeholder="Enter your password" v-model="state.password" type="password"/>
           </UFormGroup>
           <div class="pt-4 flex justify-center space-x-10">
-            <UButton class="btn" type="submit">Sign In</UButton>
+            <UButton class="btn" type="submit" @click="$emit('close-modal')">Sign In</UButton>
             <UButton class="btn" @click="openSignUp">Sign Up</UButton>
           </div>
+          <UFormGroup v-if="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </UFormGroup>
         </UForm>
       </template>
       <template v-else>
@@ -57,10 +63,20 @@ const state = reactive({
   password: undefined,
 })
 
+const errorMessage = ref('');
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log('Form submitted', event.data);
-  await userStore.login(event.data);
+  try {
+    await userStore.login(event.data);
+    navigateTo('/');
+  } catch (error) {
+    console.error('Login failed:', error);
+    errorMessage.value = 'Login failed. Please check your credentials.';
+    console.log('Error message set:', errorMessage.value);
+  }
 }
+
 </script>
 
 <style scoped>
@@ -93,5 +109,15 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
 .btn {
   background: rgba(13, 86, 73, 0.9);
+}
+
+.btn:hover {
+  background: rgba(16, 106, 90, 0.9);
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+  margin-top: 10px;
 }
 </style>
