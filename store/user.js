@@ -9,27 +9,50 @@ export const useUserStore = defineStore('user', {
         }
     },
     actions: {
-        async loadUserData(){
+        async loadUserData() {
             this.data = (await useApiFetch(`/user`)).data.value
         },
-        async addUserData(userData){
+        async addUserData(userData) {
             await useApiFetch(`/user`, {
                 method: 'POST',
                 body: JSON.stringify(userData)
             });
         },
-        async loadUserDataById(id){
+        async loadUserDataById(id) {
             this.data2 = (await useApiFetch(`/user/` + id)).data.value
         },
-        async updateUserData(userData){
+        async updateUserData(userData) {
             await useApiFetch(`/user/` + userData.id, {
                 method: 'PUT',
                 body: JSON.stringify(userData)
             });
         },
-        async deleteUserData(id){
+        async deleteUserData(id) {
             await useApiFetch(`/user/` + id, {
                 method: 'DELETE'
+            });
+        },
+        async register(userData) {
+            try {
+                await useApiFetch(`/register`, {
+                    method: 'POST',
+                    body: JSON.stringify(userData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                console.log('Registration successful');
+            } catch (error) {
+                console.error('Registration failed', error);
+            }
+        },
+        async login(data) {
+            await useApiFetch(`/login`, {
+                method: 'POST',
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
         }
     }

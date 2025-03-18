@@ -1,120 +1,122 @@
 <template>
-    <div class="signup-container">
-        <div class="header"> 
-            <UIcon 
-                name="icon-park-outline:return" 
-                class="returnIcon" 
-                @click="$emit('close-modal-signup')"
-            />
-        </div>
-        
-        <form class="signup-form">
-            <div class="inputs">
-                <p>Sign Up</p>
-                <input type="text" placeholder="Last Name">
-                <input type="text" placeholder="First Name">
-                <input type="email" placeholder="Email">
-                <input type="email" placeholder="Email bis">
-                <input type="password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password">
-                <input type="tel" placeholder="Phone Number">
-                <input type="tel" placeholder="Phone Number bis">
-            </div>
-            <div class="buttons">
-                <button>Sign Up</button>
-                <button>Sign In</button>
-            </div>
-        </form>
+  <div class="signup-container">
+    <div class="header">
+      <UIcon
+          name="icon-park-outline:return"
+          class="returnIcon"
+          @click="$emit('close-modal-signup')"
+      />
     </div>
+
+    <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
+      <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
+      <UFormGroup label="First Name" required>
+        <UInput v-model="stateR.firstName"/>
+      </UFormGroup>
+
+      <UFormGroup label="Last Name">
+        <UInput v-model="stateR.lastName"/>
+      </UFormGroup>
+
+      <UFormGroup label="Email" required>
+        <UInput v-model="stateR.email"/>
+      </UFormGroup>
+
+      <UFormGroup label="Password" required>
+        <UInput v-model="stateR.password" type="password"/>
+      </UFormGroup>
+
+      <UFormGroup label="Email Bis">
+        <UInput v-model="stateR.emailBis"/>
+      </UFormGroup>
+
+      <UFormGroup label="Phone Number">
+        <UInput v-model="stateR.phone"/>
+      </UFormGroup>
+
+      <UFormGroup label="Phone Number Bis">
+        <UInput v-model="stateR.phoneBis"/>
+      </UFormGroup>
+      <div class="pt-4 flex justify-center">
+        <UButton type="submit" class="btn" @click="onSubmitRegister(stateR)">Confirm</UButton>
+      </div>
+    </UForm>
+  </div>
 </template>
+
+<script setup lang="ts">
+import {z} from 'zod'
+import {useUserStore} from "~/store/user.js";
+import {reactive} from 'vue'
+
+const userStore = useUserStore();
+
+const schemaR = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  emailBis: z.string(),
+  password: z.string(),
+  phone: z.string(),
+  phoneBis: z.string(),
+  is_admin: z.number(),
+})
+
+const stateR = reactive({
+  firstName: undefined,
+  lastName: undefined,
+  email: undefined,
+  emailBis: undefined,
+  password: undefined,
+  phone: undefined,
+  phoneBis: undefined,
+  is_admin: 0,
+})
+
+async function onSubmitRegister(data) {
+  console.log(data)
+  await userStore.register(data);
+}
+
+</script>
 
 <style scoped>
 .signup-container {
-    height: 100%;
-    width: 100%;
-    overflow-y: auto;
-    position: relative;
-}
-
-.header {
-    position: sticky;
-    top: 0;
-    background-color: rgba(69, 71, 75, 0.9); 
-    padding: 15px 0;
-    z-index: 20;
-}
-
-.returnIcon {
-    width: 50px;
-    height: 40px;
-    margin-left: 20px;
-    cursor: pointer;
-}
-
-.signup-form {
-    padding: 0 0 20px 0;
-    min-height: 100%;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto;
+  position: relative;
 }
 
 .signup-container::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .signup-container {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-.inputs {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: center;
-    height: 850px;
+.header {
+  position: sticky;
+  top: 0;
+  background-color: #F0F0E8;
+  padding: 15px 0;
+  z-index: 20;
 }
 
-
-.inputs input {
-    width: 90%;
-    text-align: center;
-    height: 55px;
-    background-color: #D9D9D9;
-    color: black;
-    font-family: Noto Serif;
-    font-weight: 300;
-    font-size: 26px;
+.returnIcon {
+  width: 50px;
+  height: 40px;
+  margin-left: 20px;
+  cursor: pointer;
 }
 
-.buttons {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-    align-items: flex-end;
-    height: 200PX;
+.btn {
+  background: rgba(13, 86, 73, 0.9);
 }
 
-.buttons button {
-    font-family: Noto Serif;
-    font-size: 22px;
-    width: 195px;
-    height: 50px;
-    background-color: #0D5649;
-    border-radius: 5px;
-    margin-right: 30px;
-    color: #D8D27D;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
-}
-
-p {
-    font-family: Antic Didone;
-    font-size: 50px;
-    text-align: center;
-}
-
-::placeholder {
-    color: black;
-    font-family: Noto Serif;
-    font-weight: 300;
-    font-size: 26px;   
+.btn:hover {
+  background: rgba(16, 106, 90, 0.9);
 }
 </style>
