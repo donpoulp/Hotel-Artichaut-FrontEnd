@@ -14,13 +14,17 @@ onMounted(async () => {
   await reservationStore.loadReservationData();
 });
 
+// onMounted(async () => {
+//   await reservationStore.loadReservationData2();
+// });
+
 const schema = z.object({
   startDate: z.date(),
   endDate: z.date(),
   user_id: z.number(),
   bedroom_id: z.number(),
   state: z.string(),
-  // services
+  // services: z.string(),
 });
 
 const state = reactive({
@@ -29,13 +33,13 @@ const state = reactive({
   user_id: undefined,
   bedroom_id: undefined,
   state: undefined,
-  //services
+  // services: undefined,
 })
 
 // transform data to display names of services
 const transformedReservations = computed(() => {
   return reservationStore.data.map(reservation => {
-    const serviceNames = reservation.services.map(service => service.name).join(', ');
+    const serviceNames = reservation.services.map(service => service.nameFr).join(', ');
     return {
       ...reservation,
       serviceNames
@@ -82,6 +86,10 @@ const items = row => [
     icon: 'i-heroicons-trash-20-solid'
   }],
 ]
+
+const page = ref(1)
+const pageCount = 2
+
 </script>
 
 <template>
@@ -97,6 +105,9 @@ const items = row => [
           <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
         </UDropdown>
       </template>
+<!--      <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">-->
+<!--        <UPagination v-model="page" :page-count="pageCount" :total="reservationStore.data.length" />-->
+<!--      </div>-->
     </UTable>
   </div>
   <UModal v-model="isOpen">

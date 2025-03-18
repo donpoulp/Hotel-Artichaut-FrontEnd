@@ -23,10 +23,11 @@
           <div class="pt-4 flex justify-center space-x-10">
             <UButton class="btn" type="submit" @click="$emit('close-modal')">Sign In</UButton>
             <UButton class="btn" @click="openSignUp">Sign Up</UButton>
+            <UButton class="btn" @click="userStore.logout()">Log out</UButton>
           </div>
-          <UFormGroup v-if="errorMessage" class="error-message">
-            {{ errorMessage }}
-          </UFormGroup>
+<!--          <UFormGroup v-if="errorMessage" class="error-message">-->
+<!--            {{ errorMessage }}-->
+<!--          </UFormGroup>-->
         </UForm>
       </template>
       <template v-else>
@@ -63,18 +64,18 @@ const state = reactive({
   password: undefined,
 })
 
-const errorMessage = ref('');
+// const errorMessage = ref('');
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log('Form submitted', event.data);
-  try {
+  // try {
     await userStore.login(event.data);
-    navigateTo('/');
-  } catch (error) {
-    console.error('Login failed:', error);
-    errorMessage.value = 'Login failed. Please check your credentials.';
-    console.log('Error message set:', errorMessage.value);
-  }
+    // navigateTo('/');
+  // } catch (error) {
+  //   console.error('Login failed:', error);
+  //   errorMessage.value = 'Login failed. Please check your credentials.';
+  //   console.log('Error message set:', errorMessage.value);
+  // }
 }
 
 </script>

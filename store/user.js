@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', {
             await useApiFetch(`/user`, {
                 method: 'POST',
                 body: JSON.stringify(userData)
-            });
+            })
         },
         async loadUserDataById(id) {
             this.data2 = (await useApiFetch(`/user/` + id)).data.value
@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
             await useApiFetch(`/user/` + userData.id, {
                 method: 'PUT',
                 body: JSON.stringify(userData)
-            });
+            })
         },
         async deleteUserData(id) {
             await useApiFetch(`/user/` + id, {
@@ -40,20 +40,32 @@ export const useUserStore = defineStore('user', {
                     headers: {
                         'Content-Type': 'application/json'
                     }
-                });
+                })
                 console.log('Registration successful');
             } catch (error) {
                 console.error('Registration failed', error);
             }
         },
         async login(data) {
-            await useApiFetch(`/login`, {
+            const response = await useApiFetch(`/login`, {
                 method: 'POST',
                 body: JSON.stringify(data),
                 headers: {
                     'Content-Type': 'application/json'
                 }
-            });
+            })
+            // const token = data.access_token;
+            localStorage.setItem('access_token', response.access_token);
+        },
+        async logout() {
+            const token = localStorage.getItem('access_token');
+            await useApiFetch(`/logout`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+            localStorage.removeItem('access_token');
         }
     }
 })

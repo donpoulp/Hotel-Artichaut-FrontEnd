@@ -1,13 +1,26 @@
-<script setup>
+<script setup lang="ts">
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import {useBedroomTypeStore} from "~/store/bedroom_type";
+
 const route = useRoute()
 
 const carouselConfig = {
   itemsToShow: 3,
   wrapAround: true
 }
+const bedroomTypeStore = useBedroomTypeStore()
 
-const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
+// async function loadBedroomTypeById(id) {
+//   await bedroomTypeStore.loadBedroomTypeDataById(id)
+// }
+
+onMounted(async () => {
+  await bedroomTypeStore.loadBedroomTypeDataById(route.params.id);
+});
+
+const bedroomType = computed(() => bedroomTypeStore.data);
+
+// const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 </script>
 
 <template>
@@ -17,8 +30,13 @@ const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'
         <img class="RoomPageImg" src="/image%2020.png">
       </div>
       <div class="RoomPageContent text-black">
-        <h3>{{ bedroomsType[0].nameEn }}</h3>
-        <p>{{ bedroomsType[0].descriptionEn }}</p>
+<!--        <h3>{{ bedroomType.nameEn }}</h3>-->
+<!--        <p>{{ bedroomType.descriptionEn }}</p>-->
+
+<!--        <h3>{{ loadBedroomTypeById(0).nameEn}}</h3>-->
+<!--        <p>{{loadBedroomTypeById(0).descriptionEn}}</p>-->
+<!--        <h3>{{ bedroomsType[0].nameEn }}</h3>-->
+<!--        <p>{{ bedroomsType[0].descriptionEn }}</p>-->
       </div>
     </div>
     <div class="RoomPageBtn">
