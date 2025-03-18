@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import {useAboutDescriptionStore} from "~/store/about_description";
 
+const selectLangue = useState('selectedLangue');
+
 const aboutDescStore = useAboutDescriptionStore();
 let restaurant
 let articShow
 
   aboutDescStore?.data?.forEach((item) => {
-    if (item.title === 'Restaurant & Bar') {
+    if (item.titleEn === 'Restaurant & Bar') {
       restaurant = item
-    }if (item.title === "L\'Artic Show"){
+    }if (item.titleEn === "L\'Artic Show"){
       articShow = item
     }
   })
@@ -18,17 +20,17 @@ let articShow
 
 <template>
   <div class="flex flex-col items-center justify-center py-20 px-20" :style="{backgroundColor: restaurant?.background_color, opacity: restaurant?.background_opacity}">
-    <h1 class="font-antic">{{ restaurant?.title }}</h1>
-    <h2 class="font-noto text-black text-center">{{ restaurant?.description }}</h2>
+    <h1 class="font-antic">{{ restaurant?.[`title${selectLangue?.ref}`] }}</h1>
+    <h2 class="font-noto text-black text-center">{{ restaurant?.[`description${selectLangue?.ref}`] }}</h2>
   </div>
 
   <div class="div flex flex-row items-center" :style="{backgroundColor: articShow?.background_color, opacity: articShow?.background_opacity}">
     <img class="test" :src="articShow.picture?.[0]?.picturePath" alt="Restaurant"/>
 
     <div class="flex flex-col items-center">
-      <h2 class="text-black font-noto">{{ articShow?.title }}</h2>
+      <h2 class="text-black font-noto">{{ articShow?.[`title${selectLangue?.ref}`] }}</h2>
       <p class="text-black font-noto text-center">
-        {{ articShow?.description }}
+        {{ articShow?.[`description${selectLangue?.ref}`] }}
       </p>
     </div>
   </div>

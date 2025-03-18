@@ -1,6 +1,7 @@
 <script setup lang="ts">
-
 import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
+
+const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
@@ -19,7 +20,7 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:house-simple-bold" class="dashboard-icon"></UIcon>
-      <h5>Dashboard</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'Dashboard' : 'Accueil'"></h5>
     </div>
     </NuxtLink>
 
@@ -37,7 +38,7 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
       <div class="left-side-bar-dashboard">
         <div v-if="$route.path == '/backOffice/Reservation'" class="selected-left-side-bar"></div>
         <UIcon name="i-ph:book-bold" class="dashboard-icon"></UIcon>
-        <h5>Reservation</h5>
+        <h5 v-text="selectLangue?.ref === 'En' ? 'Reservation' : 'Réservation'"></h5>
       </div>
     </NuxtLink>
 
@@ -47,7 +48,7 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice/bedroom'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:key" class="dashboard-icon"></UIcon>
-      <h5>Bedroom</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'Bedroom' : 'Chambre'"></h5>
     </div>
   </NuxtLink>
 
@@ -57,7 +58,7 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice/user'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:user-circle-duotone" class="dashboard-icon"></UIcon>
-      <h5>User</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'User' : 'Utilisateur'"></h5>
     </div>
     </NuxtLink>
 

@@ -3,7 +3,7 @@
       base: 'text-center rtl:text-right font-antic !text-[2em] '},
       td: {
     base: 'whitespace-nowrap text-center !text-[1.5em]'}
-       }"">
+       }">
         <template #name-data="{ row }">
       <span :class="[selected.find(bedroom => bedroom.id === row.id) && 'text-primary-500 dark:text-primary-400']">{{ row.name }}</span>
     </template>

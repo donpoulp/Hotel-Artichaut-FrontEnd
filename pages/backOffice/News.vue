@@ -8,6 +8,8 @@ definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const newsStore = useNewsStore()
 
 const schema = z.object({
@@ -33,11 +35,11 @@ async function onSubmit(news) {
 <template>
   <section class="p-8">
     <div>
-      <h2 style="font-size: 40px; font-weight: bold" class="mt-4">Preview</h2>
+      <h2 style="font-size: 40px; font-weight: bold" class="mt-4" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
       <News class="max-w-[1500px]"></News>
     </div>
     <div>
-      <h2 style="font-size: 40px; font-weight: bold" class="mt-10">Modify</h2>
+      <h2 style="font-size: 40px; font-weight: bold" class="mt-10" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
 
         <div v-for="news in newsStore.data" class="w-[fit-content]">
           <UForm class="flex flex-row items-center border-2">
@@ -45,18 +47,20 @@ async function onSubmit(news) {
               Section : {{news.id}}
             </div>
             <div class="flex flex-row justify-center items-center p-8">
-              <div class="mr-2">Title : </div>
-              <UInput v-model="news.titleEn"></UInput>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
+                <UInput v-model="news.titleEn"></UInput>
+              </UFormGroup>
             </div>
             <div class="flex flex-col p-8 border-r-2 border-l-2">
-              <div class="mb-1">Description : </div>
-              <UTextarea rows="8" maxrows="8" v-model="news.descriptionEn" class="w-[310px] textarea_backoffice_news"></UTextarea>
-              <span class="text-right">{{news.descriptionEn.length}}/350 caractère</span>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+                <UTextarea rows="8" maxrows="8" v-model="news.descriptionEn" class="w-[310px] textarea_backoffice_news"></UTextarea>
+                <span class="float-right text-[15px]">{{news.descriptionEn.length}}/350 caractère</span>
+              </UFormGroup>
             </div>
             <div>
               <div class="p-6">
                 <div v-for="picture in news.picture">
-                  <UFormGroup :label="'image' + picture.id" class="mb-2">
+                  <UFormGroup :label="'image ' + picture.id" class="mb-2">
                     <UInput type="file" size="md" icon="i-heroicons-folder"/>
                   </UFormGroup>
                 </div>

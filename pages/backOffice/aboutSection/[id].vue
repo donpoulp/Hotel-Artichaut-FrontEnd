@@ -7,6 +7,8 @@ definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const route = useRoute()
 
 const aboutDescriptionStore = useAboutDescriptionStore()
@@ -62,34 +64,34 @@ async function onSubmit_spa(about_description) {
   <div v-if="about_desc.about_section_id == route.params.id">
     <div v-if="about_desc.id == 1">
       <div class="px-8 pt-2 w-[100%] mb-6">
-        <h2 class="text-3xl font-noto mb-2">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="flex flex-col items-center justify-center h-[80%] bg-center font-noto relative border" :style="{backgroundImage: `url(${about_desc.picture?.[0]?.picturePath})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}">
           <div class="bg-black bg-opacity-50 h h-screen flex items-center">
             <div class="flex flex-col space-y-10">
-              <h1 class="font-antic text-center text-[60px] text-white">{{ about_desc?.title }}</h1>
+              <h1 class="font-antic text-center text-[60px] text-white">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
               <p class="text-center px-44 text-white text-[20px]">
-                {{ about_desc?.description }}
+                {{ about_desc?.[`description${selectLangue?.ref}`] }}
               </p>
             </div>
           </div>
         </div>
 
-        <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
         <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
             <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
               <div class="flex text-center items-center whitespace-nowrap p-6">
-                <UFormGroup label="Title">
-                  <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
+                  <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
                 </UFormGroup>
               </div>
               <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
-                <UFormGroup label="Text">
-                  <UTextarea :rows="5" :maxrows="5" v-model="about_desc.description" type="text" class="w-[790px] h-full textearea-strongest"/>
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+                  <UTextarea :rows="5" :maxrows="5" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[790px] h-full textearea-strongest"/>
                 </UFormGroup>
-                <span class="ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/600 caractère</span>
+                <span class="ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/600 caractère</span>
               </div>
               <div class="h-full flex flex-col w-[fit-content] px-6 py-[3.9rem] border-r-2">
-                <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id">
+                <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
                   <UInput type="file" size="md" icon="i-heroicons-folder"/>
                 </UFormGroup>
               </div>
@@ -102,18 +104,18 @@ async function onSubmit_spa(about_description) {
     </div>
     <div v-if="about_desc.id == 3">
       <div class="px-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2 mt-6">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2 mt-6" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
-          <h1 class="font-antic title_bar">{{ about_desc?.title }}</h1>
-          <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.description }}</h2>
+          <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
+          <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="isOpen = true"/>
           <UModal v-model="isOpen">
             <div class="p-4">
               <UForm :schema="schema" :state="state">
-                <UFormGroup label="color">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
                   <UInput v-model="about_desc.background_color"/>
                 </UFormGroup>
-                <UFormGroup label="opacity" class="mt-3">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
                   <UInput v-model="about_desc.background_opacity"/>
                 </UFormGroup>
                 <div class="flex justify-center mt-4">
@@ -130,24 +132,24 @@ async function onSubmit_spa(about_description) {
 
     <div v-if="about_desc.id == 4">
       <div class="px-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2 mt-6">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2 mt-6" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="div flex flex-row items-center border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
           <img class="img_bar p-4" :src="about_desc.picture?.[0]?.picturePath" alt="Restaurant"/>
 
           <div class="flex flex-col items-center">
-            <h2 class="text-black font-noto desc_bar">{{ about_desc?.title }}</h2>
+            <h2 class="text-black font-noto desc_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h2>
             <p class="text-black font-noto text-center text_bar">
-              {{ about_desc?.description }}
+              {{ about_desc?.[`description${selectLangue?.ref}`] }}
             </p>
           </div>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
           <UModal v-model="isOpen2">
             <div class="p-4">
               <UForm :schema="schema" :state="state">
-                <UFormGroup label="color">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
                   <UInput v-model="about_desc.background_color"/>
                 </UFormGroup>
-                <UFormGroup label="opacity" class="mt-3">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
                   <UInput v-model="about_desc.background_opacity"/>
                 </UFormGroup>
                 <div class="flex justify-center mt-4">
@@ -163,23 +165,23 @@ async function onSubmit_spa(about_description) {
     </div>
 
     <div v-if="about_desc.id == 3 || about_desc.id == 4" class="p-6">
-      <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+      <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
       <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
         <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
           <div class="flex text-center items-center whitespace-nowrap p-6">
-            <UFormGroup label="Title">
-              <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
+              <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
             </UFormGroup>
           </div>
           <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
-            <UFormGroup label="Text">
-              <UTextarea v-if="about_desc.id == 3" :rows="3" :maxrows="3" v-model="about_desc.description" type="text" class="w-[500px] h-full textearea-strongest"/>
-              <UTextarea v-if="about_desc.id == 4" :rows="8" :maxrows="8" v-model="about_desc.description" type="text" class="w-[183px] h-full textearea-strongest"/>
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+              <UTextarea v-if="about_desc.id == 3" :rows="3" :maxrows="3" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
+              <UTextarea v-if="about_desc.id == 4" :rows="8" :maxrows="8" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[183px] h-full textearea-strongest"/>
             </UFormGroup>
-            <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/200 caractère</span>
+            <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/200 caractère</span>
           </div>
           <div v-if="about_desc.id == 4" class="h-full flex flex-col w-[fit-content] px-6 py-[5.75rem] border-r-2">
-            <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id">
+            <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
               <UInput type="file" size="md" icon="i-heroicons-folder"/>
             </UFormGroup>
           </div>
@@ -192,10 +194,10 @@ async function onSubmit_spa(about_description) {
 
     <div v-if="about_desc.id == 5">
       <div class="p-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
       <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
-        <h1 class="font-antic title_bar">{{ about_desc?.title }}</h1>
-        <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.description }}</h2>
+        <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
+        <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
 
         <div class="pb-32">
           <div class="flex flex-col relative">
@@ -210,10 +212,10 @@ async function onSubmit_spa(about_description) {
         <UModal v-model="isOpen3">
           <div class="p-4">
             <UForm :schema="schema" :state="state">
-              <UFormGroup label="color">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
                 <UInput v-model="about_desc.background_color"/>
               </UFormGroup>
-              <UFormGroup label="opacity" class="mt-3">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
                 <UInput v-model="about_desc.background_opacity"/>
               </UFormGroup>
               <div class="flex justify-center mt-4">
@@ -225,22 +227,22 @@ async function onSubmit_spa(about_description) {
           </div>
         </UModal>
       </div>
-        <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
         <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
           <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
             <div class="flex text-center items-center whitespace-nowrap p-6">
-              <UFormGroup label="Title">
-                <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
+                <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
               </UFormGroup>
             </div>
             <div class="w-[fit-content] h-full flex flex-row border-l-2 px-6 py-[4.25rem]">
-              <UFormGroup label="Text">
-                <UTextarea :rows="4" :maxrows="4" v-model="about_desc.description" type="text" class="w-[500px] h-full textearea-strongest"/>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+                <UTextarea :rows="4" :maxrows="4" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
               </UFormGroup>
-              <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/300 caractère</span>
+              <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/300 caractère</span>
             </div>
-            <div class="h-full flex flex-col w-[fit-content] p-6 border-r-2 border-l-2">
-              <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id" class="mt-2">
+            <div class="h-full flex flex-col w-fit p-6 border-r-2 border-l-2">
+              <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id" class="mt-2">
                 <UInput type="file" size="md" icon="i-heroicons-folder"/>
               </UFormGroup>
             </div>

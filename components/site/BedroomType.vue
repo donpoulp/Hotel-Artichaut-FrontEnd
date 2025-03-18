@@ -9,12 +9,13 @@ const carouselConfig = {
 
 const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedroomType', {lazy: true})
 
+const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
     <section class="sectionBedroomType">
 
-      <h2 class="titleBedroomType">Rooms and Suites</h2>
+      <h2 v-text="selectLangue.ref === 'En' ? 'Rooms and Suites' : 'Chambres et suites'" class="titleBedroomType"></h2>
 
       <div v-if="status === 'pending'">
         Loading ...
@@ -23,7 +24,7 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
         <Carousel v-bind="carouselConfig">
           <Slide v-for="bedroomType in bedroomsTypes" :key="bedroomType" class="bedroomTypeCartSection">
 
-            <h2 class="littletitleBedroomType">{{ bedroomType.nameEn }}</h2>
+            <h2 class="littletitleBedroomType">{{ bedroomType[`name${selectLangue?.ref}`] }}</h2>
             <div class="bedroomTypeCart">
                 <div class="bedroomTypeImg">
                   <div>
@@ -37,8 +38,8 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
                   </div>
                 </div>
               <div class="bedroomTypeContent">
-                <div class="textBedroomType">{{ bedroomType.descriptionEn }}</div>
-                <Button class="Button" title="Reserver" route='site-bedroomType-id' :route_params="{ id: bedroomType.id }" width="250px" height="80px" fontSize="35px"/>
+                <div class="textBedroomType">{{ bedroomType[`description${selectLangue?.ref}`] }}</div>
+                <Button class="Button" :title="selectLangue?.ref === 'En' ? 'To book' : 'Réserver'" route='site-bedroomType-id' :route_params="{ id: bedroomType?.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>
           </Slide>

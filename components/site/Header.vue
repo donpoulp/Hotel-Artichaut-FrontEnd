@@ -1,8 +1,26 @@
+<script setup>
+import Popup from './Popup.vue'
+import { ref } from 'vue'
+
+const showModal = ref(false)
+
+const langue = useState('langue') // Récupération du tableau global
+const selectedLangue = useState('selectedLangue')
+
+const onLangueChange = (newValue) => {
+  selectedLangue.value = newValue
+  console.log('Langue sélectionnée:', selectedLangue.value)
+}
+
+</script>
+
 <template>
     <header>
         <div class="langue">
-            <UIcon name="flag:gb-4x3" class="langueIcon" />
-            <p class="text-white">English</p>
+          <USelectMenu v-model="selectedLangue" :options="langue" option-attribute="name" class="w-full" @update:modelValue="onLangueChange">
+            <UIcon :name="selectedLangue?.icon" class="langueIcon" aria-hidden="true" />
+            <p class="text-white ml-2">{{selectedLangue?.name}}</p>
+          </USelectMenu>
         </div>
       <NuxtLink to="/site">
         <div class="mainLogoContainer">
@@ -15,21 +33,7 @@
             <Popup v-show="showModal" @close-modal="showModal = false" />
         </div>
     </header>
-    </template>
-<script>
-
-import Popup from './Popup.vue'
-
-export default {
-  components: { Popup },
-  data() {
-    return {
-      showModal: false,
-    }
-  },
-}
-
-</script>
+</template>
 
 <style scoped>
 header {
