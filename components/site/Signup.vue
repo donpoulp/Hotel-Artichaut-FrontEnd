@@ -1,3 +1,38 @@
+<script setup lang="ts">
+import {z} from 'zod'
+import {reactive} from 'vue'
+import {useAuthStore} from "~/store/auth";
+
+const authStore = useAuthStore();
+
+const schemaR = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  emailBis: z.string(),
+  password: z.string(),
+  phone: z.string(),
+  phoneBis: z.string(),
+  is_admin: z.number(),
+})
+
+const stateR = reactive({
+  firstName: undefined,
+  lastName: undefined,
+  email: undefined,
+  emailBis: undefined,
+  password: undefined,
+  phone: undefined,
+  phoneBis: undefined,
+  is_admin: 0,
+})
+
+async function onSubmitRegister(data) {
+  console.log(data)
+  await authStore.register(data);
+}
+</script>
+
 <template>
   <div class="signup-container">
     <div class="header">
@@ -43,42 +78,6 @@
     </UForm>
   </div>
 </template>
-
-<script setup lang="ts">
-import {z} from 'zod'
-import {useUserStore} from "~/store/user.js";
-import {reactive} from 'vue'
-
-const userStore = useUserStore();
-
-const schemaR = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  emailBis: z.string(),
-  password: z.string(),
-  phone: z.string(),
-  phoneBis: z.string(),
-  is_admin: z.number(),
-})
-
-const stateR = reactive({
-  firstName: undefined,
-  lastName: undefined,
-  email: undefined,
-  emailBis: undefined,
-  password: undefined,
-  phone: undefined,
-  phoneBis: undefined,
-  is_admin: 0,
-})
-
-async function onSubmitRegister(data) {
-  console.log(data)
-  await userStore.register(data);
-}
-
-</script>
 
 <style scoped>
 .signup-container {

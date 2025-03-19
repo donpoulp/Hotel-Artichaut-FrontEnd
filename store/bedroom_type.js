@@ -9,7 +9,7 @@ export const useBedroomTypeStore = defineStore('bedroomType', {
     },
     actions: {
         async loadBedroomTypeDataById(id){
-            this.data = (await useApiFetch(`/bedroomType` +id)).data.value
+            this.data = (await useApiFetch(`/bedroomType/` +id)).data.value
         }
     }
 })
