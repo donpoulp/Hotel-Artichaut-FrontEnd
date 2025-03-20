@@ -10,8 +10,6 @@ const carouselConfig = {
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
-console.log(useRouter().options.routes)
-
 </script>
 
 <template>

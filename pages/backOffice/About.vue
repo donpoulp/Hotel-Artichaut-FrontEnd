@@ -79,7 +79,7 @@ async function onSubmit_section(about_section) {
         <div v-for="about_section in aboutSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center border-2">
             <div class="flex text-center items-center whitespace-nowrap py-[2.1rem] px-8 border-r-2">
-              Title : <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
+              <span v-text="selectLangue?.ref === 'En' ? 'Title :' : 'Titre :'"></span><UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
             </div>
             <div class="p-8 border-r-2">
               <UInput type="file" size="md" icon="i-heroicons-folder"/>
@@ -88,7 +88,12 @@ async function onSubmit_section(about_section) {
               <UButton block @click="onSubmit_section(about_section)" class="text-center w-full">Valider</UButton>
             </div>
             <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8">
-              <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }"><UButton block class="text-center w-full">Go to</UButton></NuxtLink>
+              <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }">
+                <UButton block class="text-center w-full" color="blue" to="/site">
+                  {{ selectedLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
+                  <UIcon name="hugeicons:arrow-right-01" />
+                </UButton>
+              </NuxtLink>
             </div>
           </UForm>
           </div>

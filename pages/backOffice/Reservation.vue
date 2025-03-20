@@ -22,22 +22,28 @@ const columns = computed(() => {
       label: 'ID'
     }, {
       key: 'bedroom_id',
-      label: 'Bedroom'
+      label: 'Bedroom',
+      sortable: true
     }, {
       key: 'user_id',
-      label: 'User'
+      label: 'User',
+      sortable: true
     }, {
       key: 'service',
-      label: 'Services'
+      label: 'Services',
+      sortable: true
     }, {
       key: 'startDate',
-      label: 'Start date'
+      label: 'Start date',
+      sortable: true
     }, {
       key: 'endDate',
-      label: 'End date'
+      label: 'End date',
+      sortable: true
     }, {
       key: 'status_id',
-      label: 'Status'
+      label: 'Status',
+      sortable: true
     }, {
       key: 'action',
       label: 'Action',
@@ -48,22 +54,28 @@ const columns = computed(() => {
       label: 'ID'
     }, {
       key: 'bedroom_id',
-      label: 'Chambre'
+      label: 'Chambre',
+      sortable: true
     }, {
       key: 'user_id',
-      label: 'Utilisateur'
+      label: 'Utilisateur',
+      sortable: true
     }, {
       key: 'service',
-      label: 'Services'
+      label: 'Services',
+      sortable: true
     }, {
       key: 'startDate',
-      label: 'Date de début'
+      label: 'Date de début',
+      sortable: true
     }, {
       key: 'endDate',
-      label: 'Date de fin'
+      label: 'Date de fin',
+      sortable: true
     }, {
       key: 'status_id',
-      label: 'Status'
+      label: 'Status',
+      sortable: true
     }, {
       key: 'action',
       label: 'Action',

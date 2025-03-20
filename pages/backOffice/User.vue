@@ -21,13 +21,16 @@ const columns = computed(() => {
       label: 'ID'
     }, {
       key: 'firstName',
-      label: 'First name'
+      label: 'First name',
+      sortable: true
     }, {
       key: 'lastName',
-      label: 'Last name'
+      label: 'Last name',
+      sortable: true
     }, {
       key: 'email',
-      label: 'Email'
+      label: 'Email',
+      sortable: true
     }, {
       key: 'emailBis',
       label: 'email bis'
@@ -40,12 +43,15 @@ const columns = computed(() => {
     }, {
       key: 'role',
       label: 'Role',
+      sortable: true
     }, {
       key: 'created_at',
       label: 'Created_at',
+      sortable: true
     }, {
       key: 'updated_at',
       label: 'Updated_at',
+      sortable: true
     }, {
       key: 'action',
       label: 'Action',
@@ -56,13 +62,16 @@ const columns = computed(() => {
       label: 'ID'
     }, {
       key: 'firstName',
-      label: 'Prénom'
+      label: 'Prénom',
+      sortable: true
     }, {
       key: 'lastName',
-      label: 'Nom'
+      label: 'Nom',
+      sortable: true
     }, {
       key: 'email',
-      label: 'E-mail'
+      label: 'E-mail',
+      sortable: true
     }, {
       key: 'emailBis',
       label: 'E-mail bis'
@@ -75,12 +84,15 @@ const columns = computed(() => {
     }, {
       key: 'role',
       label: 'Role',
+      sortable: true
     }, {
       key: 'created_at',
       label: 'Crée le',
+      sortable: true
     }, {
       key: 'updated_at',
       label: 'Mise a jour le',
+      sortable: true
     }, {
       key: 'action',
       label: 'Action',
@@ -135,7 +147,7 @@ const filteredRows = computed(() => {
     return userStore.data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
   }
 
-  return userStore.data.slice((page.value - 1) * pageCount, (page.value) * pageCount).filter((person) => {
+  return userStore.data.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
 
