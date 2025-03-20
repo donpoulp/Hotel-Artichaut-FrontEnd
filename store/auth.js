@@ -4,7 +4,6 @@ import {useApiFetch} from "~/composables/useApiFetch.ts";
 export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
-            data: [],
             csrfToken: '',
             user: null
         }
@@ -24,17 +23,17 @@ export const useAuthStore = defineStore('auth', {
                 }
             })
         },
-        async login(data) {
+        async login(credentials) {
             const response = await useApiFetch(`/login`, {
                 method: 'POST',
-                body: JSON.stringify(data),
+                body: JSON.stringify(credentials),
                 headers: {
                     'Content-Type': 'application/json'
                 }
             })
-            // const token = data.access_token;
-            this.user = response.user;
-            localStorage.setItem('access_token', response.access_token);
+            const data = await response.json();
+            this.user = data.user;
+            localStorage.setItem('access_token', data.access_token);
         },
         async logout() {
             const token = localStorage.getItem('access_token');
@@ -45,6 +44,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             })
             localStorage.removeItem('access_token');
+            this.user = null;
         }
     }
 })
