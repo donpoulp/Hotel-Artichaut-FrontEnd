@@ -248,7 +248,7 @@ const select = ref(selected_role[0])
           <UInput v-model="userStore.data2[0].email"/>
         </UFormGroup>
 
-        <UFormGroup v-if="userStore.data2[0].emailBis != undifined" label="emailBis" name="emailBis" class="mt-2">
+        <UFormGroup v-if="userStore.data2[0].emailBis != undefined" label="emailBis" name="emailBis" class="mt-2">
           <UInput v-model="userStore.data2[0].emailBis"/>
         </UFormGroup>
 

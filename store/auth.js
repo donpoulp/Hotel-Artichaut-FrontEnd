@@ -24,26 +24,36 @@ export const useAuthStore = defineStore('auth', {
             })
         },
         async login(credentials) {
-            const response = await useApiFetch(`/login`, {
-                method: 'POST',
-                body: JSON.stringify(credentials),
-                headers: {
-                    'Content-Type': 'application/json'
+            try {
+                const response = await useApiFetch(`/login`, {
+                    method: 'POST',
+                    body: JSON.stringify(credentials),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                // console.log('Full response:', response)
+                console.log(response.data._value.access_token)
+
+                if (response.data._value.access_token) {
+                    sessionStorage.setItem('access_token', response.data._value.access_token);
+                    console.log(response.data);
+                } else {
+                    console.error('Access token not found in response');
                 }
-            })
-            const data = await response.json();
-            this.user = data.user;
-            localStorage.setItem('access_token', data.access_token);
+            } catch (error) {
+                console.error('Error during login:', error);
+            }
         },
         async logout() {
-            const token = localStorage.getItem('access_token');
+            const token = sessionStorage.getItem('access_token');
             await useApiFetch(`/logout`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             })
-            localStorage.removeItem('access_token');
+            sessionStorage.removeItem('access_token');
             this.user = null;
         }
     }

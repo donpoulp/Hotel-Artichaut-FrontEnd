@@ -53,7 +53,12 @@ export const useReservationStore = defineStore('reservation', {
         async loadReservationData(){
             this.data = (await useApiFetch(`/reservation`)).data.value
         },
-
+        async addReservation(reservationData){
+            await useApiFetch(`/reservation`, {
+                method: 'POST',
+                body: JSON.stringify(reservationData),
+            })
+        }
         // async loadReservationData2(){
         //     this.data2 = (await useApiFetch(`/reservation`)).data.value
         // },
