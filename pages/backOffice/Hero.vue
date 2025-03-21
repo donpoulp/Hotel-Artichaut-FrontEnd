@@ -8,6 +8,8 @@ definePageMeta({
 layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const heroStore = useHeroStore();
 
 const schema = z.object({
@@ -35,35 +37,31 @@ async function onSubmit() {
 <template>
 
     <div class="flex flex-col px-20 pt-10">
-      <h1 class="text-3xl font-noto">Preview</h1>
+      <h1 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'" class="text-3xl font-noto"></h1>
       <div class="py-2">
-        <Welcome :title="heroStore.data[0].titleEn" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
+        <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
       </div>
     </div>
 
     <div class="pb-20 pt-10">
-      <h2 class="text-2xl font-noto px-20">Modify</h2>
-
+      <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="text-2xl font-noto px-20"></h2>
       <UForm :schema="schema" :state="state" class="space-y-4 px-20" @submit.prevent="onSubmit">
 
         <div class="flex flex-row space-x-4">
-          <UFormGroup label="Title" class="custom-label">
-            <UInput v-model="heroStore.data[0].titleEn" class="custom-input"/>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
+            <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
 
-          <UFormGroup label="Picture" class="custom-label">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
             <UInput v-model="state.picture" class="custom-input" type="file"/>
           </UFormGroup>
         </div>
 
-        <UFormGroup label="Content">
-          <UInput v-model="heroStore.data[0].descriptionEn" class="custom-input"/>
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+          <UInput v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="custom-input"/>
         </UFormGroup>
 
-        <UButton type="submit">
-          Update
-        </UButton>
-
+        <UButton type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour'"></UButton>
       </UForm>
     </div>
 

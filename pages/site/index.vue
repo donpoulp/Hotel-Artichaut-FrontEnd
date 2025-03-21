@@ -14,7 +14,7 @@ import About from "~/components/site/About.vue";
     <Strongest class="z-50"/>
     <About></About>
 
-  <BedroomType></BedroomType>
+  <BedroomType display="none"></BedroomType>
   <News></News>
 </template>
 

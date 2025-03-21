@@ -1,46 +1,84 @@
 <script setup>
 import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-
+import {z} from "zod";
+import {reactive} from "vue";
+import {useBedroomStore} from "~/store/bedroom.js";
+import {useBedroomTypeStore} from "~/store/bedroom-type.js";
+defineProps(['display'])
 const carouselConfig = {
   itemsToShow: 1,
   wrapAround: true
 }
+const bedroomTypeStore = useBedroomTypeStore()
 
 const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedroomType', {lazy: true})
 
+const selectLangue = useState('selectedLangue');
+
+const sectionBackgroundColor = ref('#F0F0E8');
+
+function updateSectionBackgroundColor(newIndex) {
+  const selectedBedroomType = bedroomsTypes.value[newIndex];
+  sectionBackgroundColor.value = selectedBedroomType.background_color;
+}
+
+const isOpen = ref(false)
+
+async function openModalBedroomTypeColor(id) {
+  await bedroomTypeStore.loadBedroomTypeDataById(id)
+  isOpen.value = true
+}
+
+const schema = z.object({
+  name: z.string(),
+  description: z.string(),
+  price: z.string(),
+  picture: z.string(),
+})
+
+const state = reactive({
+  background_color: undefined,
+  background_opacity: undefined,
+})
+
+async function onSubmit(about) {
+  await bedroomTypeStore.updateBedroomTypeData(about);
+  reloadNuxtApp()
+}
 </script>
 
 <template>
-    <section class="sectionBedroomType">
+    <section class="sectionBedroomType" :style="{ backgroundColor: sectionBackgroundColor }">
 
-      <h2 class="titleBedroomType">Rooms and Suites</h2>
+      <h2 v-text="selectLangue.ref === 'En' ? 'Rooms and Suites' : 'Chambres et suites'" class="titleBedroomType"></h2>
 
       <div v-if="status === 'pending'">
         Loading ...
       </div>
       <div v-else>
-        <Carousel v-bind="carouselConfig">
+        <Carousel v-bind="carouselConfig" @update:modelValue="updateSectionBackgroundColor">
           <Slide v-for="bedroomType in bedroomsTypes" :key="bedroomType" class="bedroomTypeCartSection">
 
-            <h2 class="littletitleBedroomType">{{ bedroomType.nameEn }}</h2>
+            <h2 class="littletitleBedroomType">{{ bedroomType[`name${selectLangue?.ref}`] }}</h2>
             <div class="bedroomTypeCart">
                 <div class="bedroomTypeImg">
                   <div>
-                    <img class="bedroomTypeImg1" src="/image%2026.png">
+                    <img class="bedroomTypeImg1" :src="bedroomType.picture[0].picturePath">
                     <div class="whiteline1"></div>
-                    <img class="bedroomTypeImg2" src="/image%2025.png">
+                    <img class="bedroomTypeImg2" :src="bedroomType.picture[1].picturePath">
                   </div>
                   <div class="whiteline2"></div>
                   <div>
-                    <img class="bedroomTypeImg3" src="/image%2024.png">
+                    <img class="bedroomTypeImg3" :src="bedroomType.picture[2].picturePath">
                   </div>
                 </div>
               <div class="bedroomTypeContent">
-                <div class="textBedroomType">{{ bedroomType.descriptionEn }}</div>
-                <Button class="Button" title="Reserver" route='site-bedroomType-id' :route_params="{ id: bedroomType.id }" width="250px" height="80px" fontSize="35px"/>
+                <div class="textBedroomType">{{ bedroomType[`description${selectLangue?.ref}`] }}</div>
+                <Button class="Button" :title="selectLangue?.ref === 'En' ? 'To book' : 'Réserver'" route='site-bedroomType-id' :route_params="{ id: bedroomType?.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>
+            <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalBedroomTypeColor(bedroomType.id)" :style="{ 'display': display }"/>
           </Slide>
           <template #addons class="addonsCarrousel">
             <Navigation />
@@ -49,6 +87,24 @@ const { status, data: bedroomsTypes } = useFetch('http://127.0.0.1:8000/api/bedr
       </div>
 
     </section>
+
+  <UModal v-model="isOpen">
+    <div class="p-4">
+      <UForm :schema="schema" :state="state">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
+          <UInput v-model="bedroomTypeStore.data2.background_color"/>
+        </UFormGroup>
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
+          <UInput v-model="bedroomTypeStore.data2.background_opacity"/>
+        </UFormGroup>
+        <div class="flex justify-center mt-4">
+          <UButton @click="onSubmit(bedroomTypeStore.data2)">
+            Valider
+          </UButton>
+        </div>
+      </UForm>
+    </div>
+  </UModal>
 </template>
 
 <style scoped>
@@ -59,7 +115,7 @@ img, video {
 }
 
 .sectionBedroomType{
-  background-color: #F0F0E8;
+  //background-color: v-bind();
 }
 .titleBedroomType{
   font-family: "Antic Didone",serif;
@@ -110,16 +166,16 @@ img, video {
 }
 
 .bedroomTypeImg1{
-  max-width: 350px;
-  height: 221px;
+  width: 350px!important;
+  height: 221px!important;
 }
 .bedroomTypeImg2{
-  max-width: 350px;
-  height: 196px;
+  width: 350px!important;
+  height: 196px!important;
 }
 .bedroomTypeImg3{
-  max-width: 281px;
-  height: 417px;
+  width: 281px!important;
+  height: 417px!important;
 }
 .whiteline1{
   height: 1px;
@@ -129,20 +185,13 @@ img, video {
   height: 417px;
   width: 1px;
 }
-
-.carousel__pagination{
-  display:none;
-}
-.carousel__next, .carousel__prev, .carousel__icon{
-  width: 0!important;
-  height: 0!important;
-}
-.carousel__next, .carousel__prev, .carousel__icon{
-  width: 500px!important;
-  height: 500px!important;
-}
 .Button{
   margin-left: 13%;
   margin-top: 12%;
+}
+.modify-color-1{
+  position: absolute;
+  right: 30px;
+  bottom: 0;
 }
 </style>

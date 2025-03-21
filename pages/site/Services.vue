@@ -2,9 +2,8 @@
   import {useServicesStore} from "~/store/services";
 
   const servicesStore = useServicesStore()
-  //console.log(servicesStore.data[0].picture[0].picturePath)
 
-  //<img class="w-[50%] z-0" src="{{ service.picture[0].picturePath }}"/>
+  const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
@@ -16,14 +15,14 @@
       <div v-if="service.id % 2 == 0" class="flex flex-row items-center">
         <img class="w-[50%] z-0" :src="service.picture[0].picturePath"/>
         <div class="post-it h-[450px] w-[70%] flex flex-col items-center justify-center">
-          <div class="text-[64px] font-antic pl-[25%] pb-10">{{ service.name }}</div>
-          <div class="text-[28px] font-noto text-center p-2">{{ service.description }}</div>
+          <div class="text-[64px] font-antic pl-[25%] pb-10">{{ service[`name${selectLangue.ref}`] }}</div>
+          <div class="text-[28px] font-noto text-center p-2">{{ service[`description${selectLangue.ref}`] }}</div>
         </div>
       </div>
       <div v-else class="flex flex-row items-center">
         <div class="post-it-reverse h-[450px] w-[70%] flex flex-col items-center justify-center">
-          <div class="text-[64px] font-antic pr-[25%] pb-10">{{ service.name }}</div>
-          <div class="text-[28px] font-noto text-center p-2">{{ service.description }}</div>
+          <div class="text-[64px] font-antic pr-[25%] pb-10">{{ service[`name${selectLangue.ref}`] }}</div>
+          <div class="text-[28px] font-noto text-center p-2">{{ service[`description${selectLangue.ref}`] }}</div>
         </div>
         <img class="w-[50%] z-0" :src="service.picture[0].picturePath"/>
       </div>

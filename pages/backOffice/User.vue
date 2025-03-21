@@ -1,61 +1,115 @@
 <script setup lang="ts">
 import {useUserStore} from "~/store/user";
 import {z} from "zod";
-import {reactive} from "vue";
+import {computed, reactive} from "vue";
 import type { FormSubmitEvent } from '#ui/types'
 
 definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 // On instancie Le User Store ou l'on ira chercher les requetes SQL
 const userStore = useUserStore()
 
 // On instancie les columns pour le Tableau nuxt
-const columns = [{
-  key: 'id',
-  label: 'ID'
-}, {
-  key: 'firstName',
-  label: 'First name'
-}, {
-  key: 'lastName',
-  label: 'Last name'
-}, {
-  key: 'email',
-  label: 'Email'
-}, {
-  key: 'emailBis',
-  label: 'email bis'
-}, {
-  key: 'phone',
-  label: 'Phone'
-}, {
-  key: 'phoneBis',
-  label: 'Phone bis',
-}, {
-  key: 'role',
-  label: 'Role',
-}, {
-  key: 'created_at',
-  label: 'Created_at',
-}, {
-  key: 'updated_at',
-  label: 'Updated_at',
-}, {
-  key: 'action',
-}]
+const columns = computed(() => {
+  if (selectLangue.value?.ref == "En") {
+    return [{
+      key: 'id',
+      label: 'ID'
+    }, {
+      key: 'firstName',
+      label: 'First name',
+      sortable: true
+    }, {
+      key: 'lastName',
+      label: 'Last name',
+      sortable: true
+    }, {
+      key: 'email',
+      label: 'Email',
+      sortable: true
+    }, {
+      key: 'emailBis',
+      label: 'email bis'
+    }, {
+      key: 'phone',
+      label: 'Phone'
+    }, {
+      key: 'phoneBis',
+      label: 'Phone bis',
+    }, {
+      key: 'role',
+      label: 'Role',
+      sortable: true
+    }, {
+      key: 'created_at',
+      label: 'Created_at',
+      sortable: true
+    }, {
+      key: 'updated_at',
+      label: 'Updated_at',
+      sortable: true
+    }, {
+      key: 'action',
+      label: 'Action',
+    }]
+  } else if (selectLangue.value?.ref == "Fr") {
+    return [{
+      key: 'id',
+      label: 'ID'
+    }, {
+      key: 'firstName',
+      label: 'Prénom',
+      sortable: true
+    }, {
+      key: 'lastName',
+      label: 'Nom',
+      sortable: true
+    }, {
+      key: 'email',
+      label: 'E-mail',
+      sortable: true
+    }, {
+      key: 'emailBis',
+      label: 'E-mail bis'
+    }, {
+      key: 'phone',
+      label: 'Télephone'
+    }, {
+      key: 'phoneBis',
+      label: 'Télephone bis',
+    }, {
+      key: 'role',
+      label: 'Role',
+      sortable: true
+    }, {
+      key: 'created_at',
+      label: 'Crée le',
+      sortable: true
+    }, {
+      key: 'updated_at',
+      label: 'Mise a jour le',
+      sortable: true
+    }, {
+      key: 'action',
+      label: 'Action',
+    }]
+  }
+});
 
 // Modal Modify User
 const isOpenModify = ref(false)
 
 const items = row => [
   [{
-    label: 'Edit',
+    label: selectLangue.value.ref === 'En' ? 'Edit' : 'Modifier',
     icon: 'i-heroicons-pencil-square-20-solid',
     click: () => openModalModify(row.id),
   }], [{
-    label: 'Delete',
+    label: selectLangue.value.ref === 'En' ? 'Delete' : 'Supprimer',
     icon: 'i-heroicons-trash-20-solid',
     click: () => deleteUser(row.id),
   }]
@@ -78,7 +132,13 @@ async function deleteUser(id){
 }
 
 // Selected Column par default
-const selectedColumns = ref(columns.filter(col => ['id', 'firstName', 'lastName', 'email', 'phone', 'action'].includes(col.key)))
+const selectedColumns = ref([]);
+
+watch(columns, (newColumns) => {
+  selectedColumns.value = newColumns.filter((col) =>
+      ["id", "firstName", "lastName", "email", "phone", "action"].includes(col.key)
+  );
+}, { immediate: true });
 
 // Shearch Bar//
 const page = ref(1)
@@ -90,7 +150,7 @@ const filteredRows = computed(() => {
     return userStore.data.slice((page.value - 1) * pageCount, (page.value) * pageCount)
   }
 
-  return userStore.data.slice((page.value - 1) * pageCount, (page.value) * pageCount).filter((person) => {
+  return userStore.data.filter((person) => {
     return Object.values(person).some((value) => {
       return String(value).toLowerCase().includes(q.value.toLowerCase())
 
@@ -162,13 +222,13 @@ const select = ref(selected_role[0])
 
 <template>
   <div class="flex flex-row py-4 px-20 justify-between items-center">
-    <h1 class="text-3xl font-noto pb-4"> User </h1>
+    <h1 v-text="selectLangue?.ref === 'En' ? 'User' : 'Utilisateur'" class="text-3xl font-noto pb-4"></h1>
   </div>
   <div class="px-20">
     <div class="flex px-3 py-3.5 border-b border-gray-200 dark:border-gray-700">
       <USelectMenu v-model="selectedColumns" :options="columns" multiple placeholder="Columns" class="mr-4 w-[15%]"/>
-      <UInput v-model="q" placeholder="Filter user..." />
-      <UButton @click="isOpen = true" class="ml-[60%]">Add new</UButton>
+      <UInput v-model="q" :placeholder="selectLangue?.ref === 'En' ? 'Filter user...' : 'Filtrer l\'utilisateur...'" />
+      <UButton v-text="selectLangue?.ref === 'En' ? 'Add new' : 'Ajouter un nouveau'" @click="isOpen = true" class="ml-[60%]"></UButton>
     </div>
     <UTable :columns="selectedColumns" :rows="filteredRows">
 

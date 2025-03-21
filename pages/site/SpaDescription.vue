@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import {useAboutDescriptionStore} from "~/store/about_description";
 
+const selectLangue = useState('selectedLangue');
+
 const aboutDescStore = useAboutDescriptionStore();
 let spa
 
   aboutDescStore?.data?.forEach((item) => {
-    if (item.title === 'SPA & Well-being') {
+    if (item.titleEn === 'SPA & Well-being') {
       spa = item
     }
   })
@@ -14,8 +16,8 @@ let spa
 
 <template>
   <div class="flex flex-col items-center justify-center py-20 px-20" :style="{backgroundColor: spa?.background_color, opacity: spa?.background_opacity}">
-    <h1 class="font-antic">{{ spa?.title }}</h1>
-    <h2 class="font-noto text-black text-center">{{ spa?.description }}</h2>
+    <h1 class="font-antic">{{ spa?.[`title${selectLangue?.ref}`] }}</h1>
+    <h2 class="font-noto text-black text-center">{{ spa?.[`description${selectLangue?.ref}`] }}</h2>
 
     <div class="pb-32">
       <div class="flex flex-col relative">
