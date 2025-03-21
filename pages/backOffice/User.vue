@@ -132,10 +132,13 @@ async function deleteUser(id){
 }
 
 // Selected Column par default
-const selectedColumns = computed(() => {
-  // Ici, on filtre les colonnes en fonction des clés spécifiées
-  return columns.value.filter(col => ['id', 'firstName', 'lastName', 'email', 'phone', 'action'].includes(col.key));
-});
+const selectedColumns = ref([]);
+
+watch(columns, (newColumns) => {
+  selectedColumns.value = newColumns.filter((col) =>
+      ["id", "firstName", "lastName", "email", "phone", "action"].includes(col.key)
+  );
+}, { immediate: true });
 
 // Shearch Bar//
 const page = ref(1)

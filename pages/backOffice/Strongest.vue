@@ -49,7 +49,7 @@ const state_section = reactive({
 })
 
 async function onSubmit_section(section) {
-  if (section.text.length > 143) {
+  if (section?.[`text${selectLangue.value.ref}`].length > 143) {
     alert("trop de caractere")
   }else {
     await strongestSectionStore.updateStrongestSectionData(section);

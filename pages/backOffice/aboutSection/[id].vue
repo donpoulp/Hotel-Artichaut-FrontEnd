@@ -32,7 +32,7 @@ const state = reactive({
 })
 
 async function onSubmit(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 600) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 600) {
     alert("trop de caractere")
   }else {
     await aboutDescriptionStore.updateAboutDescriptionData(about_description);
@@ -41,7 +41,7 @@ async function onSubmit(about_description) {
 }
 
 async function onSubmit_restaurant(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 200) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 200) {
     alert("trop de caractere")
   }else {
     await aboutDescriptionStore.updateAboutDescriptionData(about_description);
@@ -50,7 +50,7 @@ async function onSubmit_restaurant(about_description) {
 }
 
 async function onSubmit_spa(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 300) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 300) {
     alert("trop de caractere")
   }else {
     await aboutDescriptionStore.updateAboutDescriptionData(about_description);

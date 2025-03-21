@@ -23,7 +23,7 @@ const state = reactive({
 })
 
 async function onSubmit(news) {
-  if (news.title.length > 22 || news.description.length > 350) {
+  if (news?.[`title${selectLangue.value.ref}`]?.length > 22 || news?.[`description${selectLangue.value.ref}`]?.length > 350) {
     alert("trop de caractere")
   }else {
     await newsStore.updateNewsData(news);
@@ -48,13 +48,13 @@ async function onSubmit(news) {
             </div>
             <div class="flex flex-row justify-center items-center p-8">
               <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
-                <UInput v-model="news.titleEn"></UInput>
+                <UInput v-model="news[`title${selectLangue?.ref}`]"></UInput>
               </UFormGroup>
             </div>
             <div class="flex flex-col p-8 border-r-2 border-l-2">
               <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
-                <UTextarea rows="8" maxrows="8" v-model="news.descriptionEn" class="w-[310px] textarea_backoffice_news"></UTextarea>
-                <span class="float-right text-[15px]">{{news.descriptionEn.length}}/350 caractère</span>
+                <UTextarea rows="8" maxrows="8" v-model="news[`description${selectLangue?.ref}`]" class="w-[310px] textarea_backoffice_news"></UTextarea>
+                <span class="float-right text-[15px]">{{news[`description${selectLangue?.ref}`].length}}/350 caractère</span>
               </UFormGroup>
             </div>
             <div>

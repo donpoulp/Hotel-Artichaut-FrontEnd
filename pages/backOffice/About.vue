@@ -30,7 +30,7 @@ const isOpen = ref(false);
 
 async function onSubmit(about) {
   await aboutStore.updateAboutData(about);
-  //reloadNuxtApp()
+  reloadNuxtApp()
 }
 
 const bgColor = computed(()=>{
@@ -44,19 +44,21 @@ const bgOpacity = computed(()=>{
 
 /// About_section
 const aboutSectionStore = useAboutSectionStore()
-console.log("dd",aboutSectionStore.data)
+
 const schema_section = z.object({
-  background_color: z.string(),
-  background_opacity: z.string(),
+  titleEn: z.string(),
+  titleFr: z.string(),
+  picture: z.string(),
 })
 
 const state_section = reactive({
-  background_color: undefined,
-  background_opacity: undefined,
+  titleEn: undefined,
+  titleFr: undefined,
+  picture: undefined,
 })
 
 async function onSubmit_section(about_section) {
-  await strongestSectionStore.updateAbooutSectionData(about_section);
+  await aboutSectionStore.updateAboutSectionData(about_section);
   reloadNuxtApp()
 }
 </script>
@@ -79,7 +81,8 @@ async function onSubmit_section(about_section) {
         <div v-for="about_section in aboutSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center border-2">
             <div class="flex text-center items-center whitespace-nowrap py-[2.1rem] px-8 border-r-2">
-              <span v-text="selectLangue?.ref === 'En' ? 'Title :' : 'Titre :'"></span><UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
+              <span v-text="selectLangue?.ref === 'En' ? 'Title :' : 'Titre :'"></span>
+              <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
             </div>
             <div class="p-8 border-r-2">
               <UInput type="file" size="md" icon="i-heroicons-folder"/>
@@ -89,7 +92,7 @@ async function onSubmit_section(about_section) {
             </div>
             <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8">
               <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }">
-                <UButton block class="text-center w-full" color="blue" to="/site">
+                <UButton block class="text-center w-full" color="blue">
                   {{ selectedLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
                   <UIcon name="hugeicons:arrow-right-01" />
                 </UButton>

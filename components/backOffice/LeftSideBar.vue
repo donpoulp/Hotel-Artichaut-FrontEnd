@@ -2,6 +2,11 @@
 import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
 
 const selectLangue = useState('selectedLangue');
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+console.log(router.getRoutes()); // Affiche toutes les routes
 </script>
 
 <template>
@@ -64,12 +69,23 @@ const selectLangue = useState('selectedLangue');
 
     <div class="left-side-bar-line"></div>
 
+    <NuxtLink to="/backOffice/ServiceCrud">
+      <div class="left-side-bar-dashboard">
+        <div v-if="$route.path == '/backOffice/ServiceCrud'" class="selected-left-side-bar"></div>
+        <UIcon name="material-symbols:room-service-outline-sharp" class="dashboard-icon"></UIcon>
+        <h5 v-text="selectLangue?.ref === 'En' ? 'Service' : 'Service'"></h5>
+      </div>
+    </NuxtLink>
+
+    <div class="left-side-bar-line"></div>
+
   </section>
 </template>
 
 <style scoped>
 .left-side-bar{
   width: fit-content;
+  min-height: 100vh;
   background-color: rgba(13, 86, 73, 0.9);
 }
 .top-left-side-bar{

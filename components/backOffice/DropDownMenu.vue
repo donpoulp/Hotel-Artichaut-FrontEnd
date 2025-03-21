@@ -18,9 +18,14 @@ const items = computed(() => {
         label: 'About',
         to: '/backOffice/About',
       }], [{
+        label: 'BedroomType',
+        to: '/backOffice/BedroomType',
+      }], [{
         label: 'News',
         to: '/backOffice/News',
-
+      }],[{
+        label: 'Service',
+        to: '/backOffice/Service',
       }], [{
         label: 'Footer',
         to: '/backOffice/Footer',
@@ -37,6 +42,12 @@ const items = computed(() => {
       }], [{
         label: 'A propos',
         to: '/backOffice/About',
+      }], [{
+        label: 'Type de chambre',
+        to: '/backOffice/BedroomType',
+      }],[{
+        label: 'Service',
+        to: '/backOffice/Service',
       }], [{
         label: 'Actualité',
         to: '/backOffice/News',

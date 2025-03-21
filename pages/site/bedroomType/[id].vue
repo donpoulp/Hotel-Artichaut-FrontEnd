@@ -10,17 +10,19 @@ const carouselConfig = {
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
+
+console.log(bedroomsType)
 </script>
 
 <template>
   <section class="RoomPageSection">
     <div class="RoomPageTop">
       <div>
-        <img class="RoomPageImg" :src="bedroomsType?.[0]?.picture?.[0]?.picturePath">
+        <img class="RoomPageImg" :src="bedroomsType?.picture?.[0]?.picturePath">
       </div>
       <div class="RoomPageContent text-black">
-        <h3>{{ bedroomsType?.[0]?.[`name${selectLangue.ref}`] }}</h3>
-        <p>{{ bedroomsType?.[0]?.[`description${selectLangue.ref}`] }}</p>
+        <h3>{{ bedroomsType?.[`name${selectLangue.ref}`] }}</h3>
+        <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
     <div class="RoomPageBtn">
@@ -44,7 +46,7 @@ const selectLangue = useState('selectedLangue');
     </div>
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
-        <Slide v-for="picture in bedroomsType?.[0]?.picture" :key="picture" class="flex flex-col">
+        <Slide v-for="picture in bedroomsType?.picture" :key="picture" class="flex flex-col">
           <img :alt="picture.id" :src="picture.picturePath" />
         </Slide>
         <template #addons class="addonsCarrousel">
