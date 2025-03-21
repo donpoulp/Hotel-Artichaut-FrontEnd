@@ -25,10 +25,19 @@ const state = reactive({
   password: undefined,
 })
 
+const errorMessage = ref('');
+
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log('Form submitted', event.data);
-  await authStore.fetchCsrfToken();
-  await authStore.login(event.data);
+  // await authStore.fetchCsrfToken();
+  try {
+    await authStore.login(event.data);
+    errorMessage.value = '';
+  } catch (error) {
+    console.error('Error during login:', error);
+    errorMessage.value = 'Connection failed. Please try again.';
+    console.log(errorMessage.value);
+  }
 }
 
 </script>
@@ -45,6 +54,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
 
         <UForm class="px-44 space-y-4" :schema="schema" :state="state" @submit="onSubmit">
           <p class="font-antic text-center text-3xl pt-36">Sign In</p>
+
           <UFormGroup label="Email" required>
             <UInput placeholder="Enter your email" v-model="state.email"/>
           </UFormGroup>
@@ -54,13 +64,16 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
           <div class="pt-4 flex justify-center space-x-10">
             <UButton class="btn" type="submit" @click="$emit('close-modal')">Sign In</UButton>
             <UButton class="btn" @click="openSignUp">Sign Up</UButton>
-            <UButton class="btn" @click="authStore.logout()">Log out</UButton>
+            <UButton class="btn" @click="authStore.logout()" v-if="authStore.isAuthenticated">Log out</UButton>
           </div>
         </UForm>
       </template>
       <template v-else>
         <Signup @close-modal-signup="showModalSignUp = false"/>
       </template>
+      <div v-if="errorMessage">
+        <p>{{ errorMessage }}</p>
+      </div>
     </div>
   </div>
 </template>

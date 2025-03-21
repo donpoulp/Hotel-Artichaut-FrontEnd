@@ -5,15 +5,16 @@ export const useAuthStore = defineStore('auth', {
     state: () => {
         return {
             csrfToken: '',
-            user: null
+            user: null,
+            isAuthenticated: false
         }
     },
     actions: {
-        async fetchCsrfToken() {
-            await useApiFetch(`/sanctum/csrf-cookie`, {
-                method: 'GET',
-            })
-        },
+        // async fetchCsrfToken() {
+        //     await useApiFetch(`/sanctum/csrf-cookie`, {
+        //         method: 'GET',
+        //     })
+        // },
         async register(userData) {
             await useApiFetch(`/register`, {
                 method: 'POST',
@@ -32,12 +33,12 @@ export const useAuthStore = defineStore('auth', {
                         'Content-Type': 'application/json'
                     }
                 });
-                // console.log('Full response:', response)
                 console.log(response.data._value.access_token)
 
                 if (response.data._value.access_token) {
                     sessionStorage.setItem('access_token', response.data._value.access_token);
-                    console.log(response.data);
+                    this.isAuthenticated = true;
+                    // console.log(response.data);
                 } else {
                     console.error('Access token not found in response');
                 }
@@ -55,6 +56,7 @@ export const useAuthStore = defineStore('auth', {
             })
             sessionStorage.removeItem('access_token');
             this.user = null;
+            this.isAuthenticated = false;
         }
     }
 })

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {z} from 'zod'
-import {reactive} from 'vue'
+import {reactive, ref} from 'vue'
 import {useAuthStore} from "~/store/auth";
 
 const authStore = useAuthStore();
@@ -27,20 +27,33 @@ const stateR = reactive({
   is_admin: 0,
 })
 
+const errorMessage = ref('');
+
 async function onSubmitRegister(data) {
-  console.log(data)
-  await authStore.register(data);
+  try {
+    await authStore.register(data);
+    errorMessage.value = '';
+  } catch (error) {
+    console.error('Error during registration:', error);
+    errorMessage.value = 'Registration failed. Please try again.'; // Message d'erreur à afficher
+    console.log(errorMessage.value);
+  }
 }
 </script>
 
 <template>
   <div class="signup-container">
+
     <div class="header">
       <UIcon
           name="icon-park-outline:return"
           class="returnIcon"
           @click="$emit('close-modal-signup')"
       />
+    </div>
+
+    <div v-if="errorMessage">
+      <p>{{ errorMessage }}</p>
     </div>
 
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
@@ -72,10 +85,12 @@ async function onSubmitRegister(data) {
       <UFormGroup label="Phone Number Bis">
         <UInput v-model="stateR.phoneBis"/>
       </UFormGroup>
-      <div class="pt-4 flex justify-center">
+      <div class="pt-4 flex justify-center space-x-10">
         <UButton type="submit" class="btn" @click="onSubmitRegister(stateR)">Confirm</UButton>
+        <UButton class="btn" @click="$emit('close-modal-signup')">Go sign in</UButton>
       </div>
     </UForm>
+
   </div>
 </template>
 
