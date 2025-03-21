@@ -16,7 +16,6 @@ export const useHeroStore = defineStore('hero', {
                 method: 'PUT',
                 body: JSON.stringify(newData)
             });
-            this.data = newData;
         }
     }
 })

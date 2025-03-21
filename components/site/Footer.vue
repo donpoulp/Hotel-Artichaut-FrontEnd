@@ -2,13 +2,13 @@
 import {useFooterStore} from "~/store/footer";
 
 const footerStore = useFooterStore();
-
+const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
     <div class="footer text-white">
         <div class="sectionSocialMedia">
-            <p>{{ footerStore.data[0].title }}</p>
+            <p>{{ footerStore.data[0][`title${selectLangue?.ref}`] }}</p>
             <div class="socialMedia">
                 <UIcon name="ic:baseline-facebook" class="socialMediaIcon" />
                 <UIcon name="ri:instagram-fill" class="socialMediaIcon" />
@@ -17,16 +17,16 @@ const footerStore = useFooterStore();
         </div>
         <div class="sectionContact">
             <ul>
-                <li>Contact : 08 95 69 69 29 (0,40€ / min)</li>
-                <li>Adress : Rue du Président Favre</li>
-                <li>Privay policy</li>
+              <li><strong>Contact</strong> : 08 95 69 69 29 (0,40€ / min)</li>
+                <li><strong v-text="selectLangue?.ref === 'En' ? 'Adress' : 'Adresse'"></strong> : Rue du Président Favre</li>
+                <li><strong v-text="selectLangue?.ref === 'En' ? 'Privay policy' : 'Politique de confidentialité'"></strong></li>
             </ul>
         </div>
         <div class="sectionCopyright">
-            <p>© 2025 Hôtel Artichaut</p>
+            <p>© 2025 {{ footerStore.data[0][`title${selectLangue?.ref}`] }}</p>
         </div>
         <div class="sectionLorem">
-            <p>{{ footerStore.data[0].text }}</p>
+            <p>{{ footerStore.data[0][`text${selectLangue?.ref}`] }}</p>
         </div>
         <div>
             <img src="/maps.png" alt="maps">

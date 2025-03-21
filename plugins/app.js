@@ -11,6 +11,7 @@ import {useServicesStore} from "~/store/services.js";
 import {useAboutStore} from "~/store/about.js";
 import {useAboutSectionStore} from "~/store/about_section.js";
 import {useAboutDescriptionStore} from "~/store/about_description.js";
+import {useBedroomTypeStore} from "~/store/bedroom-type.js";
 
 export default defineNuxtPlugin(async () => {
 
@@ -26,6 +27,7 @@ export default defineNuxtPlugin(async () => {
     const aboutSectionStore = useAboutSectionStore()
     const aboutDescriptionStore = useAboutDescriptionStore()
     const bedroomStore = useBedroomStore()
+    const bedroomTypeStore = useBedroomTypeStore()
 
     await strongestSectionStore.loadStrongestSectionData()
     await strongestStore.loadStrongestData()
@@ -39,6 +41,8 @@ export default defineNuxtPlugin(async () => {
     await aboutStore.loadAboutData()
     await aboutSectionStore.loadAboutSectionData()
     await aboutDescriptionStore.loadAboutDescriptionData()
+    await bedroomTypeStore.loadBedroomTypeData()
+
 
     return {
         provide:{
@@ -54,6 +58,7 @@ export default defineNuxtPlugin(async () => {
             about: useAboutStore(),
             aboutSection: useAboutSectionStore(),
             aboutDescription: useAboutDescriptionStore(),
+            bedroomType: useBedroomTypeStore(),
         }
     }
 })

@@ -1,7 +1,5 @@
-<script setup lang="ts">
+<script setup>
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
-import {useBedroomTypeStore} from "~/store/bedroom_type";
-
 const route = useRoute()
 
 const carouselConfig = {
@@ -9,60 +7,47 @@ const carouselConfig = {
   wrapAround: true
 }
 
-// const bedroomTypeStore = useBedroomTypeStore()
-
-// async function bedroomTypeById(id) {
-//   await bedroomTypeStore.loadBedroomTypeDataById(id)
-// }
-
-// onMounted(async () => {
-//   await bedroomTypeStore.loadBedroomTypeDataById(route.params.id);
-//   console.log(bedroomTypeStore.data);
-// });
-//
-// const bedroomType = computed(() => bedroomTypeStore.data);
-//
-// console.log(bedroomType);
-
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
+const selectLangue = useState('selectedLangue');
+
+console.log(bedroomsType)
 </script>
 
 <template>
   <section class="RoomPageSection">
     <div class="RoomPageTop">
       <div>
-        <img class="RoomPageImg" src="/image%2020.png">
+        <img class="RoomPageImg" :src="bedroomsType?.picture?.[0]?.picturePath">
       </div>
       <div class="RoomPageContent text-black">
-<!--        <h1>{{ bedroomType }}</h1>-->
-<!--        <h3>{{ bedroomTypeStore.nameEn }}</h3>-->
-<!--        <p>{{ bedroomType.descriptionEn }}</p>-->
-<!--        <h3>{{ loadBedroomTypeById(0).nameEn}}</h3>-->
-<!--        <p>{{loadBedroomTypeById(0).descriptionEn}}</p>-->
-
-
-        <h3>{{ bedroomsType[0].nameEn }}</h3>
-        <p>{{ bedroomsType[0].descriptionEn }}</p>
+        <h3>{{ bedroomsType?.[`name${selectLangue.ref}`] }}</h3>
+        <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
           <ButtonWithIcon width="175px" height="50px" fontSize="22px" title="Service" icon="ph:arrows-vertical-bold"></ButtonWithIcon>
-          <Button width="175px" height="50px" fontSize="22px" title="View all services" route="site-Services"></Button>
+          <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'" route="site-Services"></Button>
         </div>
         <div class="RoomPageBtnBoxRight">
-          <div class="RoomPageBtnBoxRightBtnCart"><UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" /><Button width="175px" height="50px" fontSize="22px" title="Choose date"></Button></div>
-          <div class="RoomPageBtnBoxRightBtnCart"><UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" /><Button width="175px" height="50px" fontSize="22px" title="Add to cart"></Button></div>
+          <div class="RoomPageBtnBoxRightBtnCart">
+            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />
+            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>
+          </div>
+          <div class="RoomPageBtnBoxRightBtnCart">
+            <UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" />
+            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
+          </div>
           <div class="RoomPageTotalPrice">Total : 0000.00 $</div>
         </div>
       </div>
     </div>
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
-        <Slide v-for="bedroom in bedroomsType" :key="bedroom">
-          <img class="bedroomTypeImg1" src="/image%2026.png">
+        <Slide v-for="picture in bedroomsType?.picture" :key="picture" class="flex flex-col">
+          <img :alt="picture.id" :src="picture.picturePath" />
         </Slide>
         <template #addons class="addonsCarrousel">
           <Navigation />
@@ -149,7 +134,6 @@ img,video{
   align-items: center;
 }
 .RoomPageCarrousel{
-  margin: 0% 1%;
-  margin-top: 3%;
+  margin: 3% 1% 0;
 }
 </style>

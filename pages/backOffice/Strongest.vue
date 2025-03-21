@@ -8,6 +8,8 @@ definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 // strongest //////////////////////////////////////////////
 const strongestStore = useStrongestStore();
 
@@ -47,7 +49,7 @@ const state_section = reactive({
 })
 
 async function onSubmit_section(section) {
-  if (section.text.length > 143) {
+  if (section?.[`text${selectLangue.value.ref}`].length > 143) {
     alert("trop de caractere")
   }else {
     await strongestSectionStore.updateStrongestSectionData(section);
@@ -58,7 +60,7 @@ async function onSubmit_section(section) {
 
 <template>
   <section class="back-office-strongest">
-    <h2>Preview</h2>
+    <h2 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
     <div v-if="status1 === 'pending' && status2 === 'pending'">
       Loading ...
     </div>
@@ -67,7 +69,7 @@ async function onSubmit_section(section) {
         <div class="back-office-strongest-div2">
           <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
             <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
-            <p class="w-[350px]">{{ strongest_section.textEn }}</p>
+            <p class="w-[350px]">{{ strongest_section[`text${selectLangue?.ref}`] }}</p>
           </div>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
         </div>
@@ -76,7 +78,7 @@ async function onSubmit_section(section) {
     </div>
 
 
-    <h2 class="mt-4">Modify</h2>
+    <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="mt-4"></h2>
       <div class="back-office-strongest-modify flex flex-col w-[70%]">
         <div v-for="strongest_section in strongestSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center w-full border-2">
@@ -84,9 +86,9 @@ async function onSubmit_section(section) {
             Section : {{strongest_section.id}}
           </div>
           <div class="flex flex-row border-r-2 border-l-2">
-            <div class="p-2 flex text-center items-center">Contenu :</div>
-            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section.textEn" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
-            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section.textEn.length}}/143 caractère</span>
+            <div v-text="selectLangue?.ref === 'En' ? 'Content :' : 'Contenu :'" class="p-2 flex text-center items-center"></div>
+            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section[`text${selectLangue?.ref}`]" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
+            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section[`text${selectLangue?.ref}`].length}}/143&nbsp;<div v-text="selectLangue?.ref === 'En' ? ' character' : ' caractère'"></div></span>
           </div>
           <div class="h-full flex flex-col w-[300px] p-4 ml-4">
            <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
@@ -99,10 +101,10 @@ async function onSubmit_section(section) {
     <UModal v-model="isOpen">
       <div class="p-4">
         <UForm :schema="schema" :state="state">
-          <UFormGroup label="color">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
             <UInput v-model="strongestStore.data.background_color_1"/>
           </UFormGroup>
-          <UFormGroup label="opacity" class="mt-3">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
             <UInput v-model="strongestStore.data.background_opacity_1"/>
           </UFormGroup>
           <div class="flex justify-center">
@@ -117,10 +119,10 @@ async function onSubmit_section(section) {
     <UModal v-model="isOpen2">
       <div class="p-4">
         <UForm :schema="schema" :state="state">
-          <UFormGroup label="color">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
             <UInput v-model="strongestStore.data.background_color_2"/>
           </UFormGroup>
-          <UFormGroup label="opacity" class="mt-3">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
             <UInput v-model="strongestStore.data.background_opacity_2"/>
           </UFormGroup>
           <div class="flex justify-center">
@@ -179,14 +181,16 @@ async function onSubmit_section(section) {
 }
 .modify-color-2{
   position: absolute;
-  right: 125px;
-  top: 355px;
+  right: 130px;
+  top: 330px;
+  border: solid 1px black;
   z-index: 99999;
 }
 .modify-color-1{
   position: absolute;
-  right: 50px;
-  top: 400px;
+  right: 55px;
+  top: 375px;
   z-index: 999;
+  border: solid 1px black;
 }
 </style>
