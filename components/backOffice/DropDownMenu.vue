@@ -1,22 +1,65 @@
 <script setup lang="ts">
+import { computed } from 'vue';
 
-const items = [
-  [{
-    label: 'Hero',
-    to: '/backOffice/Hero',
-  }], [{
-    label: 'Strongest point',
-    to: '/backOffice/Strongest',
-    class: 'bg-[#D8D27D] hover:bg-[#0D5649] hover:opacity-70 active:bg-[#0D5649] active:opacity-100 focus:outline-none focus:ring focus:ring-[#0D5649] focus-opacity-80'
+const selectLangue = useState('selectedLangue');
 
-  }], [{
-    label: 'News',
+const items = computed(() => {
+  console.log("Langue actuelle:", selectLangue?.value?.ref); // Debugging
 
-  }], [{
-    label: 'Footer',
+  if (selectLangue?.value?.ref == "En") {
+    return [
+      [{
+        label: 'Hero',
+        to: '/backOffice/Hero',
+      }], [{
+        label: 'Strongest point',
+        to: '/backOffice/Strongest',
+      }], [{
+        label: 'About',
+        to: '/backOffice/About',
+      }], [{
+        label: 'BedroomType',
+        to: '/backOffice/BedroomType',
+      }], [{
+        label: 'News',
+        to: '/backOffice/News',
+      }],[{
+        label: 'Service',
+        to: '/backOffice/Service',
+      }], [{
+        label: 'Footer',
+        to: '/backOffice/Footer',
+      }]
+    ]
+  } else if (selectLangue?.value?.ref == "Fr") {
+    return [
+      [{
+        label: 'Accueil',
+        to: '/backOffice/Hero',
+      }], [{
+        label: 'Point fort',
+        to: '/backOffice/Strongest',
+      }], [{
+        label: 'A propos',
+        to: '/backOffice/About',
+      }], [{
+        label: 'Type de chambre',
+        to: '/backOffice/BedroomType',
+      }],[{
+        label: 'Service',
+        to: '/backOffice/Service',
+      }], [{
+        label: 'Actualité',
+        to: '/backOffice/News',
 
-  }]
-]
+      }], [{
+        label: 'Pied de page',
+        to: '/backOffice/Footer',
+      }]
+    ]
+  }
+});
+
 </script>
 
 <template>

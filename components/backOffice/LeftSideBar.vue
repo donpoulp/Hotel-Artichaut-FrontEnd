@@ -1,6 +1,12 @@
 <script setup lang="ts">
-
 import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
+
+const selectLangue = useState('selectedLangue');
+
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+console.log(router.getRoutes()); // Affiche toutes les routes
 </script>
 
 <template>
@@ -19,41 +25,57 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:house-simple-bold" class="dashboard-icon"></UIcon>
-      <h5>Dashboard</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'Dashboard' : 'Accueil'"></h5>
     </div>
     </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 
     <div class="left-side-bar-dashboard">
-      <div v-if="$route.path == '/backOffice/Hero' || $route.path == '/backOffice/Strongest' || $route.path == '/backOffice/News' || $route.path == '/backOffice/Footer'" class="selected-left-side-bar"></div>
+      <div v-if="$route.path == '/backOffice/Hero' || $route.path == '/backOffice/Strongest' || $route.path == '/backOffice/About' || $route.path == '/backOffice/News' || $route.path == '/backOffice/Footer'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:list-bullets-fill" class="dashboard-icon"></UIcon>
       <DropDownMenu></DropDownMenu>
     </div>
 
     <div class="left-side-bar-line"></div>
 
-    <div class="left-side-bar-dashboard">
-      <div v-if="$route.path == '/backOffice/reservation'" class="selected-left-side-bar"></div>
-      <UIcon name="i-ph:book-bold" class="dashboard-icon"></UIcon>
-      <h5>Reservation</h5>
-    </div>
+    <NuxtLink to="/backOffice/Reservation">
+      <div class="left-side-bar-dashboard">
+        <div v-if="$route.path == '/backOffice/Reservation'" class="selected-left-side-bar"></div>
+        <UIcon name="i-ph:book-bold" class="dashboard-icon"></UIcon>
+        <h5 v-text="selectLangue?.ref === 'En' ? 'Reservation' : 'Réservation'"></h5>
+      </div>
+    </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 
+    <NuxtLink to="/backOffice/bedroom">
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice/bedroom'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:key" class="dashboard-icon"></UIcon>
-      <h5>Bedroom</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'Bedroom' : 'Chambre'"></h5>
     </div>
+  </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 
+    <NuxtLink to="/backOffice/user">
     <div class="left-side-bar-dashboard">
       <div v-if="$route.path == '/backOffice/user'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:user-circle-duotone" class="dashboard-icon"></UIcon>
-      <h5>User</h5>
+      <h5 v-text="selectLangue?.ref === 'En' ? 'User' : 'Utilisateur'"></h5>
     </div>
+    </NuxtLink>
+
+    <div class="left-side-bar-line"></div>
+
+    <NuxtLink to="/backOffice/ServiceCrud">
+      <div class="left-side-bar-dashboard">
+        <div v-if="$route.path == '/backOffice/ServiceCrud'" class="selected-left-side-bar"></div>
+        <UIcon name="material-symbols:room-service-outline-sharp" class="dashboard-icon"></UIcon>
+        <h5 v-text="selectLangue?.ref === 'En' ? 'Service' : 'Service'"></h5>
+      </div>
+    </NuxtLink>
 
     <div class="left-side-bar-line"></div>
 
@@ -63,7 +85,7 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
 <style scoped>
 .left-side-bar{
   width: fit-content;
-  height: 100vh;
+  min-height: 100vh;
   background-color: rgba(13, 86, 73, 0.9);
 }
 .top-left-side-bar{

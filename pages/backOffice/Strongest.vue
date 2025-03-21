@@ -2,24 +2,19 @@
 import { z } from 'zod'
 import { reactive } from 'vue'
 import {useStrongestStore} from "~/store/strongest";
+import {useStrongestSectionStore} from "~/store/strongest-section";
 
 definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
+// strongest //////////////////////////////////////////////
 const strongestStore = useStrongestStore();
 
-const {status: status1 ,data: strongest } = await useFetch('http://127.0.0.1:8000/api/strongest')
-
-const { status: status2 ,data: strongest_section } = await useFetch('http://127.0.0.1:8000/api/strongest_section')
-
-const color1 = strongest._rawValue[0].background_color_1
-const opacity1 = strongest._rawValue[0].background_opacity_1
-const color2 = strongest._rawValue[0].background_color_2
-const opacity2 = strongest._rawValue[0].background_opacity_2
-
-console.log(strongest)
-console.log(strongest_section)
+const isOpen = ref(false)
+const isOpen2 = ref(false)
 
 const schema = z.object({
   background_color_1: z.string(),
@@ -35,37 +30,110 @@ const state = reactive({
   background_opacity_2: undefined,
 })
 
-async function onSubmit(event) {
-  await strongestStore.updateStrongestData( {
-    background_color_1: state.background_color_1,
-    background_opacity_1: state.background_opacity_1,
-    background_color_2: state.background_color_2,
-    background_opacity_2: state.background_opacity_2,
-  });
+async function onSubmit(strongest) {
+  await strongestStore.updateStrongestData(strongest);
+  reloadNuxtApp()
+}
+
+// strongest-section ///////////////////////////////////////
+const strongestSectionStore = useStrongestSectionStore();
+
+const schema_section = z.object({
+  icon: z.string(),
+  text: z.string(),
+})
+
+const state_section = reactive({
+  icon: undefined,
+  text: undefined,
+})
+
+async function onSubmit_section(section) {
+  if (section?.[`text${selectLangue.value.ref}`].length > 143) {
+    alert("trop de caractere")
+  }else {
+    await strongestSectionStore.updateStrongestSectionData(section);
+    reloadNuxtApp()
+  }
 }
 </script>
 
 <template>
   <section class="back-office-strongest">
-    <h2>Preview</h2>
+    <h2 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
     <div v-if="status1 === 'pending' && status2 === 'pending'">
       Loading ...
     </div>
     <div v-else>
       <div class="back-office-strongest-div1">
         <div class="back-office-strongest-div2">
-          <div v-for="s in strongest_section" :key="s" class="back-office-strongest-section">
-            <UIcon :name="s.icon" class="h-20 w-20"></UIcon>
-            <p>{{ s.text }}</p>
+          <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
+            <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
+            <p class="w-[350px]">{{ strongest_section[`text${selectLangue?.ref}`] }}</p>
           </div>
+          <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
         </div>
+        <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="isOpen = true"/>
       </div>
     </div>
 
-    <h2>Modify</h2>
-    <div class="back-office-strongest-modify">
-      {{strongestStore.data[0]}}
+
+    <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="mt-4"></h2>
+      <div class="back-office-strongest-modify flex flex-col w-[70%]">
+        <div v-for="strongest_section in strongestSectionStore.data">
+          <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center w-full border-2">
+          <div class="flex text-center items-center whitespace-nowrap p-8">
+            Section : {{strongest_section.id}}
+          </div>
+          <div class="flex flex-row border-r-2 border-l-2">
+            <div v-text="selectLangue?.ref === 'En' ? 'Content :' : 'Contenu :'" class="p-2 flex text-center items-center"></div>
+            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section[`text${selectLangue?.ref}`]" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
+            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section[`text${selectLangue?.ref}`].length}}/143&nbsp;<div v-text="selectLangue?.ref === 'En' ? ' character' : ' caractère'"></div></span>
+          </div>
+          <div class="h-full flex flex-col w-[300px] p-4 ml-4">
+           <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
+            <UButton block @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
+          </div>
+          </UForm>
+        </div>
     </div>
+
+    <UModal v-model="isOpen">
+      <div class="p-4">
+        <UForm :schema="schema" :state="state">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
+            <UInput v-model="strongestStore.data.background_color_1"/>
+          </UFormGroup>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
+            <UInput v-model="strongestStore.data.background_opacity_1"/>
+          </UFormGroup>
+          <div class="flex justify-center">
+            <UButton @click="onSubmit({background_color_1: strongestStore.data.background_color_1, background_opacity_1: strongestStore.data.background_opacity_1, background_color_2: strongestStore.data.background_color_2, background_opacity_2: strongestStore.data.background_opacity_2})">
+              Valider
+            </UButton>
+          </div>
+        </UForm>
+      </div>
+    </UModal>
+
+    <UModal v-model="isOpen2">
+      <div class="p-4">
+        <UForm :schema="schema" :state="state">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
+            <UInput v-model="strongestStore.data.background_color_2"/>
+          </UFormGroup>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
+            <UInput v-model="strongestStore.data.background_opacity_2"/>
+          </UFormGroup>
+          <div class="flex justify-center">
+            <UButton class="mt-3 buttonSubmit" @click="onSubmit({background_color_1: strongestStore.data.background_color_1, background_opacity_1: strongestStore.data.background_opacity_1, background_color_2: strongestStore.data.background_color_2, background_opacity_2: strongestStore.data.background_opacity_2})">
+              Valider
+            </UButton>
+          </div>
+        </UForm>
+      </div>
+    </UModal>
+
   </section>
 </template>
 
@@ -78,16 +146,16 @@ async function onSubmit(event) {
   font-weight: bold;
 }
 .back-office-strongest-div1{
-  background-color: v-bind(color1);
-  opacity: v-bind(opacity1+'%');
+  background-color: v-bind(strongestStore.data.background_color_1);
+  opacity: v-bind(strongestStore.data.background_opacity_1+'%');
   padding: 3% 5%;
 }
 .back-office-strongest-div2{
   display: flex;
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: v-bind(color2);
-  opacity: v-bind(opacity2+'%');
+  background-color: v-bind(strongestStore.data.background_color_2);
+  opacity: v-bind(strongestStore.data.background_opacity_2+'%');
   padding: 1% 3%;
 }
 .back-office-strongest-section{
@@ -98,5 +166,31 @@ async function onSubmit(event) {
 }
 .back-office-strongest-modify{
   border: #45474B 1px solid;
+}
+.textearea-strongest :deep(textarea){
+  height: 100px;
+  background-color: gray;
+}
+.buttonSubmit{
+  background: rgba(13, 86, 73, 0.9);
+}
+.buttonSubmit .text{
+  background: -webkit-linear-gradient(0deg, #D8D27D 30%, #726F42 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.modify-color-2{
+  position: absolute;
+  right: 130px;
+  top: 330px;
+  border: solid 1px black;
+  z-index: 99999;
+}
+.modify-color-1{
+  position: absolute;
+  right: 55px;
+  top: 375px;
+  z-index: 999;
+  border: solid 1px black;
 }
 </style>

@@ -2,11 +2,13 @@
 definePageMeta({
   layout: 'back-office',
 })
+
+const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
   <section class="dashboard">
-    <h2>Dashboard</h2>
+    <h2 v-text="selectLangue.ref === 'En' ? 'Dashboard' : 'Tableau de bord'"></h2>
   </section>
 </template>
 

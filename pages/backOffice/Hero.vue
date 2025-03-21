@@ -8,6 +8,8 @@ definePageMeta({
 layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const heroStore = useHeroStore();
 
 const schema = z.object({
@@ -22,74 +24,48 @@ const state = reactive({
   picture: undefined,
 })
 
-async function onSubmit(event) {
+async function onSubmit() {
   await heroStore.updateHeroData( {
         title: state.title,
         description: state.description,
         picture: state.picture,
   });
-
-  console.log(event.data)
 }
 </script>
 
 
 <template>
-  <div class="bg-white">
 
     <div class="flex flex-col px-20 pt-10">
-      <h1 class="text-black text-3xl font-noto">Preview</h1>
+      <h1 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'" class="text-3xl font-noto"></h1>
       <div class="py-2">
-        <Welcome :title="heroStore.data[0].title" :description="heroStore.data[0].description" :picture="heroStore.data[0].picture" />
-        style="height: 588px; width: 1039px;"
+        <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
       </div>
     </div>
 
-    <div class="text-black pb-20 pt-10">
-      <h2 class="text-2xl font-noto px-20 text-black">Modify</h2>
-
-      {{heroStore.data[0]}}
-
-      <UForm :schema="schema" :state="state" class="space-y-4 text-black px-20" @submit.prevent="onSubmit">
+    <div class="pb-20 pt-10">
+      <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="text-2xl font-noto px-20"></h2>
+      <UForm :schema="schema" :state="state" class="space-y-4 px-20" @submit.prevent="onSubmit">
 
         <div class="flex flex-row space-x-4">
-
-          <UFormGroup label="Title" class="custom-label">
-            <UInput v-model="state.title" class="custom-input"/>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
+            <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
 
-          <UFormGroup label="Picture" class="custom-label">
-            <UInput v-model="state.picture" class="custom-input"/>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
+            <UInput v-model="state.picture" class="custom-input" type="file"/>
           </UFormGroup>
-
         </div>
 
-        <UFormGroup label="Content">
-          <UInput v-model="state.description" class="custom-input"/>
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+          <UInput v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="custom-input"/>
         </UFormGroup>
 
-        <UButton type="submit">
-          Update
-        </UButton>
-
+        <UButton type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour'"></UButton>
       </UForm>
-
     </div>
 
-  </div>
 </template>
 
 <style scoped>
-.custom-input {
-  background-color: white;
-  color: black;
-  border: 1px solid #ccc;
-  padding: 0.5rem;
-  border-radius: 0.25rem;
-}
-
-.custom-label {
-  margin-bottom: 0.5rem;
-  font-weight: bold;
-}
 </style>
