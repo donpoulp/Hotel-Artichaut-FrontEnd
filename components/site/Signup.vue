@@ -1,13 +1,13 @@
 <template>
     <div class="signup-container">
-        <div class="header"> 
-            <UIcon 
-                name="icon-park-outline:return" 
-                class="returnIcon" 
+        <div class="header">
+            <UIcon
+                name="icon-park-outline:return"
+                class="returnIcon"
                 @click="$emit('close-modal-signup')"
             />
         </div>
-        
+
         <form class="signup-form">
             <div class="inputs">
                 <p>Sign Up</p>
