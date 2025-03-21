@@ -6,7 +6,8 @@ export const useAuthStore = defineStore('auth', {
         return {
             csrfToken: '',
             user: null,
-            isAuthenticated: false
+            isAuthenticated: false,
+            // isAdmin: false
         }
     },
     actions: {
@@ -33,12 +34,12 @@ export const useAuthStore = defineStore('auth', {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log(response.data._value.access_token)
+                // console.log(response.data._value.access_token)
+                // console.log(response.data._value.user.is_admin)
 
                 if (response.data._value.access_token) {
                     sessionStorage.setItem('access_token', response.data._value.access_token);
                     this.isAuthenticated = true;
-                    // console.log(response.data);
                 } else {
                     console.error('Access token not found in response');
                 }
