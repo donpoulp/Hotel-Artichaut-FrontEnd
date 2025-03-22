@@ -127,32 +127,6 @@ const transformedReservations = computed(() =>
 //to select service in add reservation
 const serviceNamesSelect = computed(() => serviceStore.data.map(service => service.nameFr));
 
-const columns = [{
-  key: 'id',
-  label: 'ID'
-}, {
-  key: 'bedroom',
-  label: 'Bedroom'
-}, {
-  key: 'user_id',
-  label: 'User'
-}, {
-  key: 'serviceNames',
-  label: 'Services'
-}, {
-  key: 'startDate',
-  label: 'Start date'
-}, {
-  key: 'endDate',
-  label: 'End date'
-}, {
-  key: 'state',
-  label: 'Status'
-}, {
-  key: 'actions',
-  label: 'Actions',
-}]
-
 const isOpen = ref(false)
 const isOpenModify = ref(false)
 
@@ -200,9 +174,9 @@ const pageCount = 10
   </div>
   <div class="px-20">
     <UTable :columns="columns" :rows="transformedReservations">
-      <template #actions-data="{ row }">
+      <template #action-data="{ row }">
         <UDropdown :items="items(row)">
-          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid"/>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
         </UDropdown>
       </template>
     </UTable>
