@@ -27,16 +27,18 @@ const stateR = reactive({
   is_admin: 0,
 })
 
-const errorMessage = ref('');
+// const errorMessage = ref('');
+// const successMessage = ref('');
 
 async function onSubmitRegister(data) {
   try {
     await authStore.register(data);
-    errorMessage.value = '';
+    // successMessage.value = 'Registration successful !';
+    // errorMessage.value = '';
   } catch (error) {
-    console.error('Error during registration:', error);
-    errorMessage.value = 'Registration failed. Please try again.'; // Message d'erreur à afficher
-    console.log(errorMessage.value);
+    console.error('registration error:', error);
+    // errorMessage.value = error.message;
+    // successMessage.value = '';
   }
 }
 </script>
@@ -52,12 +54,16 @@ async function onSubmitRegister(data) {
       />
     </div>
 
-    <div v-if="errorMessage">
-      <p>{{ errorMessage }}</p>
-    </div>
-
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
+
+<!--      <div v-if="errorMessage" class="text-center error-message">-->
+<!--        <p>{{ errorMessage }}</p>-->
+<!--      </div>-->
+<!--      <div v-if="successMessage" class="text-center success-message">-->
+<!--        <p>{{ successMessage }}</p>-->
+<!--      </div>-->
+
       <UFormGroup label="First Name" required>
         <UInput v-model="stateR.firstName"/>
       </UFormGroup>
@@ -95,6 +101,15 @@ async function onSubmitRegister(data) {
 </template>
 
 <style scoped>
+
+/*.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}*/
+
 .signup-container {
   height: 100%;
   width: 100%;

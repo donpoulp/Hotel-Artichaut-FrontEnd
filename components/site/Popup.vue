@@ -26,17 +26,19 @@ const state = reactive({
 })
 
 const errorMessage = ref('');
+const successMessage = ref('');
 
 async function onSubmit(event: FormSubmitEvent<Schema>) {
   console.log('Form submitted', event.data);
   // await authStore.fetchCsrfToken();
   try {
     await authStore.login(event.data);
+    successMessage.value = 'Login successful !';
     errorMessage.value = '';
   } catch (error) {
     console.error('Error during login:', error);
-    errorMessage.value = 'Connection failed. Please try again.';
-    console.log(errorMessage.value);
+    errorMessage.value = error.message;
+    successMessage.value = '';
   }
 }
 
@@ -55,6 +57,13 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
         <UForm class="px-44 space-y-4" :schema="schema" :state="state" @submit="onSubmit">
           <p class="font-antic text-center text-3xl pt-36">Sign In</p>
 
+          <div v-if="errorMessage" class="text-center error-message">
+            <p>{{ errorMessage }}</p>
+          </div>
+          <div v-if="successMessage" class="text-center success-message">
+            <p>{{ successMessage }}</p>
+          </div>
+
           <UFormGroup label="Email" required>
             <UInput placeholder="Enter your email" v-model="state.email"/>
           </UFormGroup>
@@ -62,7 +71,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput placeholder="Enter your password" v-model="state.password" type="password"/>
           </UFormGroup>
           <div class="pt-4 flex justify-center space-x-10">
-            <UButton class="btn" type="submit" @click="$emit('close-modal')">Sign In</UButton>
+            <UButton class="btn" type="submit">Sign In</UButton>
             <UButton class="btn" @click="openSignUp">Sign Up</UButton>
             <UButton class="btn" @click="authStore.logout()" v-if="authStore.isAuthenticated">Log out</UButton>
           </div>
@@ -71,14 +80,19 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
       <template v-else>
         <Signup @close-modal-signup="showModalSignUp = false"/>
       </template>
-      <div v-if="errorMessage">
-        <p>{{ errorMessage }}</p>
-      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
 .modal-overlay {
   position: fixed;
   top: 0;
