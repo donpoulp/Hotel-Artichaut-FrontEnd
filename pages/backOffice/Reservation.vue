@@ -2,8 +2,7 @@
 // import { onMounted } from 'vue';
 import {useReservationStore} from "~/store/reservation";
 import { z } from 'zod'
-import { reactive } from 'vue'
-import {computed} from "vue";
+import {computed, reactive} from "vue";
 import type {FormSubmitEvent} from "#ui/types";
 import {useServicesStore} from "~/store/services";
 import { format } from 'date-fns'
@@ -127,45 +126,20 @@ const transformedReservations = computed(() =>
 //to select service in add reservation
 const serviceNamesSelect = computed(() => serviceStore.data.map(service => service.nameFr));
 
-const columns = [{
-  key: 'id',
-  label: 'ID'
-}, {
-  key: 'bedroom',
-  label: 'Bedroom'
-}, {
-  key: 'user_id',
-  label: 'User'
-}, {
-  key: 'serviceNames',
-  label: 'Services'
-}, {
-  key: 'startDate',
-  label: 'Start date'
-}, {
-  key: 'endDate',
-  label: 'End date'
-}, {
-  key: 'state',
-  label: 'Status'
-}, {
-  key: 'actions',
-  label: 'Actions',
-}]
 
 const isOpen = ref(false)
 const isOpenModify = ref(false)
 
 const items = row => [
   [{
-    label: 'Edit',
+    label: selectLangue?.value.ref === 'En' ? 'Edit' : 'Modifier',
     icon: 'i-heroicons-pencil-square-20-solid',
-    click: () => openModalModify(row.id)
-  }, {
-    label: 'Delete',
+    click: () => openModalModify(row.id),
+  }], [{
+    label: selectLangue?.value.ref === 'En' ? 'Delete' : 'Supprimer',
     icon: 'i-heroicons-trash-20-solid',
     click: () => deleteReservation(row.id)
-  }],
+  }]
 ]
 
 async function onSubmitAdd(event: FormSubmitEvent<Schema>) {
@@ -200,9 +174,10 @@ const pageCount = 10
   </div>
   <div class="px-20">
     <UTable :columns="columns" :rows="transformedReservations">
-      <template #actions-data="{ row }">
+
+      <template #action-data="{ row }">
         <UDropdown :items="items(row)">
-          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid"/>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal-20-solid" />
         </UDropdown>
       </template>
     </UTable>
