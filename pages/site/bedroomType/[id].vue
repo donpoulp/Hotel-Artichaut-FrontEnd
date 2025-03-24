@@ -10,7 +10,12 @@ const carouselConfig = {
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
+const totalPrice = ref(bedroomsType?.value?.price)
 
+async function createReservation(reservation){
+  await reservationStore.createReservation(reservation);
+  //reloadNuxtApp()
+}
 console.log(bedroomsType)
 </script>
 
@@ -25,6 +30,7 @@ console.log(bedroomsType)
         <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
+    <UForm @submit="createReservation">
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
@@ -32,18 +38,20 @@ console.log(bedroomsType)
           <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'" route="site-Services"></Button>
         </div>
         <div class="RoomPageBtnBoxRight">
-          <div class="RoomPageBtnBoxRightBtnCart">
-            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />
-            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>
-          </div>
+<!--          <div class="RoomPageBtnBoxRightBtnCart">-->
+<!--            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />-->
+<!--            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>-->
+<!--          </div>-->
+          <input type="date">
           <div class="RoomPageBtnBoxRightBtnCart">
             <UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" />
-            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
+            <Button type="submit" width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
           </div>
-          <div class="RoomPageTotalPrice">Total : 0000.00 $</div>
+          <div class="RoomPageTotalPrice">Total : {{totalPrice}} $</div>
         </div>
       </div>
     </div>
+    </UForm>
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
         <Slide v-for="picture in bedroomsType?.picture" :key="picture" class="flex flex-col">
