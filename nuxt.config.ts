@@ -10,14 +10,14 @@ export default defineNuxtConfig({
   // ],
 
   experimental: { appManifest: false },
-  googleFonts: {
-    families: {
-      'Luxurious+Script': true,
-      'Noto+Serif': { wght: [300, 400, 700] },
-      'Antic+Didone': true,
-    },
-    display: 'swap'
-  },
+  // googleFonts: {
+  //   families: {
+  //     'Luxurious+Script': true,
+  //     'Noto+Serif': { wght: [300, 400, 700] },
+  //     'Antic+Didone': true,
+  //   },
+  //   display: 'swap'
+  // },
 
   hooks: {
     'pages:extend'(pages) {

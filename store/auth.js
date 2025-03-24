@@ -16,15 +16,26 @@ export const useAuthStore = defineStore('auth', {
         //         method: 'GET',
         //     })
         // },
+
         async register(userData) {
-            await useApiFetch(`/register`, {
-                method: 'POST',
-                body: JSON.stringify(userData),
-                headers: {
-                    'Content-Type': 'application/json'
+            try {
+                const response = await useApiFetch(`/register`, {
+                    method: 'POST',
+                    body: JSON.stringify(userData),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.log(errorData);
+                    // throw new Error(errorData.message || 'Registration failed.');
                 }
-            })
+            } catch (error) {
+                throw new Error('Registration failed. Verify all required fields and try again.');
+            }
         },
+
         async login(credentials) {
             try {
                 const response = await useApiFetch(`/login`, {
@@ -44,9 +55,10 @@ export const useAuthStore = defineStore('auth', {
                     console.error('Access token not found in response');
                 }
             } catch (error) {
-                console.error('Error during login:', error);
+                throw new Error('Login failed. Please check your credentials and try again.');
             }
         },
+
         async logout() {
             const token = sessionStorage.getItem('access_token');
             await useApiFetch(`/logout`, {
