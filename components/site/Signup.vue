@@ -1,5 +1,51 @@
+<script setup lang="ts">
+import {z} from 'zod'
+import {reactive, ref} from 'vue'
+import {useAuthStore} from "~/store/auth";
+
+const authStore = useAuthStore();
+
+const schemaR = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  email: z.string(),
+  emailBis: z.string(),
+  password: z.string(),
+  phone: z.string(),
+  phoneBis: z.string(),
+  is_admin: z.number(),
+})
+
+const stateR = reactive({
+  firstName: undefined,
+  lastName: undefined,
+  email: undefined,
+  emailBis: undefined,
+  password: undefined,
+  phone: undefined,
+  phoneBis: undefined,
+  is_admin: 0,
+})
+
+// const errorMessage = ref('');
+// const successMessage = ref('');
+
+async function onSubmitRegister(data) {
+  try {
+    await authStore.register(data);
+    // successMessage.value = 'Registration successful !';
+    // errorMessage.value = '';
+  } catch (error) {
+    console.error('registration error:', error);
+    // errorMessage.value = error.message;
+    // successMessage.value = '';
+  }
+}
+</script>
+
 <template>
   <div class="signup-container">
+
     <div class="header">
       <UIcon
           name="icon-park-outline:return"
@@ -10,6 +56,14 @@
 
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
+
+<!--      <div v-if="errorMessage" class="text-center error-message">-->
+<!--        <p>{{ errorMessage }}</p>-->
+<!--      </div>-->
+<!--      <div v-if="successMessage" class="text-center success-message">-->
+<!--        <p>{{ successMessage }}</p>-->
+<!--      </div>-->
+
       <UFormGroup label="First Name" required>
         <UInput v-model="stateR.firstName"/>
       </UFormGroup>
@@ -37,50 +91,25 @@
       <UFormGroup label="Phone Number Bis">
         <UInput v-model="stateR.phoneBis"/>
       </UFormGroup>
-      <div class="pt-4 flex justify-center">
+      <div class="pt-4 flex justify-center space-x-10">
         <UButton type="submit" class="btn" @click="onSubmitRegister(stateR)">Confirm</UButton>
+        <UButton class="btn" @click="$emit('close-modal-signup')">Go sign in</UButton>
       </div>
     </UForm>
+
   </div>
 </template>
 
-<script setup lang="ts">
-import {z} from 'zod'
-import {useUserStore} from "~/store/user.js";
-import {reactive} from 'vue'
+<style scoped>
 
-const userStore = useUserStore();
-
-const schemaR = z.object({
-  firstName: z.string(),
-  lastName: z.string(),
-  email: z.string(),
-  emailBis: z.string(),
-  password: z.string(),
-  phone: z.string(),
-  phoneBis: z.string(),
-  is_admin: z.number(),
-})
-
-const stateR = reactive({
-  firstName: undefined,
-  lastName: undefined,
-  email: undefined,
-  emailBis: undefined,
-  password: undefined,
-  phone: undefined,
-  phoneBis: undefined,
-  is_admin: 0,
-})
-
-async function onSubmitRegister(data) {
-  console.log(data)
-  await userStore.register(data);
+/*.error-message {
+  color: red;
 }
 
-</script>
+.success-message {
+  color: green;
+}*/
 
-<style scoped>
 .signup-container {
   height: 100%;
   width: 100%;

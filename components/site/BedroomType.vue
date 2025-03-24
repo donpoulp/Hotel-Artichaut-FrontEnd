@@ -3,7 +3,6 @@ import 'vue3-carousel/carousel.css'
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import {z} from "zod";
 import {reactive} from "vue";
-import {useBedroomStore} from "~/store/bedroom.js";
 import {useBedroomTypeStore} from "~/store/bedroom-type.js";
 defineProps(['display'])
 const carouselConfig = {
@@ -114,9 +113,10 @@ img, video {
   height: auto!important;
 }
 
-.sectionBedroomType{
-  //background-color: v-bind();
-}
+/*.sectionBedroomType{
+  background-color: v-bind();
+}*/
+
 .titleBedroomType{
   font-family: "Antic Didone",serif;
   font-weight: lighter;
