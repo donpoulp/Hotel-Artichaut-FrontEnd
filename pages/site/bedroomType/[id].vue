@@ -1,5 +1,6 @@
 <script setup>
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import {useServicesStore} from "~/store/services.js";
 const route = useRoute()
 
 const carouselConfig = {
@@ -7,9 +8,29 @@ const carouselConfig = {
   wrapAround: true
 }
 
+const serviceStore = useServicesStore();
+
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
+
+const open = ref(false)
+
+defineShortcuts({
+  o: () => open.value = !open.value
+})
+
+const totalPrice = ref(bedroomsType?.value?.price);
+
+const selectedServices = ref({});
+
+function calculPrice(servicePrice, isChecked) {
+  if (isChecked) {
+    totalPrice.value += servicePrice;
+  } else {
+    totalPrice.value -= servicePrice;
+  }
+}
 
 console.log(bedroomsType)
 </script>
@@ -28,7 +49,16 @@ console.log(bedroomsType)
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
-          <ButtonWithIcon width="175px" height="50px" fontSize="22px" title="Service" icon="ph:arrows-vertical-bold"></ButtonWithIcon>
+          <UPopover v-model:open="open">
+            <UButton label="Services" @click="open.toString()" trailing-icon="i-heroicons-chevron-down-20-solid" class="btn"></UButton>
+            <template #panel>
+              <div class="p-4" v-for="item in serviceStore.data" :key="item.id">
+                <UCheckbox :label="item.nameFr" :model-value="false" v-model="selectedServices[item.id]"
+                           :value="item.price" @change="calculPrice(item.price, selectedServices[item.id])"/>
+              </div>
+            </template>
+          </UPopover>
+<!--          <ButtonWithIcon width="175px" height="50px" fontSize="22px" title="Service" icon="ph:arrows-vertical-bold"></ButtonWithIcon>-->
           <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'" route="site-Services"></Button>
         </div>
         <div class="RoomPageBtnBoxRight">
@@ -40,7 +70,7 @@ console.log(bedroomsType)
             <UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" />
             <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
           </div>
-          <div class="RoomPageTotalPrice">Total : 0000.00 $</div>
+          <div class="RoomPageTotalPrice">Total : {{ totalPrice }} $</div>
         </div>
       </div>
     </div>
@@ -58,6 +88,13 @@ console.log(bedroomsType)
 </template>
 
 <style scoped>
+.btn {
+  background: rgba(13, 86, 73, 0.9);
+}
+
+.btn:hover {
+  background: rgba(16, 106, 90, 0.9);
+}
 img,video{
   max-width: none!important;
 }
