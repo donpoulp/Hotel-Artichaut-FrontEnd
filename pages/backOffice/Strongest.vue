@@ -82,18 +82,18 @@ async function onSubmit_section(section) {
       <div class="back-office-strongest-modify flex flex-col w-[70%]">
         <div v-for="strongest_section in strongestSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center w-full border-2">
-          <div class="flex text-center items-center whitespace-nowrap p-8">
-            Section : {{strongest_section.id}}
-          </div>
-          <div class="flex flex-row border-r-2 border-l-2">
-            <div v-text="selectLangue?.ref === 'En' ? 'Content :' : 'Contenu :'" class="p-2 flex text-center items-center"></div>
-            <UTextarea :rows="2" :maxrows="2" v-model="strongest_section[`text${selectLangue?.ref}`]" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
-            <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section[`text${selectLangue?.ref}`].length}}/143&nbsp;<div v-text="selectLangue?.ref === 'En' ? ' character' : ' caractère'"></div></span>
-          </div>
-          <div class="h-full flex flex-col w-[300px] p-4 ml-4">
-           <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
-            <UButton block @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
-          </div>
+            <div class="flex text-center items-center whitespace-nowrap p-8">
+              Section : {{strongest_section.id}}
+            </div>
+            <div class="flex flex-row border-r-2 border-l-2">
+              <div v-text="selectLangue?.ref === 'En' ? 'Content :' : 'Contenu :'" class="p-2 flex text-center items-center"></div>
+              <UTextarea :rows="2" :maxrows="2" v-model="strongest_section[`text${selectLangue?.ref}`]" type="text" class="w-[350px] h-full textearea-strongest p-2"/>
+              <span class="text-right pr-2 bottom-0 flex items-end">{{strongest_section[`text${selectLangue?.ref}`].length}}/143&nbsp;<div v-text="selectLangue?.ref === 'En' ? ' character' : ' caractère'"></div></span>
+            </div>
+            <div class="h-full flex flex-col w-[300px] p-4 ml-4">
+             <div class="flex flex-row flex-nowrap w-full"><div class="p-1 w-20">Icons : </div><UInput v-model="strongest_section.icon" class="w-80" /></div>
+              <UButton block @click="onSubmit_section(strongest_section)" class="text-center mt-2 w-full buttonSubmit">Valider</UButton>
+            </div>
           </UForm>
         </div>
     </div>

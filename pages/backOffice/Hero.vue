@@ -24,12 +24,10 @@ const state = reactive({
   picture: undefined,
 })
 
-async function onSubmit() {
-  await heroStore.updateHeroData( {
-        title: state.title,
-        description: state.description,
-        picture: state.picture,
-  });
+async function onSubmit(hero) {
+  await heroStore.updateHeroData(hero);
+  console.log(hero)
+  //reloadNuxtApp()
 }
 </script>
 
@@ -39,33 +37,43 @@ async function onSubmit() {
     <div class="flex flex-col px-20 pt-10">
       <h1 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'" class="text-3xl font-noto"></h1>
       <div class="py-2">
-        <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" style="height: 588px; width: 1039px;" />
+        <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" class="" />
+      </div>
+
+      <div class="pb-20 pt-10">
+        <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="text-2xl font-noto"></h2>
+        <UForm :schema="schema" :state="state" class="flex flex-row items-center w-fit border-2">
+
+          <div class="flex flex-row p-8">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
+              <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" />
+            </UFormGroup>
+          </div>
+
+          <div class="flex flex-row border-r-2 border-l-2 p-8">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+              <UTextarea v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="w-[580px]"/>
+            </UFormGroup>
+
+          </div>
+
+          <div class="flex flex-row border-r-2 p-8 py-[3.2rem]">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
+              <UInput v-model="state.picture" class="custom-input" type="file"/>
+            </UFormGroup>
+          </div>
+
+          <div class="h-full flex flex-col p-4">
+            <UButton @click="onSubmit(heroStore.data[0])" type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour'"></UButton>
+          </div>
+        </UForm>
       </div>
     </div>
 
-    <div class="pb-20 pt-10">
-      <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="text-2xl font-noto px-20"></h2>
-      <UForm :schema="schema" :state="state" class="space-y-4 px-20" @submit.prevent="onSubmit">
 
-        <div class="flex flex-row space-x-4">
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
-            <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" class="custom-input"/>
-          </UFormGroup>
-
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
-            <UInput v-model="state.picture" class="custom-input" type="file"/>
-          </UFormGroup>
-        </div>
-
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
-          <UInput v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="custom-input"/>
-        </UFormGroup>
-
-        <UButton type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour'"></UButton>
-      </UForm>
-    </div>
 
 </template>
 
 <style scoped>
+
 </style>
