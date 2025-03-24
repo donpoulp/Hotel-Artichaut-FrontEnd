@@ -1,7 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import {useReservationStore} from "~/store/reservation.js";
+import {z} from "zod";
+import type { FormSubmitEvent } from '#ui/types';
+import {reactive} from "vue";
 import {useServicesStore} from "~/store/services.js";
+
 const route = useRoute()
+const reservationStore = useReservationStore()
 
 const carouselConfig = {
   itemsToShow: 3,
@@ -15,8 +21,28 @@ const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'
 const selectLangue = useState('selectedLangue');
 const totalPrice = ref(bedroomsType?.value?.price)
 
+const schema_reservation = z.object({
+  startDate: z.string(),
+  endDate: z.string(),
+  user_id: z.string(),
+  price: z.string(),
+  bedroom_type_id: z.string(),
+  status_id: z.string(),
+}).partial()
+
+type Schema = z.output<typeof schema_reservation>
+
+const state_reservation  = reactive({
+  startDate: undefined,
+  endDate: undefined,
+  user_id: undefined,
+  price: undefined,
+  bedroom_type_id: undefined,
+  status_id: undefined,
+})
+
 async function createReservation(reservation){
-  await reservationStore.createReservation(reservation);
+  await reservationStore.addReservation(reservation);
   //reloadNuxtApp()
 }
 const open = ref(false)
@@ -49,7 +75,7 @@ console.log(bedroomsType)
         <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
-    <UForm @submit="createReservation">
+    <UForm @submit="createReservation()">
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
