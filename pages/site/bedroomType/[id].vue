@@ -5,6 +5,7 @@ import {z} from "zod";
 import type { FormSubmitEvent } from '#ui/types';
 import {reactive} from "vue";
 import {useServicesStore} from "~/store/services.js";
+import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
 
 const route = useRoute()
 const reservationStore = useReservationStore()
@@ -19,7 +20,39 @@ const serviceStore = useServicesStore();
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
-const totalPrice = ref(bedroomsType?.value?.price)
+
+const totalPrice = computed(() => {
+  const days = differenceInDays(selected.value.end, selected.value.start) // Nombre de jours
+  return (bedroomsType.value?.price * days) + extraServicesPrice.value // Prix total
+})
+
+const open = ref(false)
+
+defineShortcuts({
+  o: () => open.value = !open.value
+})
+
+const selectedServices = ref({});
+
+const extraServicesPrice = ref(0)
+
+function calculPrice(servicePrice, isChecked) {
+  if (isChecked) {
+    extraServicesPrice.value += servicePrice;
+  } else {
+    extraServicesPrice.value -= servicePrice;
+  }
+}
+
+const selected = ref({ start: new Date(), end: addDays(new Date(), 5) })
+
+function isRangeSelected(duration: Duration) {
+  return isSameDay(selected.value.start, sub(new Date(), duration)) && isSameDay(selected.value.end, new Date())
+}
+
+function selectRange(duration: Duration) {
+  selected.value = { start: sub(new Date(), duration), end: new Date() }
+}
 
 const schema_reservation = z.object({
   startDate: z.string(),
@@ -30,35 +63,24 @@ const schema_reservation = z.object({
   status_id: z.string(),
 }).partial()
 
-type Schema = z.output<typeof schema_reservation>
-
 const state_reservation  = reactive({
-  startDate: undefined,
-  endDate: undefined,
-  user_id: undefined,
-  price: undefined,
-  bedroom_type_id: undefined,
-  status_id: undefined,
+  startDate: selected.value.start,
+  endDate: selected.value.end,
+  user_id: 1,
+  price: totalPrice.value,
+  bedroom_type_id: route.params.id,
+  status_id: 3,
 })
+
 
 async function createReservation(reservation){
-  await reservationStore.addReservation(reservation);
-  //reloadNuxtApp()
-}
-const open = ref(false)
-
-defineShortcuts({
-  o: () => open.value = !open.value
-})
-
-const selectedServices = ref({});
-
-function calculPrice(servicePrice, isChecked) {
-  if (isChecked) {
-    totalPrice.value += servicePrice;
-  } else {
-    totalPrice.value -= servicePrice;
+  console.log(reservation)
+  if (reservation.user_id == undefined){
+    console.log("ereure fait ce connecter")
+    return;
   }
+  await reservationStore.addReservation(reservation);
+  reloadNuxtApp()
 }
 
 console.log(bedroomsType)
@@ -75,37 +97,83 @@ console.log(bedroomsType)
         <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
-    <UForm @submit="createReservation()">
+    <UForm :state="state_reservation" :schema="schema_reservation">
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
           <UPopover v-model:open="open">
-            <UButton label="Services" @click="open.toString()" trailing-icon="i-heroicons-chevron-down-20-solid" class="btn"></UButton>
+            <UButton class="mr-4 w-[175px] h-[50px] text-[20px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800" @click="open.toString()" trailing-icon="i-heroicons-chevron-down-20-solid">
+              <div class="text-gradient-gold">Services</div>
+            </UButton>
             <template #panel>
               <div class="p-4" v-for="item in serviceStore.data" :key="item.id">
-                <UCheckbox :label="item.nameFr" :model-value="false" v-model="selectedServices[item.id]"
-                           :value="item.price" @change="calculPrice(item.price, selectedServices[item.id])"/>
+                <UCheckbox
+                    :label="item.nameFr"
+                    v-model="selectedServices[item.id]"
+                    :value="item.price"
+                    @change="calculPrice(item.price, selectedServices[item.id])"
+                />
               </div>
             </template>
           </UPopover>
-<!--          <ButtonWithIcon width="175px" height="50px" fontSize="22px" title="Service" icon="ph:arrows-vertical-bold"></ButtonWithIcon>-->
-          <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'" route="site-Services"></Button>
+          <NuxtLink to="/site/Services">
+            <UButton class="w-[175px] h-[50px] text-[20px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800">
+              <div class="text-gradient-gold">
+                {{selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'}}
+              </div>
+            </UButton>
+          </NuxtLink>
         </div>
         <div class="RoomPageBtnBoxRight">
-<!--          <div class="RoomPageBtnBoxRightBtnCart">-->
-<!--            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />-->
-<!--            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>-->
-<!--          </div>-->
-          <input type="date">
+
+          <!--CALENDRIER-->
+          <UPopover :popper="{ placement: 'top-start' }">
+            <UIcon name="i-heroicons-calendar-days-20-solid" class="RoomPageCartIcon"/>
+            <UButton class="w-[175px] h-[50px] text-[15px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800">
+              <div class="text-gradient-gold">
+                {{ selectLangue?.ref === 'En' ? 'From ' : 'Du ' }}
+                {{ format(selected.start, 'd MMM, yyy') }}
+                <br>
+                {{selectLangue?.ref === 'En' ? 'To ' : 'Au '}}
+                {{ format(selected.end, 'd MMM, yyy') }}
+              </div>
+            </UButton>
+
+            <template #panel="{ close }">
+              <div class="flex items-center sm:divide-x divide-gray-200 dark:divide-gray-800">
+                <div class="hidden sm:flex flex-col py-4">
+                  <UButton
+                      v-for="(range, index) in ranges"
+                      :key="index"
+                      :label="range.label"
+                      color="gray"
+                      variant="ghost"
+                      class="rounded-none px-6"
+                      :class="[isRangeSelected(range.duration) ? 'bg-gray-100 dark:bg-gray-800' : 'hover:bg-gray-50 dark:hover:bg-gray-800/50']"
+                      truncate
+                      @click="selectRange(range.duration)"
+                  />
+                </div>
+                <DatePicker v-model="selected" @close="close" color="green"/>
+              </div>
+            </template>
+          </UPopover>
+          <!--CALENDRIER-->
+
           <div class="RoomPageBtnBoxRightBtnCart">
             <UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" />
-            <Button type="submit" width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
+            <UButton @click="createReservation(state_reservation)" class="w-[175px] h-[50px] text-[18px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800">
+              <div class="text-gradient-gold">
+                {{selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'}}
+              </div>
+            </UButton>
           </div>
           <div class="RoomPageTotalPrice">Total : {{totalPrice}} $</div>
         </div>
       </div>
     </div>
     </UForm>
+
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
         <Slide v-for="picture in bedroomsType?.picture" :key="picture" class="flex flex-col">
