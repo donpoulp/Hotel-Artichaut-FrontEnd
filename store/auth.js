@@ -69,12 +69,14 @@ export const useAuthStore = defineStore('auth', {
                         'Content-Type': 'application/json'
                     }
                 });
-                // console.log(response.data._value.access_token)
-                // console.log(response.data._value.user.is_admin)
-
+                console.log(response.data._value.access_token)
+                const user = toRaw(response.data._value.user)
+                console.log(user)
                 if (response.data._value.access_token) {
-                    sessionStorage.setItem('access_token', response.data._value.access_token);
-                    this.isAuthenticated = true;
+                    sessionStorage.setItem('access_token', response.data._value.access_token)
+                    sessionStorage.setItem('user', JSON.stringify(user))
+                    this.isAuthenticated = true
+                    this.user = JSON.stringify(user)
                 } else {
                     console.error('Access token not found in response');
                 }
@@ -92,6 +94,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             })
             sessionStorage.removeItem('access_token');
+            sessionStorage.removeItem('user');
             this.user = null;
             this.isAuthenticated = false;
         }

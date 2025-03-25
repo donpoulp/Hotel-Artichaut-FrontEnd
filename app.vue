@@ -38,6 +38,7 @@ watch(selectedLangue, (newValue) => {
 <template>
   <NuxtLayout>
     <NuxtPage :key="route.fullPath"/>
+    <UNotifications />
   </NuxtLayout>
 </template>
 

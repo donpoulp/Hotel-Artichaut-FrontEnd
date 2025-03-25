@@ -2,6 +2,7 @@
 import Popup from './Popup.vue'
 import { ref } from 'vue'
 import {useCartStore} from "~/store/cart.js";
+import {useAuthStore} from "~/store/auth.js";
 
 const showModal = ref(false)
 
@@ -15,7 +16,20 @@ const onLangueChange = (newValue) => {
 
 const cartIsOpen = ref(false)
 
-const cartStore = useCartStore();
+const cartStore = useCartStore()
+const authStore = useAuthStore()
+
+const notif = useToast()
+
+const openCart = () => {
+  if (authStore.isAuthenticated) {
+    cartIsOpen.value = true;
+  } else {
+    notif.add({ title: 'Veuillez vous connecter pour accéder à votre panier.'})
+    showModal.value = true
+    console.log('User is not authenticated');
+  }
+}
 
 </script>
 
@@ -33,7 +47,8 @@ const cartStore = useCartStore();
         </div>
       </NuxtLink>
       <div class="nav">
-        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="cartIsOpen = true" />
+<!--        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="cartIsOpen = true" />-->
+        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="openCart" />
         <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
         <Popup v-show="showModal" @close-modal="showModal = false"/>
       </div>

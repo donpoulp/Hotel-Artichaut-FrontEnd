@@ -47,6 +47,12 @@ async function onSubmit(user) {
   }
 }
 
+const emit = defineEmits(['close-modal']);
+
+const myAccountClick = () => {
+  navigateTo('site/Account')
+  emit('close-modal')
+}
 
 </script>
 
@@ -77,9 +83,10 @@ async function onSubmit(user) {
             <UInput placeholder="Enter your password" v-model="state.password" type="password"/>
           </UFormGroup>
           <div class="pt-4 flex justify-center space-x-10">
-            <UButton class="btn" type="submit" @click="onSubmit({'email': state.email, 'password': state.password})">Sign In</UButton>
-            <UButton class="btn" @click="openSignUp">Sign Up</UButton>
+            <UButton class="btn" type="submit" @click="onSubmit({'email': state.email, 'password': state.password})" v-if="!authStore.isAuthenticated">Sign In</UButton>
+            <UButton class="btn" @click="openSignUp" v-if="!authStore.isAuthenticated">Sign Up</UButton>
             <UButton class="btn" @click="authStore.logout()" v-if="authStore.isAuthenticated">Log out</UButton>
+            <UButton class="btn" @click="myAccountClick" v-if="authStore.isAuthenticated">My account</UButton>
           </div>
         </UForm>
       </template>

@@ -21,7 +21,6 @@ const cartStore = useCartStore();
 const {data: bedroomsType} = useFetch('http://127.0.0.1:8000/api/bedroomType/' + route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
-const totalPrice = ref(bedroomsType?.value?.price)
 
 const schema_reservation = z.object({
   startDate: z.string(),
