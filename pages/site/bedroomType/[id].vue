@@ -1,7 +1,13 @@
-<script setup>
+<script setup lang="ts">
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
+import {useReservationStore} from "~/store/reservation.js";
+import {z} from "zod";
+import type { FormSubmitEvent } from '#ui/types';
+import {reactive} from "vue";
 import {useServicesStore} from "~/store/services.js";
+
 const route = useRoute()
+const reservationStore = useReservationStore()
 
 const carouselConfig = {
   itemsToShow: 3,
@@ -13,14 +19,37 @@ const serviceStore = useServicesStore();
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
+const totalPrice = ref(bedroomsType?.value?.price)
 
+const schema_reservation = z.object({
+  startDate: z.string(),
+  endDate: z.string(),
+  user_id: z.string(),
+  price: z.string(),
+  bedroom_type_id: z.string(),
+  status_id: z.string(),
+}).partial()
+
+type Schema = z.output<typeof schema_reservation>
+
+const state_reservation  = reactive({
+  startDate: undefined,
+  endDate: undefined,
+  user_id: undefined,
+  price: undefined,
+  bedroom_type_id: undefined,
+  status_id: undefined,
+})
+
+async function createReservation(reservation){
+  await reservationStore.addReservation(reservation);
+  //reloadNuxtApp()
+}
 const open = ref(false)
 
 defineShortcuts({
   o: () => open.value = !open.value
 })
-
-const totalPrice = ref(bedroomsType?.value?.price);
 
 const selectedServices = ref({});
 
@@ -46,6 +75,7 @@ console.log(bedroomsType)
         <p>{{ bedroomsType?.[`description${selectLangue.ref}`] }}</p>
       </div>
     </div>
+    <UForm @submit="createReservation()">
     <div class="RoomPageBtn">
       <div class="RoomPageBtnBox">
         <div class="RoomPageBtnBoxLeft">
@@ -62,18 +92,20 @@ console.log(bedroomsType)
           <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'View all services' : 'Voir les services'" route="site-Services"></Button>
         </div>
         <div class="RoomPageBtnBoxRight">
-          <div class="RoomPageBtnBoxRightBtnCart">
-            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />
-            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>
-          </div>
+<!--          <div class="RoomPageBtnBoxRightBtnCart">-->
+<!--            <UIcon name="i-ph:calendar-blank" class="RoomPageCartIcon" />-->
+<!--            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Choose date' : 'Choisir les dates'"></Button>-->
+<!--          </div>-->
+          <input type="date">
           <div class="RoomPageBtnBoxRightBtnCart">
             <UIcon name="material-symbols:shopping-bag-outline" class="RoomPageCartIcon" />
-            <Button width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
+            <Button type="submit" width="175px" height="50px" fontSize="22px" :title="selectLangue.ref === 'En' ? 'Add to cart' : 'Ajouter au panier'"></Button>
           </div>
-          <div class="RoomPageTotalPrice">Total : {{ totalPrice }} $</div>
+          <div class="RoomPageTotalPrice">Total : {{totalPrice}} $</div>
         </div>
       </div>
     </div>
+    </UForm>
     <div class="RoomPageCarrousel">
       <Carousel v-bind="carouselConfig">
         <Slide v-for="picture in bedroomsType?.picture" :key="picture" class="flex flex-col">
