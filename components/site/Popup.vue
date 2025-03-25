@@ -5,6 +5,8 @@ import {z} from 'zod';
 import type {FormSubmitEvent} from "#ui/types";
 import {useAuthStore} from "~/store/auth";
 
+const selectLangue = useState('selectedLangue');
+
 const showModalSignUp = ref(false);
 
 function openSignUp() {
@@ -18,8 +20,6 @@ const schema = z.object({
   password: z.string(),
 })
 
-type Schema = z.output<typeof schema>
-
 const state = reactive({
   email: undefined,
   password: undefined,
@@ -28,19 +28,25 @@ const state = reactive({
 const errorMessage = ref('');
 const successMessage = ref('');
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
-  console.log('Form submitted', event.data);
+async function onSubmit(user) {
+  console.log('Form submitted', user);
   // await authStore.fetchCsrfToken();
-  try {
-    await authStore.login(event.data);
-    successMessage.value = 'Login successful !';
-    errorMessage.value = '';
-  } catch (error) {
-    console.error('Error during login:', error);
-    errorMessage.value = error.message;
+  if (user.email === undefined || user.password === undefined){
+    errorMessage.value = selectLangue?.ref === 'En' ? 'Please fill in all fields !' : 'Veuillez remplir tout les champs';
     successMessage.value = '';
+  }else{
+    try {
+      await authStore.login(user);
+      successMessage.value = selectLangue?.ref === 'En' ? 'Login successful !' : 'Connexion reussie';
+      errorMessage.value = '';
+    } catch (error) {
+      console.error('Error during login:', error);
+      errorMessage.value = error.message;
+      successMessage.value = '';
+    }
   }
 }
+
 
 </script>
 
@@ -54,7 +60,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             @click="$emit('close-modal')"
         />
 
-        <UForm class="px-44 space-y-4" :schema="schema" :state="state" @submit="onSubmit">
+        <UForm class="px-44 space-y-4" :schema="schema" :state="state">
           <p class="font-antic text-center text-3xl pt-36">Sign In</p>
 
           <div v-if="errorMessage" class="text-center error-message">
@@ -71,7 +77,7 @@ async function onSubmit(event: FormSubmitEvent<Schema>) {
             <UInput placeholder="Enter your password" v-model="state.password" type="password"/>
           </UFormGroup>
           <div class="pt-4 flex justify-center space-x-10">
-            <UButton class="btn" type="submit">Sign In</UButton>
+            <UButton class="btn" type="submit" @click="onSubmit({'email': state.email, 'password': state.password})">Sign In</UButton>
             <UButton class="btn" @click="openSignUp">Sign Up</UButton>
             <UButton class="btn" @click="authStore.logout()" v-if="authStore.isAuthenticated">Log out</UButton>
           </div>
