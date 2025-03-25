@@ -1,6 +1,7 @@
 <script setup>
 import Popup from './Popup.vue'
 import { ref } from 'vue'
+import {useCartStore} from "~/store/cart.js";
 
 const showModal = ref(false)
 
@@ -11,6 +12,10 @@ const onLangueChange = (newValue) => {
   selectedLangue.value = newValue
   console.log('Langue sélectionnée:', selectedLangue.value)
 }
+
+const cartIsOpen = ref(false)
+
+const cartStore = useCartStore();
 
 </script>
 
@@ -27,12 +32,37 @@ const onLangueChange = (newValue) => {
             <img src="/public/Logo.png" alt="logo" class="logo">
         </div>
       </NuxtLink>
-        <div class="nav">
-            <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" />
-            <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
-            <Popup v-show="showModal" @close-modal="showModal = false" />
-        </div>
+      <div class="nav">
+        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="cartIsOpen = true" />
+        <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
+        <Popup v-show="showModal" @close-modal="showModal = false"/>
+      </div>
     </header>
+
+  <UModal v-model="cartIsOpen">
+    <UCard :ui="{ divide: 'divide-y divide-gray-500' }">
+      <template #header>
+        <div class="flex items-center justify-between">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            Modal
+          </h3>
+          <UButton variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="cartIsOpen = false" />
+        </div>
+      </template>
+      <div>
+        Chambre type : {{ cartStore.bedroomType?.name }}
+      </div>
+      <div>
+        Services :
+      </div>
+      <div>
+        Dates :
+      </div>
+      <template #footer>
+        Total :     $
+      </template>
+    </UCard>
+  </UModal>
 </template>
 
 <style scoped>

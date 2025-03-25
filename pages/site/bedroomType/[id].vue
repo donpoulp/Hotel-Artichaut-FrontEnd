@@ -1,6 +1,7 @@
 <script setup>
 import { Carousel, Slide, Pagination, Navigation } from 'vue3-carousel'
 import {useServicesStore} from "~/store/services.js";
+import {useCartStore} from "~/store/cart.js";
 const route = useRoute()
 
 const carouselConfig = {
@@ -9,11 +10,11 @@ const carouselConfig = {
 }
 
 const serviceStore = useServicesStore();
+const cartStore = useCartStore();
 
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
-
 const open = ref(false)
 
 defineShortcuts({
@@ -21,16 +22,23 @@ defineShortcuts({
 })
 
 const totalPrice = ref(bedroomsType?.value?.price);
-
 const selectedServices = ref({});
 
 function calculPrice(servicePrice, isChecked) {
   if (isChecked) {
     totalPrice.value += servicePrice;
+    cartStore.addService(serviceId, servicePrice);
   } else {
     totalPrice.value -= servicePrice;
+    cartStore.removeService(serviceId, servicePrice);
   }
 }
+
+watch(bedroomsType, (newBedroomType) => {
+  if (newBedroomType) {
+    cartStore.setBedroomType(newBedroomType);
+  }
+});
 
 console.log(bedroomsType)
 </script>
