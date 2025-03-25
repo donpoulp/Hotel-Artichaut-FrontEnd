@@ -16,23 +16,47 @@ export const useAuthStore = defineStore('auth', {
         //         method: 'GET',
         //     })
         // },
-
         async register(userData) {
             try {
-                const response = await useApiFetch(`/register`, {
+                // Effectuer la requête avec fetch
+                const response = await fetch(`http://localhost:8000/api/register`, {
                     method: 'POST',
                     body: JSON.stringify(userData),
                     headers: {
-                        'Content-Type': 'application/json'
-                    }
+                        'Content-Type': 'application/json',
+                    },
                 });
-                if (!response.ok) {
+
+                if (response.ok) {
+                    const responseData = await response.json();
+                    console.log("Registration successful", responseData);
+                    sessionStorage.setItem('access_token', responseData.access_token);
+                    this.isAuthenticated = true;
+                    return null
+                } else {
                     const errorData = await response.json();
-                    console.log(errorData);
-                    // throw new Error(errorData.message || 'Registration failed.');
+                    console.log("Error response:", errorData);
+
+                    if (response.status === 422 && errorData.errors) {
+                        let errorMessage = '';
+                        console.log("Errors:", errorData.errors);
+                        if (errorData.errors.email) {
+                            console.log("emails")
+                            errorMessage = errorData.errors.email[0];
+                        } else if (errorData.errors.password) {
+                            console.log("password")
+                            errorMessage = errorData.errors.password[0];
+                        }
+                        console.log("errorMessage",errorMessage);
+                        return errorMessage;
+                    } else {
+                        return 'Une erreur inconnue est survenue lors de l’inscription.'; // Erreur générique
+                    }
                 }
-            } catch (error) {
-                throw new Error('Registration failed. Verify all required fields and try again.');
+            } catch (err) {
+                console.error('An unexpected error occurred:', err);
+                return 'Une erreur inconnue est survenue lors de l’inscription.';
+
             }
         },
 
