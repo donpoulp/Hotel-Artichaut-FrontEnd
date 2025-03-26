@@ -57,6 +57,7 @@ export const useReservationStore = defineStore('reservation', {
                 method: 'POST',
                 body: JSON.stringify(reservationData),
             })
+            sessionStorage.setItem('reservation',JSON.stringify(reservationData))
         },
         async loadReservationDataById(id) {
             this.data = (await useApiFetch(`/reservation/` + id, {
