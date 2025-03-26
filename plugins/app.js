@@ -12,6 +12,7 @@ import {useAboutStore} from "~/store/about.js";
 import {useAboutSectionStore} from "~/store/about_section.js";
 import {useAboutDescriptionStore} from "~/store/about_description.js";
 import {useBedroomTypeStore} from "~/store/bedroom-type.js";
+import {useAuthStore} from "~/store/auth.js";
 
 export default defineNuxtPlugin(async () => {
 
