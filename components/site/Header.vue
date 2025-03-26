@@ -16,8 +16,8 @@ const onLangueChange = (newValue) => {
 
 const cartIsOpen = ref(false)
 
-const cartStore = useCartStore()
 const authStore = useAuthStore()
+const cartStore = useCartStore();
 
 const notif = useToast()
 

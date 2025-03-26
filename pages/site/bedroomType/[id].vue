@@ -10,14 +10,13 @@ import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from '
 
 const route = useRoute()
 const reservationStore = useReservationStore()
+const serviceStore = useServicesStore()
+const cartStore = useCartStore()
 
 const carouselConfig = {
   itemsToShow: 3,
   wrapAround: true
 }
-
-const serviceStore = useServicesStore();
-const cartStore = useCartStore();
 
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
@@ -35,14 +34,15 @@ defineShortcuts({
 })
 
 const selectedServices = ref({});
-
 const extraServicesPrice = ref(0)
 
 function calculPrice(servicePrice, isChecked) {
   if (isChecked) {
     extraServicesPrice.value += servicePrice;
+    cartStore.addService(serviceId, servicePrice);
   } else {
     extraServicesPrice.value -= servicePrice;
+    cartStore.removeService(serviceId, servicePrice);
   }
 }
 
@@ -82,6 +82,7 @@ async function createReservation(reservation){
     return;
   }
   await reservationStore.addReservation(reservation);
+  cartStore.setDates(selected.value.start, selected.value.end);
   reloadNuxtApp()
 }
 
