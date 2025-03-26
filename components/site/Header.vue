@@ -16,8 +16,9 @@ const onLangueChange = (newValue) => {
 
 const cartIsOpen = ref(false)
 
+const cartStore = useCartStore()
 const authStore = useAuthStore()
-const cartStore = useCartStore();
+authStore.hydrateStore();
 
 const notif = useToast()
 
@@ -48,84 +49,88 @@ const openCart = () => {
       </NuxtLink>
       <div class="nav">
 <!--        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="cartIsOpen = true" />-->
-        <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="openCart" />
-        <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
-        <Popup v-show="showModal" @close-modal="showModal = false"/>
-      </div>
-    </header>
+            <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" @click="openCart" />
+            <UIcon v-if="authStore.isAuthenticated === false" name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
+            <NuxtLink to="/site/Account">
+              <UIcon v-if="authStore.isAuthenticated === true" name="material-symbols:manage-accounts" class="userIcon text-white"/>
+            </NuxtLink>
+            <UIcon v-if="authStore.isAuthenticated === true" @click="disconnect()" name="material-symbols:person-cancel" class="userIcon text-white"/>
+            <Popup v-show="showModal" @close-modal="showModal = false"/>
+          </div>
+        </header>
 
-  <UModal v-model="cartIsOpen">
-    <UCard :ui="{ divide: 'divide-y divide-gray-500' }">
-      <template #header>
-        <div class="flex items-center justify-between">
-          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            Modal
-          </h3>
-          <UButton variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="cartIsOpen = false" />
-        </div>
-      </template>
-      <div>
-        Chambre type : {{ cartStore.bedroomType?.name }}
-      </div>
-      <div>
-        Services :
-      </div>
-      <div>
-        Dates :
-      </div>
-      <template #footer>
-        Total :     $
-      </template>
-    </UCard>
-  </UModal>
-</template>
+      <UModal v-model="cartIsOpen">
+        <UCard :ui="{ divide: 'divide-y divide-gray-500' }">
+          <template #header>
+            <div class="flex items-center justify-between">
+              <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+                Modal
+              </h3>
+              <UButton variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1" @click="cartIsOpen = false" />
+            </div>
+          </template>
+          <div>
+            Chambre type : {{ cartStore.bedroomType?.name }}
+          </div>
+          <div>
+            Services :
+          </div>
+          <div>
+            Dates :
+          </div>
+          <template #footer>
+            Total :     $
+          </template>
+        </UCard>
+      </UModal>
+    </template>
 
-<style scoped>
-header {
-    height: 207px;
-    background: linear-gradient(90deg, #0D5649 69%, #158470 100%);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+    <style scoped>
+    header {
+        height: 207px;
+        background: linear-gradient(90deg, #0D5649 69%, #158470 100%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-.langue {
-    display: flex;
-    justify-content: space-between;
-    width: 250px;
-}
+    .langue {
+        display: flex;
+        justify-content: space-between;
+        width: 250px;
+    }
 
-.langueIcon {
-    width: 80px;
-    height: 60px;
-    border-radius: 10px;
-    margin-left: 20px;
-}
+    .langueIcon {
+        width: 80px;
+        height: 60px;
+        border-radius: 10px;
+        margin-left: 20px;
+    }
 
-.langue p {
-    font-family: Noto Serif;
-    font-size: 40px;
-}
+    .langue p {
+        font-family: Noto Serif;
+        font-size: 40px;
+    }
 
-.nav {
-    width: 250px;
-    display: flex;
-    justify-content: space-evenly;
-    padding-right: 80px;
+    .nav {
+        width: 250px;
+        display: flex;
+        justify-content: space-evenly;
+        padding-right: 80px;
 
-}
+    }
 
-.nav .cartIcon, .userIcon {
-    width: 80px;
-    height: 100px;
-}
+    .nav .cartIcon, .userIcon {
+        width: 80px;
+        height: 100px;
+    }
 
-.userIcon {
-    cursor: pointer;
-}
+    .userIcon {
+        cursor: pointer;
+    }
 
-.cartIcon {
-    cursor: pointer;
-}
+    .cartIcon {
+        cursor: pointer;
+    }
 
-</style>
+    </style>

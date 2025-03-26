@@ -7,16 +7,18 @@ import {reactive} from "vue";
 import {useServicesStore} from "~/store/services.js";
 import {useCartStore} from "~/store/cart.js";
 import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
+import {useAuthStore} from "~/store/auth";
 
 const route = useRoute()
 const reservationStore = useReservationStore()
-const serviceStore = useServicesStore()
-const cartStore = useCartStore()
 
 const carouselConfig = {
   itemsToShow: 3,
   wrapAround: true
 }
+
+const serviceStore = useServicesStore();
+const cartStore = useCartStore();
 
 const { data: bedroomsType } = useFetch('http://127.0.0.1:8000/api/bedroomType/'+route.params.id, {lazy: true})
 
@@ -56,6 +58,9 @@ function selectRange(duration: Duration) {
   selected.value = { start: sub(new Date(), duration), end: new Date() }
 }
 
+const authStore = useAuthStore()
+authStore.hydrateStore();
+
 const schema_reservation = z.object({
   startDate: z.string(),
   endDate: z.string(),
@@ -68,7 +73,7 @@ const schema_reservation = z.object({
 const state_reservation  = reactive({
   startDate: selected.value.start,
   endDate: selected.value.end,
-  user_id: 1,
+  user_id: authStore.user?.id || undefined,
   price: totalPrice.value,
   bedroom_type_id: route.params.id,
   status_id: 3,
@@ -82,6 +87,7 @@ async function createReservation(reservation){
     return;
   }
   await reservationStore.addReservation(reservation);
+  console.log("reservation reussie !")
   cartStore.setDates(selected.value.start, selected.value.end);
   reloadNuxtApp()
 }

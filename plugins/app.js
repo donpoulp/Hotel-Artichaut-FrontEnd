@@ -28,6 +28,7 @@ export default defineNuxtPlugin(async () => {
     const aboutDescriptionStore = useAboutDescriptionStore()
     const bedroomStore = useBedroomStore()
     const bedroomTypeStore = useBedroomTypeStore()
+    const authStore = useAuthStore()
 
     await strongestSectionStore.loadStrongestSectionData()
     await strongestStore.loadStrongestData()
@@ -59,6 +60,7 @@ export default defineNuxtPlugin(async () => {
             aboutSection: useAboutSectionStore(),
             aboutDescription: useAboutDescriptionStore(),
             bedroomType: useBedroomTypeStore(),
+            auth: useAuthStore()
         }
     }
 })
