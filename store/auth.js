@@ -11,11 +11,15 @@ export const useAuthStore = defineStore('auth', {
         }
     },
     actions: {
-        // async fetchCsrfToken() {
-        //     await useApiFetch(`/sanctum/csrf-cookie`, {
-        //         method: 'GET',
-        //     })
-        // },
+        hydrateStore() {
+            if (process.client) {
+                const storedUser = sessionStorage.getItem('user');
+                if (storedUser) {
+                    this.user = JSON.parse(storedUser);
+                    this.isAuthenticated = true;
+                }
+            }
+        },
         async register(userData) {
             try {
                 // Effectuer la requête avec fetch
@@ -69,14 +73,16 @@ export const useAuthStore = defineStore('auth', {
                         'Content-Type': 'application/json'
                     }
                 });
-                console.log(response.data._value.access_token)
-                const user = toRaw(response.data._value.user)
-                console.log(user)
+
+                console.log(response.data._value.access_token);
+                const user = response.data._value.user;
+                console.log(user);
+
                 if (response.data._value.access_token) {
-                    sessionStorage.setItem('access_token', response.data._value.access_token)
-                    sessionStorage.setItem('user', JSON.stringify(user))
-                    this.isAuthenticated = true
-                    this.user = JSON.stringify(user)
+                    sessionStorage.setItem('access_token', response.data._value.access_token);
+                    sessionStorage.setItem('user', JSON.stringify(user));
+                    this.isAuthenticated = true;
+                    this.user = user;  // Ne pas convertir en JSON ici
                 } else {
                     console.error('Access token not found in response');
                 }
@@ -92,7 +98,8 @@ export const useAuthStore = defineStore('auth', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
-            })
+            });
+
             sessionStorage.removeItem('access_token');
             sessionStorage.removeItem('user');
             this.user = null;
