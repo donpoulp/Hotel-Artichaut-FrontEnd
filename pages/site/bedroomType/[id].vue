@@ -8,7 +8,7 @@ import {useServicesStore} from "~/store/services.js";
 import {useCartStore} from "~/store/cart.js";
 import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
 import {useAuthStore} from "~/store/auth";
-
+  
 const route = useRoute()
 const reservationStore = useReservationStore()
 
@@ -36,15 +36,14 @@ defineShortcuts({
 })
 
 const selectedServices = ref({});
+
 const extraServicesPrice = ref(0)
 
 function calculPrice(servicePrice, isChecked) {
   if (isChecked) {
     extraServicesPrice.value += servicePrice;
-    cartStore.addService(serviceId, servicePrice);
   } else {
     extraServicesPrice.value -= servicePrice;
-    cartStore.removeService(serviceId, servicePrice);
   }
 }
 
@@ -68,6 +67,7 @@ const schema_reservation = z.object({
   price: z.string(),
   bedroom_type_id: z.string(),
   status_id: z.string(),
+  services: z.string()
 }).partial()
 
 const state_reservation  = reactive({
@@ -77,8 +77,14 @@ const state_reservation  = reactive({
   price: totalPrice.value,
   bedroom_type_id: route.params.id,
   status_id: 3,
+  services: []
 })
 
+watchEffect(() => {
+  state_reservation.startDate = selected.value.start
+  state_reservation.endDate = selected.value.end
+  state_reservation.price = totalPrice.value
+})
 
 async function createReservation(reservation){
   console.log(reservation)
@@ -88,8 +94,7 @@ async function createReservation(reservation){
   }
   await reservationStore.addReservation(reservation);
   console.log("reservation reussie !")
-  cartStore.setDates(selected.value.start, selected.value.end);
-  reloadNuxtApp()
+  //reloadNuxtApp()
 }
 
 watch(bedroomsType, (newBedroomType) => {
@@ -97,6 +102,16 @@ watch(bedroomsType, (newBedroomType) => {
     cartStore.setBedroomType(newBedroomType);
   }
 });
+
+function addService(service_id){
+  const index = state_reservation.services.indexOf(service_id);
+
+  if (index !== -1) {
+    state_reservation.services = state_reservation.services.filter(id => id !== service_id);
+  } else {
+    state_reservation.services.push(service_id);
+  }
+}
 
 console.log(bedroomsType)
 </script>
@@ -126,7 +141,7 @@ console.log(bedroomsType)
                     :label="item.nameFr"
                     v-model="selectedServices[item.id]"
                     :value="item.price"
-                    @change="calculPrice(item.price, selectedServices[item.id])"
+                    @change="calculPrice(item.price, selectedServices[item.id]), addService(item.id)"
                 />
               </div>
             </template>
