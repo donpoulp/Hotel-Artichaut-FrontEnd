@@ -11,11 +11,15 @@ export const useHeroStore = defineStore('hero', {
         async loadHeroData(){
             this.data = (await useApiFetch(`/hero/1`)).data.value
         },
-        async updateHeroData(newData){
-            await useApiFetch(`/hero/1`, {
+        async updateHeroData(formData){
+            const response = await useApiFetch(`/hero/1`, {
                 method: 'PUT',
-                body: JSON.stringify(newData)
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
+            console.log(response)
         }
     }
 })
