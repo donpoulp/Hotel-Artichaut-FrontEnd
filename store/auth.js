@@ -109,6 +109,7 @@ export const useAuthStore = defineStore('auth', {
             sessionStorage.removeItem('user');
             this.user = null;
             this.isAuthenticated = false;
+            navigateTo('/')
         }
     }
 })

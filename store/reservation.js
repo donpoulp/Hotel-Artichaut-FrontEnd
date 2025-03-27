@@ -57,11 +57,21 @@ export const useReservationStore = defineStore('reservation', {
                 method: 'POST',
                 body: JSON.stringify(reservationData),
             })
+            sessionStorage.setItem('reservation',JSON.stringify(reservationData))
         },
         async loadReservationDataById(id) {
             this.data = (await useApiFetch(`/reservation/` + id, {
                 method: 'GET',
             })).data.value
+        },
+        async loadReservationDataByUserId(userId) {
+            try {
+                const response = await useApiFetch(`/reservations/user/${userId}`);
+                this.data = response.data.value;
+                console.log('Reservations:', this.data);
+            } catch (error) {
+                console.error('Erreur chargement des reservations :', error);
+            }
         },
         async updateReservation(reservationData) {
           await useApiFetch(`/reservation/`, + reservationData.id, {

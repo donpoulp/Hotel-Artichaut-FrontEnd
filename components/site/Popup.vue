@@ -9,9 +9,7 @@ const selectLangue = useState('selectedLangue');
 
 const showModalSignUp = ref(false);
 
-const emit = defineEmits(['close-modal']);
-
-async function openSignUp() {
+function openSignUp() {
   showModalSignUp.value = true;
 }
 
@@ -41,18 +39,12 @@ async function onSubmit(user) {
       await authStore.login(user);
       successMessage.value = selectLangue?.ref === 'En' ? 'Login successful !' : 'Connexion reussie';
       errorMessage.value = '';
-      emit('close-modal');
     } catch (error) {
       console.error('Error during login:', error);
       errorMessage.value = error.message;
       successMessage.value = '';
     }
   }
-}
-
-const myAccountClick = () => {
-  navigateTo('site/Account')
-  emit('close-modal')
 }
 
 </script>
@@ -87,7 +79,6 @@ const myAccountClick = () => {
             <UButton class="btn" type="submit" @click="onSubmit({'email': state.email, 'password': state.password})" v-if="!authStore.isAuthenticated">Sign In</UButton>
             <UButton class="btn" @click="openSignUp" v-if="!authStore.isAuthenticated">Sign Up</UButton>
             <UButton class="btn" @click="authStore.logout()" v-if="authStore.isAuthenticated">Log out</UButton>
-            <UButton class="btn" @click="myAccountClick" v-if="authStore.isAuthenticated">My account</UButton>
           </div>
         </UForm>
       </template>
