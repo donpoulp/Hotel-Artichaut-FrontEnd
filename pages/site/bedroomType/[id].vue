@@ -98,6 +98,7 @@ async function createReservation(reservation) {
   await reservationStore.addReservation(reservation);
   console.log("reservation reussie !")
   resModal.value = false
+  navigateTo('/site/Payment')
   //reloadNuxtApp()
 }
 
@@ -111,10 +112,13 @@ function addService(service_id) {
   }
 }
 
+const notif = useToast()
+
 function checkLogin() {
   const currentUser = authStore.user?.id
   if (currentUser == undefined) {
     console.log("ereure fait ce connecter")
+    notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
     console.log("connexion ok go")
     resModal.value = true
