@@ -9,7 +9,9 @@ const selectLangue = useState('selectedLangue');
 
 const showModalSignUp = ref(false);
 
-function openSignUp() {
+const emit = defineEmits(['close-modal']);
+
+async function openSignUp() {
   showModalSignUp.value = true;
 }
 
@@ -39,6 +41,7 @@ async function onSubmit(user) {
       await authStore.login(user);
       successMessage.value = selectLangue?.ref === 'En' ? 'Login successful !' : 'Connexion reussie';
       errorMessage.value = '';
+      emit('close-modal');
     } catch (error) {
       console.error('Error during login:', error);
       errorMessage.value = error.message;
@@ -46,8 +49,6 @@ async function onSubmit(user) {
     }
   }
 }
-
-const emit = defineEmits(['close-modal']);
 
 const myAccountClick = () => {
   navigateTo('site/Account')

@@ -25,10 +25,32 @@ const state = reactive({
 })
 
 async function onSubmit(hero) {
-  await heroStore.updateHeroData(hero);
-  console.log(hero)
+  const formData = {
+    id: hero.id,
+    titleFr: hero.titleFr,
+    titleEn: hero.titleEn,
+    descriptionFr: hero.descriptionFr,
+    descriptionEn: hero.descriptionEn,
+    picture: state.picture,
+  };
+  console.log(formData)
+
+  await heroStore.updateHeroData(formData);
   //reloadNuxtApp()
 }
+
+const handleFileUpload = (event) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      state.picture = {'base64': base64Image, 'name': file.name};
+      console.log(state.picture)
+    };
+    reader.readAsDataURL(file);
+  }
+};
 </script>
 
 
@@ -59,7 +81,7 @@ async function onSubmit(hero) {
 
           <div class="flex flex-row border-r-2 p-8 py-[3.2rem]">
             <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
-              <UInput v-model="state.picture" class="custom-input" type="file"/>
+              <UInput class="custom-input" type="file" @change="handleFileUpload($event)"/>
             </UFormGroup>
           </div>
 
