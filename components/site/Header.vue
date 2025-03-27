@@ -54,7 +54,7 @@ const openCart = () => {
             <NuxtLink to="/site/Account">
               <UIcon v-if="authStore.isAuthenticated === true" name="material-symbols:manage-accounts" class="userIcon text-white"/>
             </NuxtLink>
-            <UIcon v-if="authStore.isAuthenticated === true" @click="disconnect()" name="material-symbols:person-cancel" class="userIcon text-white"/>
+            <UIcon v-if="authStore.isAuthenticated === true" @click="authStore.logout()" name="material-symbols:person-cancel" class="userIcon text-white"/>
             <Popup v-show="showModal" @close-modal="showModal = false"/>
           </div>
         </header>

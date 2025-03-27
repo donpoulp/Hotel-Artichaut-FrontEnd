@@ -31,36 +31,43 @@ export const useAuthStore = defineStore('auth', {
                     },
                 });
 
-                if (response.ok) {
-                    const responseData = await response.json();
-                    console.log("Registration successful", responseData);
-                    sessionStorage.setItem('access_token', responseData.access_token);
-                    this.isAuthenticated = true;
-                    return null
-                } else {
+                if (!response.ok) {
                     const errorData = await response.json();
                     console.log("Error response:", errorData);
 
                     if (response.status === 422 && errorData.errors) {
                         let errorMessage = '';
-                        console.log("Errors:", errorData.errors);
                         if (errorData.errors.email) {
-                            console.log("emails")
                             errorMessage = errorData.errors.email[0];
                         } else if (errorData.errors.password) {
-                            console.log("password")
                             errorMessage = errorData.errors.password[0];
                         }
-                        console.log("errorMessage",errorMessage);
                         return errorMessage;
                     } else {
-                        return 'Une erreur inconnue est survenue lors de l’inscription.'; // Erreur générique
+                        throw new Error('Une erreur inconnue est survenue lors de l’inscription.');
                     }
                 }
-            } catch (err) {
-                console.error('An unexpected error occurred:', err);
-                return 'Une erreur inconnue est survenue lors de l’inscription.';
 
+                // Convertir la réponse en JSON
+                const responseData = await response.json();
+                console.log("Registration successful", responseData);
+
+                // Récupérer `user` et `access_token` correctement
+                const user = responseData.user;
+                const accessToken = responseData.access_token;
+
+                if (accessToken) {
+                    sessionStorage.setItem('access_token', accessToken);
+                    sessionStorage.setItem('user', JSON.stringify(user));
+                    this.isAuthenticated = true;
+                    this.user = user; // Ne pas convertir en JSON ici
+                } else {
+                    throw new Error('Access token not found in response');
+                }
+
+            } catch (err) {
+                console.error("Registration error:", err);
+                throw new Error(err.message || 'Erreur lors de l’inscription.');
             }
         },
 
@@ -74,9 +81,7 @@ export const useAuthStore = defineStore('auth', {
                     }
                 });
 
-                console.log(response.data._value.access_token);
                 const user = response.data._value.user;
-                console.log(user);
 
                 if (response.data._value.access_token) {
                     sessionStorage.setItem('access_token', response.data._value.access_token);
@@ -84,7 +89,7 @@ export const useAuthStore = defineStore('auth', {
                     this.isAuthenticated = true;
                     this.user = user;  // Ne pas convertir en JSON ici
                 } else {
-                    console.error('Access token not found in response');
+                    throw new Error('Access token not found in response');
                 }
             } catch (error) {
                 throw new Error('Login failed. Please check your credentials and try again.');

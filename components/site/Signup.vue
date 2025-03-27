@@ -32,6 +32,8 @@ const stateR = reactive({
  const errorMessage = ref('');
  const successMessage = ref('');
 
+const emit = defineEmits(['close-modal-signup']);
+
 async function onSubmitRegister(data) {
   if (data.email === undefined || data.password === undefined){
     errorMessage.value = selectLangue?.ref === 'En' ? 'Please fill in all fields !' : 'Veuillez remplir tout les champs';
@@ -41,11 +43,11 @@ async function onSubmitRegister(data) {
       const registrationError = await authStore.register(data);
       if (registrationError) {
         errorMessage.value = registrationError;
-        successMessage.value = ''; // Assure-toi de ne pas afficher le message de succès en cas d'erreur
+        successMessage.value = '';
       } else {
-        // Si tout se passe bien, on affiche le message de succès
         successMessage.value = 'Registration successful !';
-        errorMessage.value = ''; // On réinitialise l'erreur
+        errorMessage.value = '';
+        reloadNuxtApp()
       }
     } catch (error) {
       console.error('registration error:', error);
