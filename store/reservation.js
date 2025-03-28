@@ -1,5 +1,7 @@
 import {defineStore} from 'pinia'
 import {useApiFetch} from "~/composables/useApiFetch.ts";
+import {useWebFetch} from "~/composables/useWebFetch.ts";
+import reservation from "~/pages/backOffice/Reservation.vue";
 // import { Reservation } from '~/types/reservation';
 
 /**
@@ -63,13 +65,13 @@ export const useReservationStore = defineStore('reservation', {
 
             if (status.value === 'success' && data.value) {
                 sessionStorage.setItem('reservation', JSON.stringify(reservationData));
+                sessionStorage.setItem('id_res', data.value.reservation.id);
                 return 201;
             } else if (status.value === 'error' && error.value) {
                 return error.value.statusCode || 500;
             }
             return 500;
         },
-
 
         // async addReservation(reservationData) {
         //     await useApiFetch(`/reservation`, {
@@ -78,6 +80,7 @@ export const useReservationStore = defineStore('reservation', {
         //     })
         //     sessionStorage.setItem('reservation',JSON.stringify(reservationData))
         // },
+
         async loadReservationDataById(id) {
             this.data = (await useApiFetch(`/reservation/` + id, {
                 method: 'GET',

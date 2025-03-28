@@ -8,6 +8,8 @@ import {useServicesStore} from "~/store/services.js";
 import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
 import {useAuthStore} from "~/store/auth";
 import auth from "~/middleware/auth";
+// import Interceptors from "undici-types/interceptors";
+import redirect = Interceptors.redirect;
 
 const route = useRoute()
 const reservationStore = useReservationStore()
@@ -90,8 +92,8 @@ const resModal = ref(false)
 const notif = useToast()
 
 async function createReservation(reservation) {
-  console.log(reservation)
-  console.log(authStore.user?.id)
+  // console.log(reservation)
+  // console.log(authStore.user?.id)
 
   const status = await reservationStore.addReservation(reservation);
 
@@ -123,8 +125,12 @@ async function createReservation(reservation) {
 
   resModal.value = false
 
-  // navigateTo('/site/Payment') //plus tard avec stripe
-  //reloadNuxtApp()
+   const reservationId = sessionStorage.getItem('id_res');
+   const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+
+   window.open(checkoutUrl, '_blank');
+
+
 }
 
 function addService(service_id) {
@@ -143,7 +149,7 @@ function checkLogin() {
     console.log("ereure fait ce connecter")
     notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
-    console.log("connexion ok go")
+    // console.log("User connected")
     resModal.value = true
   }
 }

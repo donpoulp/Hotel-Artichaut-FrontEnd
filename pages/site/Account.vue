@@ -46,7 +46,7 @@ const notif = useToast()
 
 async function onSubmitModify() {
   const userId = authStore.user.id;
-  const updatedUserData = { ...state_user, id: userId };
+  const updatedUserData = {...state_user, id: userId};
   try {
     await userStore.updateUserData(updatedUserData);
     notif.add({
@@ -104,30 +104,31 @@ const selectLangue = useState('selectedLangue');
   <h1 class="text-center text-3xl py-14">{{ selectLangue?.ref === 'En' ? 'Your account' : 'Votre compte' }}</h1>
   <div class="flex flex-row space-x-72 justify-center">
     <div class="flex flex-col pb-14">
-      <h1 class="text-xl text-center pb-6">Informations personnelles</h1>
+      <h1 class="text-xl text-center pb-6">
+        {{ selectLangue?.ref === 'En' ? 'Personal information' : 'Informations personnelles' }}</h1>
       <UForm :schema="schema_user" :state="state_user">
-        <UCard class="p-4 space-y-4">
-          <UFormGroup label="FirstName" name="firstName">
+        <UCard class="p-4 space-y-4 bg-gray-100">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Firstname' : 'Prénom'">
             <UInput v-model="state_user.firstName"/>
           </UFormGroup>
 
-          <UFormGroup label="Lastname" name="lastName">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Lastname' : 'Nom'">
             <UInput v-model="state_user.lastName"/>
           </UFormGroup>
 
-          <UFormGroup label="Email" name="email">
+          <UFormGroup label="Email">
             <UInput v-model="state_user.email"/>
           </UFormGroup>
 
-          <UFormGroup label="emailBis" name="emailBis">
+          <UFormGroup label="Email Bis">
             <UInput v-model="state_user.emailBis"/>
           </UFormGroup>
 
-          <UFormGroup label="Password" name="password">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Password' : 'Mot de passe'">
             <UInput v-model="state_user.password"/>
           </UFormGroup>
 
-          <UFormGroup label="Phone" name="phone">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Phone' : 'Téléphone'">
             <UInput v-model="state_user.phone"/>
           </UFormGroup>
 
@@ -149,20 +150,23 @@ const selectLangue = useState('selectedLangue');
     </div>
 
     <div class="flex flex-col pb-14">
-      <h1 class="text-xl text-center pb-6">Mes réservations</h1>
-      <UCard class="p-4 max-h-[490px] overflow-y-auto space-y-4">
-        <div v-for="reservation in reservations" :key="reservation.id" class="border p-2 space-y-1">
-          <p>{{ selectLangue?.ref === 'En' ? 'Number : ' : 'Numéro : ' }} {{ reservation.id }}</p>
-          <p>{{ selectLangue?.ref === 'En' ? 'From : ' : 'Du : ' }}{{ reservation.startDate }}</p>
-          <p>{{ selectLangue?.ref === 'En' ? 'To : ' : 'Au : ' }} {{ reservation.endDate }}</p>
-          <p>{{ selectLangue?.ref === 'En' ? 'Price : ' : 'Prix : ' }} {{ reservation.price }} $</p>
+      <h1 class="text-xl text-center pb-6">{{selectLangue?.ref === 'En' ? 'My reservations' : 'Mes réservations' }}</h1>
+      <UCard class="p-4 max-h-[490px] overflow-y-auto bg-gray-100">
+        <div class="space-y-4">
+          <div v-for="reservation in reservations" :key="reservation.id" class="border rounded-md border-gray-300 p-2 space-y-1 bg-white">
+            <p>{{ selectLangue?.ref === 'En' ? 'Number : ' : 'Numéro : ' }} {{ reservation.id }}</p>
+            <p>{{ selectLangue?.ref === 'En' ? 'From : ' : 'Du : ' }}{{ reservation.startDate }}</p>
+            <p>{{ selectLangue?.ref === 'En' ? 'To : ' : 'Au : ' }} {{ reservation.endDate }}</p>
+            <p>{{ selectLangue?.ref === 'En' ? 'Price : ' : 'Prix : ' }} {{ reservation.price }} $</p>
+          </div>
         </div>
       </UCard>
     </div>
   </div>
   <div class="flex justify-center pb-14">
-    <UButton class="w-[175px] h-[50px] text-[18px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800"
-             @click="returnClick">
+    <UButton
+        class="w-[175px] h-[50px] text-[18px] flex items-center justify-center bg-custom-green bg-opacity-90 hover:bg-green-800"
+        @click="returnClick">
       <div class="text-gradient-gold">
         {{ selectLangue?.ref === 'En' ? 'Return to site' : 'Retour au site' }}
       </div>
