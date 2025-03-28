@@ -47,7 +47,7 @@ export const useReservationStore = defineStore('reservation', {
         return {
             /** @type {Reservation[]} */
             data: [],
-            // data2: {}
+            data2: []
         }
     },
     actions: {
@@ -61,28 +61,16 @@ export const useReservationStore = defineStore('reservation', {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(reservationData),
-            });
-
-            if (status.value === 'success' && data.value) {
-                sessionStorage.setItem('reservation', JSON.stringify(reservationData));
-                sessionStorage.setItem('id_res', data.value.reservation.id);
-                return 201;
-            } else if (status.value === 'error' && error.value) {
-                return error.value.statusCode || 500;
-            }
-            return 500;
+            })
         },
-
-        // async addReservation(reservationData) {
-        //     await useApiFetch(`/reservation`, {
-        //         method: 'POST',
-        //         body: JSON.stringify(reservationData),
-        //     })
-        //     sessionStorage.setItem('reservation',JSON.stringify(reservationData))
-        // },
-
+        async addReservationFromBo(reservationData){
+            await useApiFetch(`/reservation-from-bo`, {
+                method: 'POST',
+                body: JSON.stringify(reservationData),
+            })
+        },
         async loadReservationDataById(id) {
-            this.data = (await useApiFetch(`/reservation/` + id, {
+            this.data2 = (await useApiFetch(`/reservation/` + id, {
                 method: 'GET',
             })).data.value
         },
@@ -96,7 +84,13 @@ export const useReservationStore = defineStore('reservation', {
             }
         },
         async updateReservation(reservationData) {
-            await useApiFetch(`/reservation/`, +reservationData.id, {
+          await useApiFetch(`/reservation/`, + reservationData.id, {
+              method: 'PUT',
+              body: JSON.stringify(reservationData),
+          })
+        },
+        async updateReservationFromBo(reservationData, id) {
+            await useApiFetch(`/reservation-from-bo/${id}`, {
                 method: 'PUT',
                 body: JSON.stringify(reservationData),
             })

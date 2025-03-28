@@ -67,7 +67,10 @@ export const useServicesStore = defineStore('services', {
         async updateServiceData(service){
             await useApiFetch(`/services/` + service.id, {
                 method: 'PUT',
-                body: JSON.stringify(service)
+                body: JSON.stringify(service),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
         },
         async addServiceData(service){

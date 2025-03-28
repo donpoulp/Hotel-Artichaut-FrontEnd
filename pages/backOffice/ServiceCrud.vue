@@ -119,11 +119,14 @@ const schema_service = z.object({
   price: z.string(),
   quantity: z.string(),
   time: z.string(),
-  picture: z.string(),
   backgroundText_color_1: z.string(),
   backgroundText_opacity_1: z.string(),
   backgroundText_color_2: z.string(),
   backgroundText_opacity_2: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 }).partial()
 
 type Schema = z.output<typeof schema_service>
@@ -157,8 +160,23 @@ async function onSubmitAdd(event: FormSubmitEvent<Schema>) {
   if (event.data.backgroundText_opacity_2 == undefined){
     event.data.backgroundText_opacity_2 = "100"
   }
-  console.log(event.data)
-  await servicesStore.addServiceData(event.data);
+  const formData = {
+    id: event.data.id,
+    titleFr: event.data.titleFr,
+    titleEn: event.data.titleEn,
+    descriptionEn: event.data.descriptionEn,
+    descriptionFr: event.data.descriptionFr,
+    duration: event.data.duration,
+    price: event.data.price,
+    quantity: event.data.quantity,
+    time: event.data.time,
+    backgroundText_color_1: event.data.backgroundText_color_1,
+    backgroundText_opacity_1: event.data.backgroundText_color_1,
+    backgroundText_color_2: event.data.backgroundText_color_2,
+    backgroundText_opacity_2: event.data.backgroundText_color_2,
+    picture: state_service.picture,
+  };
+  await servicesStore.updateServiceData(formData);
   reloadNuxtApp()
 }
 
@@ -187,10 +205,38 @@ async function onSubmitModify(service) {
   if (service.backgroundText_opacity_2 == undefined){
     service.backgroundText_opacity_2 = "100"
   }
-  //console.log(service)
-  await servicesStore.updateServiceData(service);
+  const formData = {
+    id: service.id,
+    titleFr: service.titleFr,
+    titleEn: service.titleEn,
+    descriptionEn: service.descriptionEn,
+    descriptionFr: service.descriptionFr,
+    duration: service.duration,
+    price: service.price,
+    quantity: service.quantity,
+    time: service.time,
+    backgroundText_color_1: service.backgroundText_color_1,
+    backgroundText_opacity_1: service.backgroundText_color_1,
+    backgroundText_color_2: service.backgroundText_color_2,
+    backgroundText_opacity_2: service.backgroundText_color_2,
+    picture: state_service.picture,
+  };
+  await servicesStore.updateServiceData(formData);
   reloadNuxtApp()
 }
+
+const handleFileUpload = (event) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      state_service.picture = {'base64': base64Image, 'name': file.name};
+      console.log(state_service.picture)
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 console.log(servicesStore.data)
 </script>
@@ -217,40 +263,40 @@ console.log(servicesStore.data)
   <UModal v-model="isOpen">
     <div class="p-4">
       <UForm :schema="schema_service" :state="state_service" @submit="onSubmitAdd">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in English *' : 'nom en Anglais *'" name="name" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in English' : 'nom en Anglais'" name="name" class="mt-3" required>
           <UInput v-model="state_service.nameEn"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in French *' : 'nom en Français *'" name="name" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in French' : 'nom en Français'" name="name" class="mt-3" required>
           <UInput v-model="state_service.nameFr"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in English *' : 'description en Anglais *'" name="description" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in English' : 'description en Anglais'" name="description" class="mt-3" required>
           <UTextarea v-model="state_service.descriptionEn"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in French *' : 'description en Français *'" name="description" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in French' : 'description en Français'" name="description" class="mt-3" required>
           <UTextarea v-model="state_service.descriptionFr"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Price *' : 'Prix *'" name="price" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Price' : 'Prix'" name="price" class="mt-3" required>
           <UInput v-model="state_service.price"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Quantity *' : 'Quantité *'" name="quantity" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Quantity' : 'Quantité'" name="quantity" class="mt-3" required>
           <UInput v-model="state_service.quantity"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Time *' : 'Temps *'" name="time" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Time' : 'Temps'" name="time" class="mt-3" required>
           <UInput v-model="state_service.time"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Duration *' : 'Durée *'" name="duration" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Duration' : 'Durée'" name="duration" class="mt-3" required>
           <UInput v-model="state_service.duration"/>
         </UFormGroup>
 
         <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" name="picture" class="mt-3">
-          <UInput type="file" v-model="state_service.picture"/>
+          <UInput type="file" @change="handleFileUpload($event)"/>
         </UFormGroup>
 
         <div class="flex justify-center mt-4">
@@ -265,40 +311,40 @@ console.log(servicesStore.data)
   <UModal v-model="isOpen2">
     <div class="p-4">
       <UForm :schema="schema_service" :state="state_service" @submit="onSubmitModify(servicesStore.data2)">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in English *' : 'nom en Anglais *'" name="name" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in English' : 'nom en Anglais'" name="name" class="mt-3" required>
           <UInput v-model="servicesStore.data2.nameEn"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in French *' : 'nom en Français *'" name="name" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'name in French' : 'nom en Français'" name="name" class="mt-3" required>
           <UInput v-model="servicesStore.data2.nameFr"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in English *' : 'description en Anglais *'" name="description" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in English' : 'description en Anglais'" name="description" class="mt-3" required>
           <UTextarea v-model="servicesStore.data2.descriptionEn"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in French *' : 'description en Français *'" name="description" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'description in French' : 'description en Français'" name="description" class="mt-3" required>
           <UTextarea v-model="servicesStore.data2.descriptionFr"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Price *' : 'Prix *'" name="price" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Price' : 'Prix'" name="price" class="mt-3" required>
           <UInput v-model="servicesStore.data2.price"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Quantity *' : 'Quantité *'" name="quantity" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Quantity' : 'Quantité'" name="quantity" class="mt-3" required>
           <UInput v-model="servicesStore.data2.quantity"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Time *' : 'Temps *'" name="time" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Time' : 'Temps'" name="time" class="mt-3" required>
           <UInput v-model="servicesStore.data2.time"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Duration *' : 'Durée *'" name="duration" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Duration' : 'Durée'" name="duration" class="mt-3" required>
           <UInput v-model="servicesStore.data2.duration"/>
         </UFormGroup>
 
         <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" name="picture" class="mt-3">
-          <UInput type="file" v-model="servicesStore.data2.picture"/>
+          <UInput type="file" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
         </UFormGroup>
 
         <div class="flex justify-center mt-4">

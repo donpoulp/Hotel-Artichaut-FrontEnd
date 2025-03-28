@@ -32,7 +32,7 @@ console.log(router.getRoutes()); // Affiche toutes les routes
     <div class="left-side-bar-line"></div>
 
     <div class="left-side-bar-dashboard">
-      <div v-if="$route.path == '/backOffice/Hero' || $route.path == '/backOffice/Strongest' || $route.path == '/backOffice/About' || $route.path == '/backOffice/News' || $route.path == '/backOffice/Footer'" class="selected-left-side-bar"></div>
+      <div v-if="$route.path == '/backOffice/Hero' || $route.path == '/backOffice/Strongest' || $route.path == '/backOffice/About' || $route.path == '/backOffice/aboutSection/1' || $route.path == '/backOffice/aboutSection/2' || $route.path == '/backOffice/aboutSection/3' || $route.path == '/backOffice/BedroomType' || $route.path == '/backOffice/Service' || $route.path == '/backOffice/News' || $route.path == '/backOffice/Footer'" class="selected-left-side-bar"></div>
       <UIcon name="i-ph:list-bullets-fill" class="dashboard-icon"></UIcon>
       <DropDownMenu></DropDownMenu>
     </div>
