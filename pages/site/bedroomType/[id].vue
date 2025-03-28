@@ -87,18 +87,29 @@ watchEffect(() => {
 })
 
 const resModal = ref(false)
+const notif = useToast()
 
 async function createReservation(reservation) {
   console.log(reservation)
   console.log(authStore.user?.id)
-  if (reservation.user_id == undefined) {
-    console.log("ereure fait ce connecter")
-    return;
+
+  const status = await reservationStore.addReservation(reservation);
+
+  if (status === 201) {
+    notif.add({ title : "Réservation créée avec succès" });
+    resModal.value = false;
+    // navigateTo('/site/Payment') // Décommentez plus tard avec Stripe
+  } else if (status === 406) {
+    notif.add({ title : "Aucune chambre disponible pour le type de chambre sélectionné."});
+  } else if (status === 400) {
+    notif.add({ title : "Erreur de validation : veuillez vérifier les informations saisies."});
+  } else {
+    notif.add({ title : "Une erreur inattendue s'est produite."});
   }
-  await reservationStore.addReservation(reservation);
-  console.log("reservation reussie !")
+
   resModal.value = false
-  navigateTo('/site/Payment')
+
+  // navigateTo('/site/Payment') //plus tard avec stripe
   //reloadNuxtApp()
 }
 
@@ -111,8 +122,6 @@ function addService(service_id) {
     state_reservation.services.push(service_id);
   }
 }
-
-const notif = useToast()
 
 function checkLogin() {
   const currentUser = authStore.user?.id
