@@ -14,7 +14,10 @@ export const useNewsStore = defineStore('news', {
         async updateNewsData(news){
             await useApiFetch(`/news/` + news.id, {
                 method: 'PUT',
-                body: JSON.stringify(news)
+                body: JSON.stringify(news),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
         }
     }

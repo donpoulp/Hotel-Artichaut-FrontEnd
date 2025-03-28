@@ -41,14 +41,16 @@ const bgOpacity = computed(()=>{
 })
 
 
-
 /// About_section
 const aboutSectionStore = useAboutSectionStore()
 
 const schema_section = z.object({
   titleEn: z.string(),
   titleFr: z.string(),
-  picture: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 })
 
 const state_section = reactive({
@@ -58,9 +60,29 @@ const state_section = reactive({
 })
 
 async function onSubmit_section(about_section) {
-  await aboutSectionStore.updateAboutSectionData(about_section);
+  const formData = {
+    id: about_section.id,
+    titleFr: about_section.titleFr,
+    titleEn: about_section.titleEn,
+    picture: state_section.picture,
+  };
+
+  await aboutSectionStore.updateAboutSectionData(formData);
   reloadNuxtApp()
 }
+
+const handleFileUpload = (event) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      state_section.picture = {'base64': base64Image, 'name': file.name};
+      console.log(state_section.picture)
+    };
+    reader.readAsDataURL(file);
+  }
+};
 </script>
 
 <template>
@@ -81,13 +103,14 @@ async function onSubmit_section(about_section) {
         <div v-for="about_section in aboutSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center border-2">
             <div class="flex text-center items-center whitespace-nowrap py-[2.1rem] px-8 border-r-2">
-              <span v-text="selectLangue?.ref === 'En' ? 'Title :' : 'Titre :'"></span>
-              <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
+              </UFormGroup>
             </div>
-            <div class="p-8 border-r-2">
-              <UInput type="file" size="md" icon="i-heroicons-folder"/>
+            <div class="p-8">
+              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
             </div>
-            <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8 border-r-2">
+            <div class="h-full flex flex-col w-[200px] py-[2.85rem] px-8 border-r-2 border-l-2">
               <UButton block @click="onSubmit_section(about_section)" class="text-center w-full">Valider</UButton>
             </div>
             <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8">

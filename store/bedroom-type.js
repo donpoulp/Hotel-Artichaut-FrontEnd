@@ -16,9 +16,12 @@ export const useBedroomTypeStore = defineStore('bedroom-type', {
             this.data2 = (await useApiFetch(`/bedroomType/` + id)).data.value
         },
         async updateBedroomTypeData(bedroomData){
-            await useApiFetch(`/bedroomType/${bedroomData.id}`, {
+            await useApiFetch(`/bedroomType/` + bedroomData.id, {
                 method: 'PUT',
-                body: JSON.stringify(bedroomData)
+                body: JSON.stringify(bedroomData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
         },
     }

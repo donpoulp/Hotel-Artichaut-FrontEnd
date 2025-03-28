@@ -45,7 +45,7 @@ export const useReservationStore = defineStore('reservation', {
         return {
             /** @type {Reservation[]} */
             data: [],
-            // data2: {}
+            data2: []
         }
     },
     actions: {
@@ -58,8 +58,14 @@ export const useReservationStore = defineStore('reservation', {
                 body: JSON.stringify(reservationData),
             })
         },
+        async addReservationFromBo(reservationData){
+            await useApiFetch(`/reservation-from-bo`, {
+                method: 'POST',
+                body: JSON.stringify(reservationData),
+            })
+        },
         async loadReservationDataById(id) {
-            this.data = (await useApiFetch(`/reservation/` + id, {
+            this.data2 = (await useApiFetch(`/reservation/` + id, {
                 method: 'GET',
             })).data.value
         },
@@ -68,6 +74,12 @@ export const useReservationStore = defineStore('reservation', {
               method: 'PUT',
               body: JSON.stringify(reservationData),
           })
+        },
+        async updateReservationFromBo(reservationData, id) {
+            await useApiFetch(`/reservation-from-bo/${id}`, {
+                method: 'PUT',
+                body: JSON.stringify(reservationData),
+            })
         },
         async deleteReservation(id){
             await useApiFetch(`/reservation/` + id, {

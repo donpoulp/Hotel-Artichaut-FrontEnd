@@ -15,7 +15,10 @@ const heroStore = useHeroStore();
 const schema = z.object({
   title: z.string(),
   description: z.string(),
-  picture: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 })
 
 const state = reactive({
@@ -33,10 +36,9 @@ async function onSubmit(hero) {
     descriptionEn: hero.descriptionEn,
     picture: state.picture,
   };
-  console.log(formData)
 
   await heroStore.updateHeroData(formData);
-  //reloadNuxtApp()
+  reloadNuxtApp()
 }
 
 const handleFileUpload = (event) => {
@@ -67,13 +69,13 @@ const handleFileUpload = (event) => {
         <UForm :schema="schema" :state="state" class="flex flex-row items-center w-fit border-2">
 
           <div class="flex flex-row p-8">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label" required>
               <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" />
             </UFormGroup>
           </div>
 
           <div class="flex flex-row border-r-2 border-l-2 p-8">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
               <UTextarea v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="w-[580px]"/>
             </UFormGroup>
 

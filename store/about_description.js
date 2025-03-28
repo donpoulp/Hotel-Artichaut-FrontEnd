@@ -18,7 +18,10 @@ export const useAboutDescriptionStore = defineStore('about_description', {
         async updateAboutDescriptionData(about_description){
             await useApiFetch(`/about_description/` + about_description.id, {
                 method: 'PUT',
-                body: JSON.stringify(about_description)
+                body: JSON.stringify(about_description),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             })
         }
     }
