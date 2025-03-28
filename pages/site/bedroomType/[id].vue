@@ -96,15 +96,29 @@ async function createReservation(reservation) {
   const status = await reservationStore.addReservation(reservation);
 
   if (status === 201) {
-    notif.add({ title : "Réservation créée avec succès" });
-    resModal.value = false;
-    // navigateTo('/site/Payment') // Décommentez plus tard avec Stripe
+    notif.add({
+      title : "Success",
+      description : "Reservation created successfully",
+      color: 'green',
+    });
   } else if (status === 406) {
-    notif.add({ title : "Aucune chambre disponible pour le type de chambre sélectionné."});
+    notif.add({
+      title : "Sorry",
+      description : "No rooms available for the selected room type.",
+      color: 'red',
+    });
   } else if (status === 400) {
-    notif.add({ title : "Erreur de validation : veuillez vérifier les informations saisies."});
+    notif.add({
+      title : "Error",
+      description : "Check reservation informations",
+      color: 'red',
+    });
   } else {
-    notif.add({ title : "Une erreur inattendue s'est produite."});
+    notif.add({
+      title : "Sorry",
+      description : "Servor Error",
+      color: 'red',
+    });
   }
 
   resModal.value = false

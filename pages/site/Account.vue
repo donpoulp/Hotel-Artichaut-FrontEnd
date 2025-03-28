@@ -87,21 +87,6 @@ async function onSubmitDelete() {
   }
 }
 
-// async function onSubmitModify() {
-//   const userId = authStore.user.id;
-//   const updatedUserData = { ...state_user, id: userId };
-//   await userStore.updateUserData(updatedUserData);
-//   console.log('User data updated:', userStore.data2);
-// }
-//
-// async function onSubmitDelete() {
-//   if (authStore.user) {
-//     await userStore.deleteUserData(authStore.user.id)
-//     console.log('User data deleted:', userStore.data2);
-//     navigateTo('/')
-//   }
-// }
-
 async function getReservations(userId) {
   await resaStore.loadReservationDataByUserId(userId);
   reservations.value = resaStore.data;
