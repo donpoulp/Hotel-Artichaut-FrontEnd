@@ -7,9 +7,6 @@ import {reactive, ref} from "vue";
 import {useServicesStore} from "~/store/services.js";
 import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
 import {useAuthStore} from "~/store/auth";
-import auth from "~/middleware/auth";
-// import Interceptors from "undici-types/interceptors";
-import redirect = Interceptors.redirect;
 
 const route = useRoute()
 const reservationStore = useReservationStore()
@@ -125,12 +122,10 @@ async function createReservation(reservation) {
 
   resModal.value = false
 
-   const reservationId = sessionStorage.getItem('id_res');
-   const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+  const reservationId = sessionStorage.getItem('id_res');
 
-   window.open(checkoutUrl, '_blank');
-
-
+  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+  window.open(checkoutUrl, '_blank');
 }
 
 function addService(service_id) {
@@ -145,11 +140,18 @@ function addService(service_id) {
 
 function checkLogin() {
   const currentUser = authStore.user?.id
+  // const reservationId = sessionStorage.getItem('id_res');
   if (currentUser == undefined) {
     console.log("ereure fait ce connecter")
     notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
     // console.log("User connected")
+
+    //envois mail (uniquement compte admin tristan)
+
+    // const mailUrl = 'http://localhost:8000/inscription/' + reservationId;
+    // window.open(mailUrl, '_blank');
+
     resModal.value = true
   }
 }
