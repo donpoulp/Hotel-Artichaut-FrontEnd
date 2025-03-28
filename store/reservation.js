@@ -1,5 +1,7 @@
 import {defineStore} from 'pinia'
 import {useApiFetch} from "~/composables/useApiFetch.ts";
+import {useWebFetch} from "~/composables/useWebFetch.ts";
+import reservation from "~/pages/backOffice/Reservation.vue";
 // import { Reservation } from '~/types/reservation';
 
 /**
@@ -49,16 +51,36 @@ export const useReservationStore = defineStore('reservation', {
         }
     },
     actions: {
-        async loadReservationData(){
+        async loadReservationData() {
             this.data = (await useApiFetch(`/reservation`)).data.value
         },
-        async addReservation(reservationData){
-            await useApiFetch(`/reservation`, {
+        async addReservation(reservationData) {
+            const { data, error, status } = await useApiFetch(`/reservation`, {
                 method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
                 body: JSON.stringify(reservationData),
-            })
-            sessionStorage.setItem('reservation',JSON.stringify(reservationData))
+            });
+
+            if (status.value === 'success' && data.value) {
+                sessionStorage.setItem('reservation', JSON.stringify(reservationData));
+                sessionStorage.setItem('id_res', data.value.reservation.id);
+                return 201;
+            } else if (status.value === 'error' && error.value) {
+                return error.value.statusCode || 500;
+            }
+            return 500;
         },
+
+        // async addReservation(reservationData) {
+        //     await useApiFetch(`/reservation`, {
+        //         method: 'POST',
+        //         body: JSON.stringify(reservationData),
+        //     })
+        //     sessionStorage.setItem('reservation',JSON.stringify(reservationData))
+        // },
+
         async loadReservationDataById(id) {
             this.data = (await useApiFetch(`/reservation/` + id, {
                 method: 'GET',
@@ -74,12 +96,12 @@ export const useReservationStore = defineStore('reservation', {
             }
         },
         async updateReservation(reservationData) {
-          await useApiFetch(`/reservation/`, + reservationData.id, {
-              method: 'PUT',
-              body: JSON.stringify(reservationData),
-          })
+            await useApiFetch(`/reservation/`, +reservationData.id, {
+                method: 'PUT',
+                body: JSON.stringify(reservationData),
+            })
         },
-        async deleteReservation(id){
+        async deleteReservation(id) {
             await useApiFetch(`/reservation/` + id, {
                 method: 'DELETE'
             });

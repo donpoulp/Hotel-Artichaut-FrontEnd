@@ -7,7 +7,6 @@ import {reactive, ref} from "vue";
 import {useServicesStore} from "~/store/services.js";
 import {sub, format, isSameDay, addDays, type Duration, differenceInDays} from 'date-fns'
 import {useAuthStore} from "~/store/auth";
-import auth from "~/middleware/auth";
 
 const route = useRoute()
 const reservationStore = useReservationStore()
@@ -87,19 +86,46 @@ watchEffect(() => {
 })
 
 const resModal = ref(false)
+const notif = useToast()
 
 async function createReservation(reservation) {
-  console.log(reservation)
-  console.log(authStore.user?.id)
-  if (reservation.user_id == undefined) {
-    console.log("ereure fait ce connecter")
-    return;
+  // console.log(reservation)
+  // console.log(authStore.user?.id)
+
+  const status = await reservationStore.addReservation(reservation);
+
+  if (status === 201) {
+    notif.add({
+      title : "Success",
+      description : "Reservation created successfully",
+      color: 'green',
+    });
+  } else if (status === 406) {
+    notif.add({
+      title : "Sorry",
+      description : "No rooms available for the selected room type.",
+      color: 'red',
+    });
+  } else if (status === 400) {
+    notif.add({
+      title : "Error",
+      description : "Check reservation informations",
+      color: 'red',
+    });
+  } else {
+    notif.add({
+      title : "Sorry",
+      description : "Servor Error",
+      color: 'red',
+    });
   }
-  await reservationStore.addReservation(reservation);
-  console.log("reservation reussie !")
+
   resModal.value = false
-  navigateTo('/site/Payment')
-  //reloadNuxtApp()
+
+  const reservationId = sessionStorage.getItem('id_res');
+
+  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+  window.open(checkoutUrl, '_blank');
 }
 
 function addService(service_id) {
@@ -112,15 +138,20 @@ function addService(service_id) {
   }
 }
 
-const notif = useToast()
-
 function checkLogin() {
   const currentUser = authStore.user?.id
+  // const reservationId = sessionStorage.getItem('id_res');
   if (currentUser == undefined) {
     console.log("ereure fait ce connecter")
     notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
-    console.log("connexion ok go")
+    // console.log("User connected")
+
+    //envois mail (uniquement compte admin tristan)
+
+    // const mailUrl = 'http://localhost:8000/inscription/' + reservationId;
+    // window.open(mailUrl, '_blank');
+
     resModal.value = true
   }
 }
