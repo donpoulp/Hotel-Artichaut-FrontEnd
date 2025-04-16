@@ -1,20 +1,25 @@
 <script setup lang="ts">
 import {useFooterStore} from "~/store/footer";
+import LeafletMap from '~/components/LeafletMap.vue'
 
 const footerStore = useFooterStore();
 const selectLangue = useState('selectedLangue');
 </script>
 
 <template>
-    <div class="footer text-white">
+    <div class="footer text-white" :style="{ backgroundColor: footerStore.data.background_color, opacity: footerStore.data.background_opacity / 100 }">
         <div class="sectionSocialMedia">
-            <p>{{ footerStore.data[0][`title${selectLangue?.ref}`] }}</p>
+            <p>{{ footerStore.data[`title${selectLangue?.ref}`] }}</p>
             <div class="socialMedia">
-                <UIcon name="ic:baseline-facebook" class="socialMediaIcon" />
-                <UIcon name="ri:instagram-fill" class="socialMediaIcon" />
-                <UIcon name="hugeicons:new-twitter" class="socialMediaIcon" />
+                <ULink v-for="icon in footerStore.data.icon" :to="icon.link">
+                  <UIcon :name="icon.iconPath" class="socialMediaIcon"/>
+                </ULink>
             </div>
         </div>
+      <div class="sectionCopyright text-center">
+        <p class="text-2xl">{{ footerStore.data[`text${selectLangue?.ref}`] }}</p>
+        <p class="mt-4 text-xl">© 2025 {{ footerStore.data[`title${selectLangue?.ref}`] }}</p>
+      </div>
         <div class="sectionContact">
             <ul>
               <li><strong>Contact</strong> : 08 95 69 69 29 (0,40€ / min)</li>
@@ -22,66 +27,67 @@ const selectLangue = useState('selectedLangue');
                 <li><strong v-text="selectLangue?.ref === 'En' ? 'Privay policy' : 'Politique de confidentialité'"></strong></li>
             </ul>
         </div>
-        <div class="sectionCopyright">
-            <p>© 2025 {{ footerStore.data[0][`title${selectLangue?.ref}`] }}</p>
+        <div class="sectionMap">
+          <client-only>
+            <LeafletMap />
+          </client-only>
         </div>
-        <div class="sectionLorem">
-            <p>{{ footerStore.data[0][`text${selectLangue?.ref}`] }}</p>
-        </div>
-        <div>
-            <img src="/maps.png" alt="maps">
-        </div>
-
     </div>
 </template>
 
 
 <style scoped>
 .footer {
-    height: 207px;
-    background: linear-gradient(90deg, #0D5649 69%, #158470 100%);
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+  height: 207px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .footer p, ul, li {
-    font-family: Noto Serif;
-    font-weight: 300;
-    font-size: 22px;
+  font-family: Noto Serif;
+  font-weight: 300;
 }
 
 .sectionSocialMedia {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  margin-left: 3%;
 }
 
 .sectionSocialMedia p {
-    font-family: Noto Serif;
-    font-size: 31px;
-    font-weight: 300;
+  font-family: Noto Serif;
+  font-size: 32.5px;
+  font-weight: 400;
+  text-decoration: underline;
 }
 
 .socialMedia {
-    width: 80%;
-    display: flex;
-    justify-content: space-between;
+  width: 90%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .socialMediaIcon {
-    width: 50px;
-    height: 50px;
+  width: 50px;
+  height: 50px;
 }
 
 ul {
-  text-align: center; /* Centre le contenu horizontalement */
-  margin: 0 auto; /* Centre l'élément si nécessaire */
+  text-align: center;
+  margin: 0 auto;
 }
 
+.sectionMap{
+  width: 300px;
+  margin-right: 10px;
+}
 
-.sectionLorem {
-width: 160px;
+.sectionContact ul{
+  font-size: 20px;
+  text-align: start;
 }
 </style>

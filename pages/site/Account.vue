@@ -39,6 +39,14 @@ onMounted(async () => {
     await userStore.loadUserDataById(authStore.user.id);
     Object.assign(state_user, authStore.user);
     await getReservations(authStore.user.id);
+    if (state_user.emailBis != ''){
+      document.querySelector(".emailBis").style.display = "block"
+      isActiveMail.value = true;
+    }
+    if (state_user.phoneBis != ''){
+      document.querySelector(".phoneBis").style.display = "block"
+      isActivePhone.value = true;
+    }
   }
 });
 
@@ -89,8 +97,7 @@ async function onSubmitDelete() {
 
 async function getReservations(userId) {
   await resaStore.loadReservationDataByUserId(userId);
-  reservations.value = resaStore.data;
-  console.log('Réservations récupérées :', reservations.value);
+  reservations.value = resaStore.data2;
 }
 
 const returnClick = () => {
@@ -98,39 +105,74 @@ const returnClick = () => {
 }
 
 const selectLangue = useState('selectedLangue');
+
+
+const isActiveMail = ref(false)
+const isActivePhone = ref(false)
+
+function displayMailBis(){
+  let mailBis = document.querySelector(".emailBis").style.display;
+  if (mailBis == "none") {
+    document.querySelector(".emailBis").style.display = "block"
+    isActiveMail.value = true
+  }else{
+    document.querySelector(".emailBis").style.display = "none"
+    isActiveMail.value = false
+  }
+}
+function displayPhoneBis(){
+  let phoneBis = document.querySelector(".phoneBis").style.display;
+  if (phoneBis == "none") {
+    document.querySelector(".phoneBis").style.display = "block"
+    isActivePhone.value = true
+  }else{
+    document.querySelector(".phoneBis").style.display = "none"
+    isActivePhone.value = false
+  }
+}
 </script>
 
 <template>
-  <h1 class="text-center text-3xl py-14">{{ selectLangue?.ref === 'En' ? 'Your account' : 'Votre compte' }}</h1>
+  <h1 class="text-center font-bold text-3xl py-14 text-[#0D5649]">{{ selectLangue?.ref === 'En' ? 'Your account' : 'Votre compte' }}</h1>
   <div class="flex flex-row space-x-72 justify-center">
     <div class="flex flex-col pb-14">
-      <h1 class="text-xl text-center pb-6">
+      <h1 class="text-2xl font-semibold text-center pb-6 text-[#0D5649]">
         {{ selectLangue?.ref === 'En' ? 'Personal information' : 'Informations personnelles' }}</h1>
       <UForm :schema="schema_user" :state="state_user">
-        <UCard class="p-4 space-y-4 bg-gray-100">
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Firstname' : 'Prénom'">
+        <UCard class="p-4 space-y-4 bg-[#F9F9F4]">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Firstname' : 'Prénom'" class="mb-2">
             <UInput v-model="state_user.firstName"/>
           </UFormGroup>
 
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Lastname' : 'Nom'">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Lastname' : 'Nom'" class="mb-2">
             <UInput v-model="state_user.lastName"/>
           </UFormGroup>
 
-          <UFormGroup label="Email">
+          <UFormGroup label="E-mail" class="mb-2">
             <UInput v-model="state_user.email"/>
           </UFormGroup>
 
-          <UFormGroup label="Email Bis">
+          <UFormGroup label="E-mail bis" name="emailBis" class="emailBis mb-2" style="display: none">
             <UInput v-model="state_user.emailBis"/>
           </UFormGroup>
+          <UButton class="btn_phone mb-4 bg-[#D8D27D] text-[#072527]" size="sm" color="primary" square variant="solid" @click="displayMailBis()">
+            <UIcon :name="isActiveMail ? 'material-symbols:remove' : 'material-symbols:add'"/>
+          </UButton>
 
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Password' : 'Mot de passe'">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Password' : 'Mot de passe'" class="mb-2">
             <UInput v-model="state_user.password"/>
           </UFormGroup>
 
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Phone' : 'Téléphone'">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Phone' : 'Téléphone'" class="mb-2">
             <UInput v-model="state_user.phone"/>
           </UFormGroup>
+
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Phone bis' : 'telephone bis'" name="phoneBis" class="phoneBis mb-2" style="display: none">
+            <UInput v-model="state_user.phoneBis"/>
+          </UFormGroup>
+          <UButton class="btn_phone bg-[#D8D27D] text-[#072527]" size="sm" color="primary" square variant="solid" @click="displayPhoneBis()">
+            <UIcon :name="isActivePhone ? 'material-symbols:remove' : 'material-symbols:add'"/>
+          </UButton>
 
           <div class="flex justify-center pt-10 space-x-4">
             <UButton class="btn" @click="onSubmitModify">
@@ -150,14 +192,58 @@ const selectLangue = useState('selectedLangue');
     </div>
 
     <div class="flex flex-col pb-14">
-      <h1 class="text-xl text-center pb-6">{{selectLangue?.ref === 'En' ? 'My reservations' : 'Mes réservations' }}</h1>
-      <UCard class="p-4 max-h-[490px] overflow-y-auto bg-gray-100">
+      <h1 class="text-2xl font-semibold text-center pb-6 text-[#0D5649]">
+        {{ selectLangue?.ref === 'En' ? 'My reservations' : 'Mes réservations' }}
+      </h1>
+
+      <UCard class="p-4 max-h-[600px] overflow-y-auto bg-[#F9F9F4] shadow-sm border border-[#E5E7EB] rounded-xl">
         <div class="space-y-4">
-          <div v-for="reservation in reservations" :key="reservation.id" class="border rounded-md border-gray-300 p-2 space-y-1 bg-white">
-            <p>{{ selectLangue?.ref === 'En' ? 'Number : ' : 'Numéro : ' }} {{ reservation.id }}</p>
-            <p>{{ selectLangue?.ref === 'En' ? 'From : ' : 'Du : ' }}{{ reservation.startDate }}</p>
-            <p>{{ selectLangue?.ref === 'En' ? 'To : ' : 'Au : ' }} {{ reservation.endDate }}</p>
-            <p>{{ selectLangue?.ref === 'En' ? 'Price : ' : 'Prix : ' }} {{ reservation.price }} $</p>
+          <div
+              v-if="reservations.length > 0"
+              v-for="(reservation, index) in reservations"
+              :key="reservation.id"
+              class="bg-white p-5 rounded-xl shadow border border-gray-200 transition hover:shadow-md"
+          >
+            <div class="flex justify-between items-center mb-3">
+              <h2 class="text-xl font-semibold text-[#0D5649]">
+                {{ selectLangue?.ref === 'En' ? 'Reservation #' : 'Réservation n°' }}{{ index + 1 }}
+              </h2>
+            </div>
+
+            <div class="text-sm text-gray-700 space-y-2">
+              <p>
+                <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'Bedroom type :' : 'Type de chambre :' }}</span>
+                {{ reservation.bedroom_type[`name${selectLangue?.ref}`] }}
+              </p>
+              <p>
+                <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'Price:' : 'Prix :' }}</span>
+                {{ reservation.price }} $
+              </p>
+              <p>
+                <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'From:' : 'Du :' }}</span>
+                {{ reservation.startDate }}
+              </p>
+              <p>
+                <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'To:' : 'Au :' }}</span>
+                {{ reservation.endDate }}
+              </p>
+              <div>
+                <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'Services:' : 'Services :' }}</span>
+                <div class="flex flex-wrap gap-2 mt-1">
+              <span
+                  v-for="service in reservation.services"
+                  :key="service.id"
+                  class="bg-[#D8D27D] text-[#072527] text-xs font-medium px-3 py-1 rounded-full"
+              >
+                {{ service[`name${selectLangue?.ref}`] }}
+              </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-else class="text-center text-gray-500 italic py-10">
+            <p>{{ selectLangue?.ref === 'En' ? 'No reservations found.' : 'Aucune réservation trouvée.' }}</p>
           </div>
         </div>
       </UCard>
