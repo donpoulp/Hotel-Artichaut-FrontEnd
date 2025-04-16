@@ -81,40 +81,78 @@ const handleFileUpload = (event, params) => {
         <BedroomType/>
     </div>
 
-    <div class="flex flex-col pt-10">
+    <div class="pt-10 mb-10">
       <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h1>
-      <div class="flex flex-col w-[fit-content] mb-6">
-        <div v-for="bedroomType in bedroomTypeStore.data">
-          <UForm :schema="schema" :state="state" class="flex flex-row items-center border-2">
-            <div class="flex text-center items-center whitespace-nowrap py-[8.25rem] px-8 border-r-2">
-              Section : {{bedroomType.id}}
+      <div class="space-y-6">
+        <div v-for="bedroomType in bedroomTypeStore.data" :key="bedroomType.id" class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+          <UForm :schema="schema" :state="state" class="space-y-6">
+            <!-- ID de la section -->
+            <div class="text-lg font-semibold text-gray-700">
+              Section : {{ bedroomType.id }}
             </div>
-            <div class="flex flex-row justify-center items-center p-8">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-                <UInput v-model="bedroomType[`name${selectLangue?.ref}`]"></UInput>
-              </UFormGroup>
-            </div>
-            <div class="flex flex-col p-8 py-[4.1rem] border-r-2 border-l-2">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-                <UTextarea rows="5" maxrows="5" v-model="bedroomType[`description${selectLangue?.ref}`]" class="w-[310px] textarea_backoffice_news"></UTextarea>
-                <span class="float-right text-[15px]">{{bedroomType[`description${selectLangue?.ref}`].length}}/200 caractère</span>
-              </UFormGroup>
-            </div>
-            <div>
-              <div class="p-6">
-                <div v-for="(picture, index) in bedroomType.picture" :key="index">
-                  <UFormGroup :label="'image ' + picture.id" class="mb-2">
-                    <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, index)"/>
-                  </UFormGroup>
-                </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <!-- Titre + Description -->
+              <div class="md:col-span-2 space-y-4">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                  <UInput v-model="bedroomType[`name${selectLangue?.ref}`]" />
+                </UFormGroup>
+
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+                  <UTextarea
+                      rows="5"
+                      maxrows="5"
+                      v-model="bedroomType[`description${selectLangue?.ref}`]"
+                      class="w-full"
+                  />
+                  <span class="text-sm text-gray-500 block text-right mt-1">
+                {{ bedroomType[`description${selectLangue?.ref}`].length }}/200 {{ selectLangue?.ref === 'En' ? 'characters' : 'caractères' }}
+              </span>
+                </UFormGroup>
+              </div>
+
+              <!-- Upload image(s) -->
+              <div class="space-y-4">
+                <UFormGroup
+                    v-for="(picture, index) in bedroomType.picture"
+                    :key="index"
+                    :label="'Image ' + picture.id"
+                >
+                  <UInput
+                      type="file"
+                      size="md"
+                      icon="i-heroicons-folder"
+                      @change="handleFileUpload($event, index)"
+                  />
+                </UFormGroup>
               </div>
             </div>
-            <div class="py-[7.75rem] px-6 border-l-2 border-r-2">
-              <UButton block @click="onSubmit(bedroomType)" class="text-center h-10 w-full buttonSubmit">Valider</UButton>
+
+            <!-- 🎨 Couleurs de fond -->
+            <div class="border-t border-gray-200 pt-6 mt-6">
+              <h4 class="font-medium text-gray-700 mb-4">
+                {{ selectLangue?.ref === 'En' ? 'Background Settings' : 'Paramètres de fond' }}
+              </h4>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background color' : 'Couleur de fond'" required>
+                  <UInput v-model="bedroomType.background_color" placeholder="#FFFFFF" />
+                </UFormGroup>
+
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" required>
+                  <UInput v-model="bedroomType.background_opacity" placeholder="1 ou 0.5..." />
+                </UFormGroup>
+              </div>
             </div>
-            <div class="h-full flex flex-col py-[2.1rem] px-8">
+
+            <!-- Actions -->
+            <div class="flex flex-col md:flex-row justify-between items-center pt-6">
+              <UButton @click="onSubmit(bedroomType)" class="buttonSubmit w-full md:w-fit mb-4 md:mb-0">
+                {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
+              </UButton>
+
               <NuxtLink :to="{ name:'site-bedroomType-id', params: { id: bedroomType.id} }">
-                <UButton block class="text-center w-full" color="blue">
+                <UButton class="text-center w-full md:w-fit" color="blue">
                   {{ selectLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
                   <UIcon name="hugeicons:arrow-right-01" />
                 </UButton>

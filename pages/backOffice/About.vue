@@ -86,64 +86,80 @@ const handleFileUpload = (event) => {
 </script>
 
 <template>
-  <div class="flex flex-col pt-10 px-10">
+  <div class="flex flex-col pt-10 px-10 pb-10">
     <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h1>
-    <div class="background_about py-20 px-[6rem]">
+    <div class="py-20 px-[6rem]"  :style="{ backgroundColor: bgColor, opacity: bgOpacity / 100 }">
       <div class="flex flex-row justify-between">
         <Hostel/>
         <Restaurant/>
         <Spa/>
       </div>
-      <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="isOpen = true"/>
     </div>
 
-    <div class="flex flex-col pt-10">
-      <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h1>
-      <div class="flex flex-col w-[fit-content] mb-6">
-        <div v-for="about_section in aboutSectionStore.data">
-          <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center border-2">
-            <div class="flex text-center items-center whitespace-nowrap py-[2.1rem] px-8 border-r-2">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-                <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
-              </UFormGroup>
-            </div>
-            <div class="p-8">
-              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
-            </div>
-            <div class="h-full flex flex-col w-[200px] py-[2.85rem] px-8 border-r-2 border-l-2">
-              <UButton block @click="onSubmit_section(about_section)" class="text-center w-full">Valider</UButton>
-            </div>
-            <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8">
-              <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }">
-                <UButton block class="text-center w-full" color="blue">
-                  {{ selectedLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
-                  <UIcon name="hugeicons:arrow-right-01" />
-                </UButton>
-              </NuxtLink>
-            </div>
-          </UForm>
+    <h1 class="text-3xl font-noto pb-4 pt-10 text-gray-800" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h1>
+
+    <div class="space-y-6">
+      <div
+          v-for="about_section in aboutSectionStore.data"
+          :key="about_section.id"
+          class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm"
+      >
+        <UForm :schema="schema_section" :state="state_section" class="space-y-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            Section : {{ about_section.id }}
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+              <UInput v-model="about_section[`title${selectedLangue?.ref}`]" />
+            </UFormGroup>
+
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Image' : 'Image'">
+              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)" />
+            </UFormGroup>
           </div>
+
+          <div class="flex flex-col md:flex-row justify-between gap-4">
+            <UButton @click="onSubmit_section(about_section)" class="w-full md:w-[200px] flex justify-center">
+              {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
+            </UButton>
+
+            <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }" class="w-full md:w-[200px]">
+              <UButton block color="blue">
+                {{ selectedLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
+                <UIcon name="hugeicons:arrow-right-01" />
+              </UButton>
+            </NuxtLink>
+          </div>
+        </UForm>
+      </div>
+
+      <!-- Section modification couleur de fond -->
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm mt-10">
+        <UForm :schema="schema" :state="state" class="space-y-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            {{ selectLangue?.ref === 'En' ? 'Background Settings' : 'Paramètres de fond' }}
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background Color' : 'Couleur de fond'" required>
+              <UInput v-model="aboutStore.data[0].background_color" placeholder="#FFFFFF" />
+            </UFormGroup>
+
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" required>
+              <UInput v-model="aboutStore.data[0].background_opacity" placeholder="0.5" type="number" step="0.1" min="0" max="1" />
+            </UFormGroup>
+          </div>
+
+          <div class="flex justify-end">
+            <UButton @click="onSubmit_background(backgroundSettings)" class="text-center buttonSubmit">
+              {{ selectLangue?.ref === 'En' ? 'Update Background' : 'Modifier le fond' }}
+            </UButton>
+          </div>
+        </UForm>
       </div>
     </div>
   </div>
-
-  <UModal v-model="isOpen">
-    <div class="p-4">
-      <UForm :schema="schema" :state="state">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
-          <UInput v-model="aboutStore.data[0].background_color"/>
-        </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
-          <UInput v-model="aboutStore.data[0].background_opacity"/>
-        </UFormGroup>
-        <div class="flex justify-center mt-4">
-          <UButton @click="onSubmit({background_color: aboutStore.data[0].background_color, background_opacity: aboutStore.data[0].background_opacity})">
-            Valider
-          </UButton>
-        </div>
-      </UForm>
-    </div>
-  </UModal>
 </template>
 
 <style scoped>

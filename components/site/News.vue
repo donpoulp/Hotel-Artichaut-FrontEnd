@@ -9,6 +9,7 @@ const selectedNews = ref(null)
 const newsStore = useNewsStore()
 
 const openModal = (newsItem) => {
+  console.log(newsItem)
   selectedNews.value = newsItem
   isOpen.value = true
 }
@@ -18,7 +19,7 @@ const carouselConfig = {
   wrapAround: true
 }
 
-console.log(newsStore.data)
+console.log("ddddd",newsStore.data)
 </script>
 
 <template>
@@ -32,7 +33,7 @@ console.log(newsStore.data)
                     <div class="newsTitle">{{ newsItem[`title${selectLangue?.ref}`] }}</div>
                 </div>
               <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
-                <div :class="`bg-[${newsItem.background_color}] bg-opacity-${newsItem.background_opacity} h-full w-full`">
+                <div :class="`h-full w-full`" :style="{backgroundColor: selectedNews.background_color, opacity: selectedNews.background_opacity / 100}">
                   <template v-if="selectedNews">
                     <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews[`title${selectLangue?.ref}`] }}</h1>
                   </template>
@@ -104,9 +105,5 @@ console.log(newsStore.data)
     font-weight: 300;
     height: 75px;
     background-color: rgba(0, 0, 0, 0.55);
-}
-
-.carousel__pagination {
-    display: none;
 }
 </style>
