@@ -4,6 +4,8 @@ import {useStrongestSectionStore} from "~/store/strongest-section";
 
 const strongestStore = useStrongestStore();
 const strongestSectionStore = useStrongestSectionStore();
+
+const selectLangue = useState('selectedLangue');
 </script>
 
 
@@ -13,7 +15,7 @@ const strongestSectionStore = useStrongestSectionStore();
       <div class="back-office-strongest-div2">
         <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
           <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
-          <p class="w-[350px]">{{ strongest_section.textEn }}</p>
+          <p class="w-[350px]">{{ strongest_section[`text${selectLangue?.ref}`] }}</p>
         </div>
       </div>
     </div>

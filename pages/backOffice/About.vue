@@ -10,6 +10,9 @@ import {reactive} from "vue";
 definePageMeta({
   layout: 'back-office',
 })
+
+const selectedLangue = useState('selectedLangue');
+
 /// About
 const aboutStore = useAboutStore()
 
@@ -27,7 +30,7 @@ const isOpen = ref(false);
 
 async function onSubmit(about) {
   await aboutStore.updateAboutData(about);
-  //reloadNuxtApp()
+  reloadNuxtApp()
 }
 
 const bgColor = computed(()=>{
@@ -37,30 +40,54 @@ const bgOpacity = computed(()=>{
   return aboutStore.data?.[0]?.background_opacity
 })
 
-console.log(aboutStore.data)
 
 /// About_section
 const aboutSectionStore = useAboutSectionStore()
 
 const schema_section = z.object({
-  background_color: z.string(),
-  background_opacity: z.string(),
+  titleEn: z.string(),
+  titleFr: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 })
 
 const state_section = reactive({
-  background_color: undefined,
-  background_opacity: undefined,
+  titleEn: undefined,
+  titleFr: undefined,
+  picture: undefined,
 })
 
 async function onSubmit_section(about_section) {
-  await strongestSectionStore.updateAbooutSectionData(about_section);
+  const formData = {
+    id: about_section.id,
+    titleFr: about_section.titleFr,
+    titleEn: about_section.titleEn,
+    picture: state_section.picture,
+  };
+
+  await aboutSectionStore.updateAboutSectionData(formData);
   reloadNuxtApp()
 }
+
+const handleFileUpload = (event) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      state_section.picture = {'base64': base64Image, 'name': file.name};
+      console.log(state_section.picture)
+    };
+    reader.readAsDataURL(file);
+  }
+};
 </script>
 
 <template>
   <div class="flex flex-col pt-10 px-10">
-    <h1 class="text-3xl font-noto pb-4">Preview</h1>
+    <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h1>
     <div class="background_about py-20 px-[6rem]">
       <div class="flex flex-row justify-between">
         <Hostel/>
@@ -71,21 +98,28 @@ async function onSubmit_section(about_section) {
     </div>
 
     <div class="flex flex-col pt-10">
-      <h1 class="text-3xl font-noto pb-4">Modify</h1>
+      <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h1>
       <div class="flex flex-col w-[fit-content] mb-6">
         <div v-for="about_section in aboutSectionStore.data">
           <UForm :schema="schema_section" :state="state_section" class="flex flex-row items-center border-2">
             <div class="flex text-center items-center whitespace-nowrap py-[2.1rem] px-8 border-r-2">
-              Title : <UInput v-model="about_section.title" class="ml-2"></UInput>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                <UInput v-model="about_section[`title${selectedLangue?.ref}`]" class="ml-2"></UInput>
+              </UFormGroup>
             </div>
-            <div class="p-8 border-r-2">
-              <UInput type="file" size="md" icon="i-heroicons-folder"/>
+            <div class="p-8">
+              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
             </div>
-            <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8 border-r-2">
+            <div class="h-full flex flex-col w-[200px] py-[2.85rem] px-8 border-r-2 border-l-2">
               <UButton block @click="onSubmit_section(about_section)" class="text-center w-full">Valider</UButton>
             </div>
             <div class="h-full flex flex-col w-[200px] py-[2.1rem] px-8">
-              <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }"><UButton block class="text-center w-full">Go to</UButton></NuxtLink>
+              <NuxtLink :to="{ name:'backOffice-aboutSection-id', params: { id: about_section.id} }">
+                <UButton block class="text-center w-full" color="blue">
+                  {{ selectedLangue?.ref === 'En' ? 'Go to' : 'Aller à' }}
+                  <UIcon name="hugeicons:arrow-right-01" />
+                </UButton>
+              </NuxtLink>
             </div>
           </UForm>
           </div>
@@ -96,10 +130,10 @@ async function onSubmit_section(about_section) {
   <UModal v-model="isOpen">
     <div class="p-4">
       <UForm :schema="schema" :state="state">
-        <UFormGroup label="color">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
           <UInput v-model="aboutStore.data[0].background_color"/>
         </UFormGroup>
-        <UFormGroup label="opacity" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
           <UInput v-model="aboutStore.data[0].background_opacity"/>
         </UFormGroup>
         <div class="flex justify-center mt-4">

@@ -2,16 +2,23 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', 'vue3-carousel-nuxt', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', 'vue3-carousel-nuxt', '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-auth-utils'],
+  css: ['@/assets/css/main.css'],
+
+  // plugins: [
+  //   '~/plugins/echo.client.ts',
+  //   '~/plugins/csrf.ts',
+  // ],
+
   experimental: { appManifest: false },
-  googleFonts: {
-    families: {
-      'Luxurious+Script': true,
-      'Noto+Serif': { wght: [300, 400, 700] },
-      'Antic+Didone': true,
-    },
-    display: 'swap'
-  },
+  // googleFonts: {
+  //   families: {
+  //     'Luxurious+Script': true,
+  //     'Noto+Serif': { wght: [300, 400, 700] },
+  //     'Antic+Didone': true,
+  //   },
+  //   display: 'swap'
+  // },
 
   hooks: {
     'pages:extend'(pages) {
@@ -29,7 +36,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.API_URL,
+      baseURL: process.env.API_URL,
     }
   },
 
@@ -38,6 +45,6 @@ export default defineNuxtConfig({
     preference: 'light',
     fallback: 'light',
     classSuffix: '', // Important pour @nuxt/ui
-    forcedLight: true // Force le mode clair
+    // forcedLight: true // Force le mode clair
   },
 })

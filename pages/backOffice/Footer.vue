@@ -9,7 +9,10 @@ definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const footerStore = useFooterStore();
+console.log(footerStore.data)
 
 const schema = z.object({
   title: z.string(),
@@ -41,41 +44,40 @@ async function onSubmit() {
 <template>
 
     <div class="flex flex-col px-20 pt-10">
-      <h1 class="text-3xl font-noto pb-4">Preview</h1>
+      <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h1>
       <div class="py-2">
-        <Footer :title="footerStore.data[0].titleEn" :text="footerStore.data[0].textEn" :titleReseau="footerStore.data[0].titleReseauEn" :iconReseau="footerStore.data[0].iconReseau" :linkReseau="footerStore.data[0].linkReseau" />
+        <Footer />
       </div>
     </div>
 
     <div class="pb-20 pt-10">
-      <h2 class="text-2xl font-noto px-20 pb-4">Modify</h2>
+      <h2 class="text-2xl font-noto px-20 pb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
 
       <UForm :schema="schema" :state="state" class="space-y-4 px-20" @submit.prevent="onSubmit">
 
         <div class="flex flex-row space-x-4">
-          <UFormGroup label="Title" class="custom-label">
-            <UInput v-model="footerStore.data[0].titleEn" class="custom-input"/>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label" required>
+            <UInput v-model="footerStore.data[0][`title${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
 
-          <UFormGroup label="Text" class="custom-label">
-            <UInput v-model="footerStore.data[0].textEn" class="custom-input"/>
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" class="custom-label" required>
+            <UInput v-model="footerStore.data[0][`text${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
         </div>
 
-        <UFormGroup label="Social Title">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social title' : 'Titre des réseaux'" required>
           <UInput v-model="footerStore.data[0].titleReseau" class="custom-input"/>
         </UFormGroup>
 
-        <UFormGroup label="Social Icon">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social icon' : 'Icon réseaux'" required>
           <UInput v-model="footerStore.data[0].iconReseau" class="custom-input"/>
         </UFormGroup>
 
-        <UFormGroup label="Social Link">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social link' : 'Liens réseaux'" required>
           <UInput v-model="footerStore.data[0].linkReseau" class="custom-input"/>
         </UFormGroup>
 
-        <UButton type="submit">
-          Update
+        <UButton type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Modifier'">
         </UButton>
 
       </UForm>

@@ -7,6 +7,8 @@ definePageMeta({
   layout: 'back-office',
 })
 
+const selectLangue = useState('selectedLangue');
+
 const route = useRoute()
 
 const aboutDescriptionStore = useAboutDescriptionStore()
@@ -16,45 +18,120 @@ const isOpen2 = ref(false)
 const isOpen3 = ref(false)
 
 const schema = z.object({
-  title: z.string(),
-  description: z.string(),
+  titleEn: z.string(),
+  titleFr: z.string(),
+  descriptionEn: z.string(),
+  descriptionFr: z.string(),
   background_color: z.string(),
   background_opacity: z.string(),
+  picture1: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
+  picture2: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
+  picture3: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 })
 
 const state = reactive({
-  title: undefined,
-  description: undefined,
+  titleEn: undefined,
+  titleFr: undefined,
+  descriptionEn: undefined,
+  descriptionFr: undefined,
   background_color: undefined,
   background_opacity: undefined,
+  picture1: undefined,
+  picture2: undefined,
+  picture3: undefined,
 })
 
 async function onSubmit(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 600) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 600) {
     alert("trop de caractere")
   }else {
-    await aboutDescriptionStore.updateAboutDescriptionData(about_description);
+    const formData = {
+      id: about_description.id,
+      titleFr: about_description.titleFr,
+      titleEn: about_description.titleEn,
+      descriptionFr: about_description.descriptionFr,
+      descriptionEn: about_description.descriptionEn,
+      background_color: about_description.background_color,
+      background_opacity: about_description.background_opacity,
+      picture1: state.picture1,
+    };
+
+    await aboutDescriptionStore.updateAboutDescriptionData(formData);
     reloadNuxtApp()
   }
 }
 
 async function onSubmit_restaurant(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 200) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 200) {
     alert("trop de caractere")
   }else {
-    await aboutDescriptionStore.updateAboutDescriptionData(about_description);
+    const formData = {
+      id: about_description.id,
+      titleFr: about_description.titleFr,
+      titleEn: about_description.titleEn,
+      descriptionFr: about_description.descriptionFr,
+      descriptionEn: about_description.descriptionEn,
+      background_color: about_description.background_color,
+      background_opacity: about_description.background_opacity,
+      picture1: state.picture1,
+    };
+
+    await aboutDescriptionStore.updateAboutDescriptionData(formData);
     reloadNuxtApp()
   }
 }
 
 async function onSubmit_spa(about_description) {
-  if (about_description.description.length < 20 || about_description.description.length > 300) {
+  if (about_description?.[`description${selectLangue?.value.ref}`].length < 20 || about_description?.[`description${selectLangue?.value.ref}`].length > 300) {
     alert("trop de caractere")
   }else {
-    await aboutDescriptionStore.updateAboutDescriptionData(about_description);
+    const formData = {
+      id: about_description.id,
+      titleFr: about_description.titleFr,
+      titleEn: about_description.titleEn,
+      descriptionFr: about_description.descriptionFr,
+      descriptionEn: about_description.descriptionEn,
+      background_color: about_description.background_color,
+      background_opacity: about_description.background_opacity,
+      picture1: state.picture1,
+      picture2: state.picture2,
+      picture3: state.picture3,
+    };
+
+    await aboutDescriptionStore.updateAboutDescriptionData(formData);
     reloadNuxtApp()
   }
 }
+
+const handleFileUpload = (event, params) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      if (params == 0){
+        state.picture1 = {'base64': base64Image, 'name': file.name};
+        console.log(state.picture1)
+      }else if (params == 1){
+        state.picture2 = {'base64': base64Image, 'name': file.name};
+        console.log(state.picture2)
+      }else if (params == 2){
+        state.picture3 = {'base64': base64Image, 'name': file.name};
+        console.log(state.picture3)
+      }
+    };
+    reader.readAsDataURL(file);
+  }
+};
 </script>
 
 <template>
@@ -62,35 +139,35 @@ async function onSubmit_spa(about_description) {
   <div v-if="about_desc.about_section_id == route.params.id">
     <div v-if="about_desc.id == 1">
       <div class="px-8 pt-2 w-[100%] mb-6">
-        <h2 class="text-3xl font-noto mb-2">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="flex flex-col items-center justify-center h-[80%] bg-center font-noto relative border" :style="{backgroundImage: `url(${about_desc.picture?.[0]?.picturePath})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}">
           <div class="bg-black bg-opacity-50 h h-screen flex items-center">
             <div class="flex flex-col space-y-10">
-              <h1 class="font-antic text-center text-[60px] text-white">{{ about_desc?.title }}</h1>
+              <h1 class="font-antic text-center text-[60px] text-white">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
               <p class="text-center px-44 text-white text-[20px]">
-                {{ about_desc?.description }}
+                {{ about_desc?.[`description${selectLangue?.ref}`] }}
               </p>
             </div>
           </div>
         </div>
 
-        <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
         <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
             <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
               <div class="flex text-center items-center whitespace-nowrap p-6">
-                <UFormGroup label="Title">
-                  <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                  <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
                 </UFormGroup>
               </div>
               <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
-                <UFormGroup label="Text">
-                  <UTextarea :rows="5" :maxrows="5" v-model="about_desc.description" type="text" class="w-[790px] h-full textearea-strongest"/>
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+                  <UTextarea :rows="5" :maxrows="5" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[790px] h-full textearea-strongest"/>
                 </UFormGroup>
-                <span class="ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/600 caractère</span>
+                <span class="ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/600 caractère</span>
               </div>
               <div class="h-full flex flex-col w-[fit-content] px-6 py-[3.9rem] border-r-2">
-                <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id">
-                  <UInput type="file" size="md" icon="i-heroicons-folder"/>
+                <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
+                  <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, 0)"/>
                 </UFormGroup>
               </div>
               <div class="h-full flex flex-col w-[fit-content] p-6">
@@ -102,18 +179,18 @@ async function onSubmit_spa(about_description) {
     </div>
     <div v-if="about_desc.id == 3">
       <div class="px-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2 mt-6">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2 mt-6" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
-          <h1 class="font-antic title_bar">{{ about_desc?.title }}</h1>
-          <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.description }}</h2>
+          <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
+          <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="isOpen = true"/>
           <UModal v-model="isOpen">
             <div class="p-4">
               <UForm :schema="schema" :state="state">
-                <UFormGroup label="color">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
                   <UInput v-model="about_desc.background_color"/>
                 </UFormGroup>
-                <UFormGroup label="opacity" class="mt-3">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
                   <UInput v-model="about_desc.background_opacity"/>
                 </UFormGroup>
                 <div class="flex justify-center mt-4">
@@ -130,24 +207,24 @@ async function onSubmit_spa(about_description) {
 
     <div v-if="about_desc.id == 4">
       <div class="px-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2 mt-6">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2 mt-6" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="div flex flex-row items-center border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
           <img class="img_bar p-4" :src="about_desc.picture?.[0]?.picturePath" alt="Restaurant"/>
 
           <div class="flex flex-col items-center">
-            <h2 class="text-black font-noto desc_bar">{{ about_desc?.title }}</h2>
+            <h2 class="text-black font-noto desc_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h2>
             <p class="text-black font-noto text-center text_bar">
-              {{ about_desc?.description }}
+              {{ about_desc?.[`description${selectLangue?.ref}`] }}
             </p>
           </div>
           <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
           <UModal v-model="isOpen2">
             <div class="p-4">
               <UForm :schema="schema" :state="state">
-                <UFormGroup label="color">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
                   <UInput v-model="about_desc.background_color"/>
                 </UFormGroup>
-                <UFormGroup label="opacity" class="mt-3">
+                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
                   <UInput v-model="about_desc.background_opacity"/>
                 </UFormGroup>
                 <div class="flex justify-center mt-4">
@@ -163,24 +240,24 @@ async function onSubmit_spa(about_description) {
     </div>
 
     <div v-if="about_desc.id == 3 || about_desc.id == 4" class="p-6">
-      <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+      <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
       <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
         <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
           <div class="flex text-center items-center whitespace-nowrap p-6">
-            <UFormGroup label="Title">
-              <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+              <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
             </UFormGroup>
           </div>
           <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
-            <UFormGroup label="Text">
-              <UTextarea v-if="about_desc.id == 3" :rows="3" :maxrows="3" v-model="about_desc.description" type="text" class="w-[500px] h-full textearea-strongest"/>
-              <UTextarea v-if="about_desc.id == 4" :rows="8" :maxrows="8" v-model="about_desc.description" type="text" class="w-[183px] h-full textearea-strongest"/>
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+              <UTextarea v-if="about_desc.id == 3" :rows="3" :maxrows="3" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
+              <UTextarea v-if="about_desc.id == 4" :rows="8" :maxrows="8" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[183px] h-full textearea-strongest"/>
             </UFormGroup>
-            <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/200 caractère</span>
+            <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/200 caractère</span>
           </div>
           <div v-if="about_desc.id == 4" class="h-full flex flex-col w-[fit-content] px-6 py-[5.75rem] border-r-2">
-            <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id">
-              <UInput type="file" size="md" icon="i-heroicons-folder"/>
+            <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
+              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, 0)"/>
             </UFormGroup>
           </div>
           <div class="h-full flex flex-col w-[200px] p-6">
@@ -192,10 +269,10 @@ async function onSubmit_spa(about_description) {
 
     <div v-if="about_desc.id == 5">
       <div class="p-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2">Preview</h2>
+        <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
       <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
-        <h1 class="font-antic title_bar">{{ about_desc?.title }}</h1>
-        <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.description }}</h2>
+        <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
+        <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
 
         <div class="pb-32">
           <div class="flex flex-col relative">
@@ -210,10 +287,10 @@ async function onSubmit_spa(about_description) {
         <UModal v-model="isOpen3">
           <div class="p-4">
             <UForm :schema="schema" :state="state">
-              <UFormGroup label="color">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
                 <UInput v-model="about_desc.background_color"/>
               </UFormGroup>
-              <UFormGroup label="opacity" class="mt-3">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
                 <UInput v-model="about_desc.background_opacity"/>
               </UFormGroup>
               <div class="flex justify-center mt-4">
@@ -225,23 +302,23 @@ async function onSubmit_spa(about_description) {
           </div>
         </UModal>
       </div>
-        <h2 class="text-3xl font-noto mt-4 mb-2">Modify</h2>
+        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
         <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
           <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
             <div class="flex text-center items-center whitespace-nowrap p-6">
-              <UFormGroup label="Title">
-                <UInput v-model="about_desc.title" class="w-[fit-content]"></UInput>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
               </UFormGroup>
             </div>
             <div class="w-[fit-content] h-full flex flex-row border-l-2 px-6 py-[4.25rem]">
-              <UFormGroup label="Text">
-                <UTextarea :rows="4" :maxrows="4" v-model="about_desc.description" type="text" class="w-[500px] h-full textearea-strongest"/>
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+                <UTextarea :rows="4" :maxrows="4" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
               </UFormGroup>
-              <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc.description.length}}/300 caractère</span>
+              <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/300 caractère</span>
             </div>
-            <div class="h-full flex flex-col w-[fit-content] p-6 border-r-2 border-l-2">
-              <UFormGroup v-for="picture in about_desc.picture" :label="'image' + picture.id" class="mt-2">
-                <UInput type="file" size="md" icon="i-heroicons-folder"/>
+            <div class="h-full flex flex-col w-fit p-6 border-r-2 border-l-2">
+              <UFormGroup v-for="(picture, index) in about_desc.picture" :key="index" :label="'image ' + picture.id" class="mt-2">
+                <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, index)"/>
               </UFormGroup>
             </div>
             <div class="h-full flex w-[fit-content] p-6">
