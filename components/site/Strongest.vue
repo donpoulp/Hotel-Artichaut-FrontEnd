@@ -11,9 +11,9 @@ const selectLangue = useState('selectedLangue');
 
 <template>
   <section class="back-office-strongest">
-    <div class="back-office-strongest-div1">
-      <div class="back-office-strongest-div2">
-        <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-wrap">
+    <div class=" back-office-strongest-div1 justify-items-center ">
+      <div class="flex flex-col justify-around py-20 lg:flex-row md:justify-around justify-items-center ">
+        <div v-for="strongest_section in strongestSectionStore.data" class="back-office-strongest-section w-[350px] flex flex-col flex-wrap p-6">
           <UIcon :name="strongest_section.icon" class="h-20 w-20"></UIcon>
           <p class="w-[350px]">{{ strongest_section[`text${selectLangue?.ref}`] }}</p>
         </div>
@@ -24,19 +24,11 @@ const selectLangue = useState('selectedLangue');
 
 
 <style scoped>
+
 .back-office-strongest-div1{
-  background-color: v-bind(strongestStore.data.background_color_1);
-  opacity: v-bind(strongestStore.data.background_opacity_1+'%');
   padding: 3% 5%;
 }
-.back-office-strongest-div2{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  background-color: v-bind(strongestStore.data.background_color_2);
-  opacity: v-bind(strongestStore.data.background_opacity_2+'%');
-  padding: 1% 3%;
-}
+
 .back-office-strongest-section{
   display: flex;
   flex-direction: column;

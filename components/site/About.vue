@@ -12,7 +12,7 @@ const bgOpacity = aboutStore.data[0].background_opacity
 </script>
 
 <template>
-  <div class="flex flex-row py-20 justify-between px-60 background_about">
+  <div class=" h-full flex flex-col justify-around py-20 background_about md:flex-row ">
     <Hostel/>
     <Restaurant/>
     <Spa/>

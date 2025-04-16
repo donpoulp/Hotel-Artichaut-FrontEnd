@@ -45,10 +45,23 @@ async function onSubmit(about) {
   await bedroomTypeStore.updateBedroomTypeData(about);
   reloadNuxtApp()
 }
+const isLargeScreen = ref(false)
+
+const checkScreenSize = () => {
+  isLargeScreen.value = window.innerWidth > 1024
+  isSmallScreen.value = window.innerWidth < 1024
+}
+
+onMounted(() => {
+  checkScreenSize()
+  window.addEventListener('resize', checkScreenSize)
+})
+const isSmallScreen = ref(false)
+
 </script>
 
 <template>
-    <section class="sectionBedroomType" :style="{ backgroundColor: sectionBackgroundColor }">
+    <section v-if="isLargeScreen" class="sectionBedroomType" :style="{ backgroundColor: sectionBackgroundColor }">
 
       <h2 v-text="selectLangue.ref === 'En' ? 'Rooms and Suites' : 'Chambres et suites'" class="titleBedroomType"></h2>
 
@@ -86,6 +99,33 @@ async function onSubmit(about) {
       </div>
 
     </section>
+  <section v-if="isSmallScreen" class="sectionBedroomType" :style="{ backgroundColor: sectionBackgroundColor }">
+
+    <h2 v-text="selectLangue.ref === 'En' ? 'Rooms and Suites' : 'Chambres et suites'" class="titleBedroomType"></h2>
+
+    <div v-if="status === 'pending'">
+      Loading ...
+    </div>
+    <div v-else>
+      <Carousel v-bind="carouselConfig" @update:modelValue="updateSectionBackgroundColor">
+        <Slide v-for="bedroomType in bedroomsTypes" :key="bedroomType" class="bedroomTypeCartSection">
+
+          <h2 class="littletitleBedroomType">{{ bedroomType[`name${selectLangue?.ref}`] }}</h2>
+          <div class="bedroomTypeCart">
+            <div class="bedroomTypeContent">
+              <div class="textBedroomType">{{ bedroomType[`description${selectLangue?.ref}`] }}</div>
+              <Button class="Button" :title="selectLangue?.ref === 'En' ? 'To book' : 'Réserver'" route='site-bedroomType-id' :route_params="{ id: bedroomType?.id }" width="250px" height="80px" fontSize="35px"/>
+            </div>
+          </div>
+          <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalBedroomTypeColor(bedroomType.id)" :style="{ 'display': display }"/>
+        </Slide>
+        <template #addons class="addonsCarrousel">
+          <Navigation />
+        </template>
+      </Carousel>
+    </div>
+
+  </section>
 
   <UModal v-model="isOpen">
     <div class="p-4">
@@ -121,7 +161,7 @@ img, video {
   font-family: "Antic Didone",serif;
   font-weight: lighter;
   text-align: center;
-  background: -webkit-linear-gradient(0deg, #D8D27D 30%, #726F42 100%);
+  background: black;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-top: 2%;
@@ -194,4 +234,5 @@ img, video {
   right: 30px;
   bottom: 0;
 }
+
 </style>

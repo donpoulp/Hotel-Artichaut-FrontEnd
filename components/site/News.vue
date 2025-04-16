@@ -54,14 +54,15 @@ const carouselConfig = {
 
 <style scoped>
 .newsContainer {
-    height: 516px;
-    background-color: #EDE798;
+    height: 600px;
+    background-color: #072527;
+  padding: 2%;
 }
 
 .newsContainer h2 {
     font-family: Antic Didone;
     font-size: 64px;
-    color: black;
+    color: white;
     position: relative;
     left: 95px;
     top: 40px;
@@ -69,7 +70,7 @@ const carouselConfig = {
 }
 
 .newsContent {
-    width: 370px;
+    width: 100%;
     height: 258px;
     background-color: rgb(255, 255, 255);
     display: flex;

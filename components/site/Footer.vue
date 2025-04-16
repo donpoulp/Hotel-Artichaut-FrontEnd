@@ -39,7 +39,7 @@ const selectLangue = useState('selectedLangue');
 <style scoped>
 .footer {
     height: 207px;
-    background: linear-gradient(90deg, #0D5649 69%, #158470 100%);
+    background: #0D5649;
     display: flex;
     justify-content: space-evenly;
     align-items: center;

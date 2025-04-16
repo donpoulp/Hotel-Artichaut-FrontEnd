@@ -21,7 +21,7 @@ button{
 }
 
 .buttonText{
-  background: -webkit-linear-gradient(0deg, #D8D27D 30%, #726F42 100%);
+  background: white;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }

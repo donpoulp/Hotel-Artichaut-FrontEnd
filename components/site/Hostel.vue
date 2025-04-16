@@ -17,7 +17,7 @@ aboutSectionStore?.data?.forEach(aboutSection => {
 
 <template>
   <NuxtLink to="/site/HostelDescription">
-    <div class="flex justify-center items-end h-full" :style="{backgroundImage: `url(${hostel?.picture?.[0]?.picturePath})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '637px', width: '392px'}">
+    <div class="flex justify-center items-end object-scale-down m-3 " :style="{backgroundImage: `url(${hostel?.picture?.[0]?.picturePath})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover', height: '500px', width: '250px'}">
       <div class="p-4 w-full bg-black bg-opacity-50 px-4">
         <h2 class="text-white text-3xl text-center font-antic">{{ hostel?.[`title${selectLangue?.ref}`] }}</h2>
       </div>
@@ -26,5 +26,7 @@ aboutSectionStore?.data?.forEach(aboutSection => {
 </template>
 
 <style scoped>
-
+a{
+  justify-items: center;
+}
 </style>

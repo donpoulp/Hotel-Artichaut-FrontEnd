@@ -16,71 +16,66 @@ const onLangueChange = (newValue) => {
 
 <template>
     <header>
+      <section class="header">
+
         <div class="langue">
           <USelectMenu v-model="selectedLangue" :options="langue" option-attribute="name" class="w-full" @update:modelValue="onLangueChange">
             <UIcon :name="selectedLangue?.icon" class="langueIcon" aria-hidden="true" />
             <p class="text-white ml-2">{{selectedLangue?.name}}</p>
           </USelectMenu>
         </div>
-      <NuxtLink to="/site">
-        <div class="mainLogoContainer">
-            <img src="/public/Logo.png" alt="logo" class="logo">
-        </div>
-      </NuxtLink>
+
+        <NuxtLink to="/site">
+          <div class="mainLogoContainer">
+            <img src="/public/Logo.png" alt="logo">
+          </div>
+        </NuxtLink>
+
         <div class="nav">
-            <UIcon name="material-symbols:shopping-bag-outline" class="cartIcon text-white" />
             <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
-            <Popup v-show="showModal" @close-modal="showModal = false" />
+            <Popup v-show="showModal" @close-modal="showModal = false"/>
         </div>
+      </section>
     </header>
 </template>
 
 <style scoped>
-header {
-    height: 207px;
-    background: linear-gradient(90deg, #0D5649 69%, #158470 100%);
+
+.header {
+  height: 15vh;
+    background: #072527;
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
-
 .langue {
     display: flex;
     justify-content: space-between;
-    width: 250px;
-}
+    width: 20%;
 
+}
 .langueIcon {
-    width: 80px;
-    height: 60px;
+    width: 25px;
+    height: 25px;
     border-radius: 10px;
     margin-left: 20px;
 }
-
 .langue p {
-    font-family: Noto Serif;
-    font-size: 40px;
+    font-size: 1.2rem;
 }
-
 .nav {
-    width: 250px;
+    width: 15%;
     display: flex;
-    justify-content: space-evenly;
-    padding-right: 80px;
-
+    align-items: center;
+    justify-content: space-around
 }
-
-.nav .cartIcon, .userIcon {
-    width: 80px;
-    height: 100px;
+.mainLogoContainer{
+  width: 200px;
+  height: 200px;
+  display: flex;
+  align-items: center;
 }
-
-.userIcon {
-    cursor: pointer;
+.text-white{
+  font-size: 3rem;
 }
-
-.cartIcon {
-    cursor: pointer;
-}
-
 </style>
