@@ -61,7 +61,16 @@ export const useReservationStore = defineStore('reservation', {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(reservationData),
-            })
+            });
+
+            if (status.value === 'success' && data.value) {
+                sessionStorage.setItem('reservation', JSON.stringify(reservationData));
+                sessionStorage.setItem('id_res', data.value.reservation.id);
+                return 201;
+            } else if (status.value === 'error' && error.value) {
+                return error.value.statusCode || 500;
+            }
+            return 500;
         },
         async addReservationFromBo(reservationData){
             await useApiFetch(`/reservation-from-bo`, {
