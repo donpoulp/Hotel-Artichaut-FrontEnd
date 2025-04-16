@@ -18,7 +18,7 @@ authStore.hydrateStore();
 </script>
 
 <template>
-  <header>
+  <header class="header">
     <div class="langue">
       <USelectMenu v-model="selectedLangue" :options="langue" option-attribute="name" class="w-full"
                    @update:modelValue="onLangueChange">
