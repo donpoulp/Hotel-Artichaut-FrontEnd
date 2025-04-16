@@ -2,7 +2,8 @@
 export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
-  modules: ['@nuxt/ui', 'vue3-carousel-nuxt', '@pinia/nuxt'],
+  modules: ['@nuxt/ui', 'vue3-carousel-nuxt', '@pinia/nuxt', '@nuxtjs/tailwindcss', 'nuxt-auth-utils'],
+  css: ['@/assets/css/main.css'],
 
   // plugins: [
   //   '~/plugins/echo.client.ts',

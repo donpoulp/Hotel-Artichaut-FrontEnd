@@ -95,7 +95,10 @@ const isOpen = ref(false)
 const schema_bedroom = z.object({
   number: z.string(),
   bedroom_type_id: z.string(),
-  picture: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 }).partial()
 
 type Schema = z.output<typeof schema_bedroom>
@@ -218,16 +221,12 @@ async function onSubmitModify(bedroom, selectedBedroomType){
   <UModal v-model="isOpen">
     <div class="p-4">
       <UForm :schema="schema_bedroom" :state="state_bedroom" @submit="onSubmitAdd">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Number *' : 'Numéro *'" name="number" :error="errorMessage">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Number' : 'Numéro'" name="number" :error="errorMessage" required>
           <UInput v-model="state_bedroom.number"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Bedroom type *' : 'Type de chambre *'" name="bedroom_type_id" class="mt-2" >
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Bedroom type' : 'Type de chambre'" name="bedroom_type_id" class="mt-2" required>
           <USelect v-model="state_bedroom.bedroom_type_id" :options="bedroom_type_choice" />
-        </UFormGroup>
-
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" name="picture" class="mt-2">
-          <UInput type="file" v-model="state_bedroom.picture"/>
         </UFormGroup>
 
         <div class="flex justify-center mt-4">
@@ -242,16 +241,12 @@ async function onSubmitModify(bedroom, selectedBedroomType){
   <UModal v-model="isOpenModify">
     <div class="p-4">
       <UForm :schema="schema_bedroom" :state="state_bedroom" @submit="onSubmitModify(bedroomStore.data2, selectedBedroomType)">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Number *' : 'Numéro *'" name="number" :error="errorMessage">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Number' : 'Numéro'" name="number" :error="errorMessage" required>
           <UInput v-model="bedroomStore.data2.number"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Bedroom type *' : 'Type de chambre *'" name="bedroom_type_id" class="mt-2" >
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Bedroom type' : 'Type de chambre'" name="bedroom_type_id" class="mt-2" required>
           <USelect v-model="selectedBedroomType" :options="bedroom_type_choice" />
-        </UFormGroup>
-
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" name="picture" class="mt-2">
-          <UInput type="file" v-model="bedroomStore.data2.picture"/>
         </UFormGroup>
 
         <div class="flex justify-center mt-4">

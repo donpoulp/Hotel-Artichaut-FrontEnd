@@ -17,6 +17,8 @@ const carouselConfig = {
   itemsToShow: 3,
   wrapAround: true
 }
+
+console.log(newsStore.data)
 </script>
 
 <template>
@@ -30,7 +32,7 @@ const carouselConfig = {
                     <div class="newsTitle">{{ newsItem[`title${selectLangue?.ref}`] }}</div>
                 </div>
               <UModal v-model="isOpen" class="modal" :ui="{ height: 'h-[82vh]', width: 'w-[81vw] !max-w-none' }">
-                <div class="bg-[#ede798] h-full w-full">
+                <div :class="`bg-[${newsItem.background_color}] bg-opacity-${newsItem.background_opacity} h-full w-full`">
                   <template v-if="selectedNews">
                     <h1 class="font-noto font-light text-[4.2vw] text-center text-black mb-[10px]">{{ selectedNews[`title${selectLangue?.ref}`] }}</h1>
                   </template>

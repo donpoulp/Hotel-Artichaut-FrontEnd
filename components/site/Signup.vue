@@ -3,6 +3,8 @@ import {z} from 'zod'
 import {reactive, ref} from 'vue'
 import {useAuthStore} from "~/store/auth";
 
+const selectLangue = useState('selectedLangue');
+
 const authStore = useAuthStore();
 
 const schemaR = z.object({
@@ -14,7 +16,7 @@ const schemaR = z.object({
   phone: z.string(),
   phoneBis: z.string(),
   is_admin: z.number(),
-})
+}).partial()
 
 const stateR = reactive({
   firstName: undefined,
@@ -27,18 +29,55 @@ const stateR = reactive({
   is_admin: 0,
 })
 
-// const errorMessage = ref('');
-// const successMessage = ref('');
+ const errorMessage = ref('');
+ const successMessage = ref('');
+
+const emit = defineEmits(['close-modal-signup']);
 
 async function onSubmitRegister(data) {
-  try {
-    await authStore.register(data);
-    // successMessage.value = 'Registration successful !';
-    // errorMessage.value = '';
-  } catch (error) {
-    console.error('registration error:', error);
-    // errorMessage.value = error.message;
-    // successMessage.value = '';
+  if (data.email === undefined || data.password === undefined){
+    errorMessage.value = selectLangue?.ref === 'En' ? 'Please fill in all fields !' : 'Veuillez remplir tout les champs';
+    successMessage.value = '';
+  }else {
+    try {
+      const registrationError = await authStore.register(data);
+      if (registrationError) {
+        errorMessage.value = registrationError;
+        successMessage.value = '';
+      } else {
+        successMessage.value = 'Registration successful !';
+        errorMessage.value = '';
+        reloadNuxtApp()
+      }
+    } catch (error) {
+      console.error('registration error:', error);
+      errorMessage.value = error.message || 'Une erreur inconnue est survenue lors de l’inscription.';
+      successMessage.value = '';
+    }
+  }
+}
+
+const isActiveMail = ref(false)
+const isActivePhone = ref(false)
+
+function displayMailBis(){
+  let mailBis = document.querySelector(".emailBis").style.display;
+  if (mailBis == "none") {
+    document.querySelector(".emailBis").style.display = "block"
+    isActiveMail.value = true
+  }else{
+    document.querySelector(".emailBis").style.display = "none"
+    isActiveMail.value = false
+  }
+}
+function displayPhoneBis(){
+  let phoneBis = document.querySelector(".phoneBis").style.display;
+  if (phoneBis == "none") {
+    document.querySelector(".phoneBis").style.display = "block"
+    isActivePhone.value = true
+  }else{
+    document.querySelector(".phoneBis").style.display = "none"
+    isActivePhone.value = false
   }
 }
 </script>
@@ -57,12 +96,12 @@ async function onSubmitRegister(data) {
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
 
-<!--      <div v-if="errorMessage" class="text-center error-message">-->
-<!--        <p>{{ errorMessage }}</p>-->
-<!--      </div>-->
-<!--      <div v-if="successMessage" class="text-center success-message">-->
-<!--        <p>{{ successMessage }}</p>-->
-<!--      </div>-->
+       <div v-if="errorMessage" class="text-center error-message">
+       <p>{{ errorMessage }}</p>
+      </div>
+      <div v-if="successMessage" class="text-center success-message">
+        <p>{{ successMessage }}</p>
+      </div>
 
       <UFormGroup label="First Name" required>
         <UInput v-model="stateR.firstName"/>
@@ -72,25 +111,32 @@ async function onSubmitRegister(data) {
         <UInput v-model="stateR.lastName"/>
       </UFormGroup>
 
-      <UFormGroup label="Email" required>
-        <UInput v-model="stateR.email"/>
-      </UFormGroup>
-
       <UFormGroup label="Password" required>
         <UInput v-model="stateR.password" type="password"/>
       </UFormGroup>
 
-      <UFormGroup label="Email Bis">
+      <UFormGroup label="Email" required>
+        <UInput v-model="stateR.email"/>
+      </UFormGroup>
+
+      <UFormGroup label="Email Bis" name="emailBis" class="emailBis" style="display: none">
         <UInput v-model="stateR.emailBis"/>
       </UFormGroup>
+      <UButton class="btn_phone mt-2" size="sm" color="primary" square variant="solid" @click="displayMailBis()">
+        <UIcon :name="isActiveMail ? 'material-symbols:remove' : 'material-symbols:add'"/>
+      </UButton>
 
       <UFormGroup label="Phone Number">
         <UInput v-model="stateR.phone"/>
       </UFormGroup>
 
-      <UFormGroup label="Phone Number Bis">
+      <UFormGroup label="Phone Number Bis" name="phoneBis" class="phoneBis mt-2" style="display: none">
         <UInput v-model="stateR.phoneBis"/>
       </UFormGroup>
+      <UButton class="btn_phone mt-2" size="sm" color="primary" square variant="solid" @click="displayPhoneBis()">
+        <UIcon :name="isActivePhone ? 'material-symbols:remove' : 'material-symbols:add'"/>
+      </UButton>
+
       <div class="pt-4 flex justify-center space-x-10">
         <UButton type="submit" class="btn" @click="onSubmitRegister(stateR)">Confirm</UButton>
         <UButton class="btn" @click="$emit('close-modal-signup')">Go sign in</UButton>
@@ -102,13 +148,13 @@ async function onSubmitRegister(data) {
 
 <style scoped>
 
-/*.error-message {
+.error-message {
   color: red;
 }
 
 .success-message {
   color: green;
-}*/
+}
 
 .signup-container {
   height: 100%;

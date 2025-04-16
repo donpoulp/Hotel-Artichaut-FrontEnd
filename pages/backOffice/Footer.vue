@@ -56,24 +56,24 @@ async function onSubmit() {
       <UForm :schema="schema" :state="state" class="space-y-4 px-20" @submit.prevent="onSubmit">
 
         <div class="flex flex-row space-x-4">
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label" required>
             <UInput v-model="footerStore.data[0][`title${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
 
-          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" class="custom-label">
+          <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" class="custom-label" required>
             <UInput v-model="footerStore.data[0][`text${selectLangue?.ref}`]" class="custom-input"/>
           </UFormGroup>
         </div>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social title' : 'Titre des réseaux'">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social title' : 'Titre des réseaux'" required>
           <UInput v-model="footerStore.data[0].titleReseau" class="custom-input"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social icon' : 'Icon réseaux'">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social icon' : 'Icon réseaux'" required>
           <UInput v-model="footerStore.data[0].iconReseau" class="custom-input"/>
         </UFormGroup>
 
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social link' : 'Liens réseaux'">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Social link' : 'Liens réseaux'" required>
           <UInput v-model="footerStore.data[0].linkReseau" class="custom-input"/>
         </UFormGroup>
 

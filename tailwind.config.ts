@@ -15,7 +15,10 @@ export default <Partial<Config>>{
             },
             fontWeight: {
                 light: '100',
-            }
+            },
+            colors: {
+                'custom-green': 'rgba(13, 86, 73, 0.9)',
+            },
         }
     }
 }

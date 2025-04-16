@@ -246,42 +246,42 @@ const select = ref(selected_role[0])
   <UModal v-model="isOpen">
     <div class="p-4">
       <UForm :schema="schema_user" :state="state_user" @submit="onSubmitAdd">
-        <UFormGroup label="firstName" name="firstName">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'First name' : 'Prenom'" name="firstName" required>
           <UInput v-model="state_user.firstName"/>
         </UFormGroup>
 
-        <UFormGroup label="lastName" name="lastName" class="mt-2">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Last name' : 'Nom'" name="lastName" class="mt-2" required>
           <UInput v-model="state_user.lastName"/>
         </UFormGroup>
 
-        <UFormGroup label="email" name="email" class="mt-2">
+        <UFormGroup label="e-mail" name="email" class="mt-2" required>
           <UInput v-model="state_user.email"/>
         </UFormGroup>
 
-        <UFormGroup label="emailBis" name="emailBis" class="emailBis mt-2" style="display: none">
+        <UFormGroup label="e-mail bis" name="emailBis" class="emailBis mt-2" style="display: none">
           <UInput v-model="state_user.emailBis"/>
         </UFormGroup>
         <UButton class="btn_phone mt-2" size="sm" color="primary" square variant="solid" @click="displayMailBis()">
           <UIcon :name="isActiveMail ? 'material-symbols:remove' : 'material-symbols:add'"/>
         </UButton>
 
-        <UFormGroup label="password" name="password" class="mt-2">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'password' : 'mot de passe'" name="password" class="mt-2" required>
           <UInput v-model="state_user.password"/>
         </UFormGroup>
 
-        <UFormGroup label="phone" name="phone" class="mt-2">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'phone' : 'telephone'" name="phone" class="mt-2">
           <UInput v-model="state_user.phone"/>
         </UFormGroup>
 
-        <UFormGroup label="phoneBis" name="phoneBis" class="phoneBis mt-2" style="display: none">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'phone bis' : 'telephone bis'" name="phoneBis" class="phoneBis mt-2" style="display: none">
           <UInput v-model="state_user.phoneBis"/>
         </UFormGroup>
         <UButton class="btn_phone mt-2" size="sm" color="primary" square variant="solid" @click="displayPhoneBis()">
           <UIcon :name="isActivePhone ? 'material-symbols:remove' : 'material-symbols:add'"/>
         </UButton>
 
-        <UFormGroup label="role" name="role" class="mt-2">
-          <USelect v-model="select" :options="selected_role" />
+        <UFormGroup label="role" name="role" class="mt-2" required>
+          <USelect v-model="select" :options="selected_role"/>
         </UFormGroup>
 
         <div class="flex justify-center mt-4">
@@ -296,31 +296,31 @@ const select = ref(selected_role[0])
   <UModal v-model="isOpenModify">
     <div class="p-4">
       <UForm :schema="schema_user" :state="state_user" @submit="onSubmitModify(userStore.data2[0])">
-        <UFormGroup label="firstName" name="firstName">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'First name' : 'Prenom'" name="firstName" required>
           <UInput v-model="userStore.data2[0].firstName"/>
         </UFormGroup>
 
-        <UFormGroup label="lastName" name="lastName" class="mt-2">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Last name' : 'Nom'"  name="lastName" class="mt-2" required>
           <UInput v-model="userStore.data2[0].lastName"/>
         </UFormGroup>
 
-        <UFormGroup label="email" name="email" class="mt-2">
+        <UFormGroup label="e-mail" name="email" class="mt-2" required>
           <UInput v-model="userStore.data2[0].email"/>
         </UFormGroup>
 
-        <UFormGroup v-if="userStore.data2[0].emailBis != undefined" label="emailBis" name="emailBis" class="mt-2">
+        <UFormGroup v-if="userStore.data2[0].emailBis != undefined" label="e-mail bis" name="emailBis" class="mt-2">
           <UInput v-model="userStore.data2[0].emailBis"/>
         </UFormGroup>
 
-        <UFormGroup label="phone" name="phone" class="mt-2">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'phone' : 'telephone'" name="phone" class="mt-2">
           <UInput v-model="userStore.data2[0].phone"/>
         </UFormGroup>
 
-        <UFormGroup v-if="userStore.data2[0].phoneBis != undifined" label="phoneBis" name="phoneBis" class="mt-2">
+        <UFormGroup v-if="userStore.data2[0].phoneBis != undifined" :label="selectLangue?.ref === 'En' ? 'phone bis' : 'telephone bis'" name="phoneBis" class="mt-2">
           <UInput v-model="userStore.data2[0].phoneBis"/>
         </UFormGroup>
 
-        <UFormGroup label="role" name="role" class="mt-2">
+        <UFormGroup label="role" name="role" class="mt-2" required>
           <USelect v-model="select" :options="selected_role" />
         </UFormGroup>
 

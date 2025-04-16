@@ -18,6 +18,10 @@ const schema = z.object({
   backgroundText_color_2: z.string(),
   backgroundText_opacity_1: z.string(),
   backgroundText_opacity_2: z.string(),
+  picture: z.object({
+    base64: z.string(),
+    name: z.string(),
+  }),
 })
 
 const state = reactive({
@@ -25,17 +29,45 @@ const state = reactive({
   backgroundText_color_2: undefined,
   backgroundText_opacity_1: undefined,
   backgroundText_opacity_2: undefined,
+  picture: undefined,
+
 })
 
 async function onSubmit(service) {
   if (service?.[`name${selectLangue.value.ref}`]?.length > 22 || service?.[`description${selectLangue.value.ref}`]?.length > 300) {
     alert("trop de caractere")
   }else {
-    await servicesStore.updateServiceData(service);
+    const formData = {
+      id: service.id,
+      titleFr: service.nameFr,
+      titleEn: service.nameEn,
+      descriptionFr: service.descriptionFr,
+      descriptionEn: service.descriptionEn,
+      backgroundText_color_1: service.backgroundText_color_1,
+      backgroundText_color_2: service.backgroundText_color_2,
+      backgroundText_opacity_1: service.backgroundText_opacity_1,
+      backgroundText_opacity_2: service.backgroundText_opacity_2,
+      picture: state.picture,
+    };
+
+    await servicesStore.updateServiceData(formData);
     await servicesStore.loadServicesData()
     reloadNuxtApp()
   }
 }
+
+const handleFileUpload = (event) => {
+  const file = event[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const base64Image = reader.result;
+      state.picture = {'base64': base64Image, 'name': file.name};
+      console.log(state.picture)
+    };
+    reader.readAsDataURL(file);
+  }
+};
 
 const isOpen = ref(false)
 
@@ -80,12 +112,12 @@ console.log(servicesStore.data)
                     Section : {{service.id}}
                   </div>
                   <div class="flex flex-row justify-center items-center p-8">
-                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'">
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
                       <UInput v-model="service[`name${selectLangue?.ref}`]"></UInput>
                     </UFormGroup>
                   </div>
                   <div class="flex flex-col p-8 py-[4.7rem] border-r-2 border-l-2">
-                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'">
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
                       <UTextarea rows="4" maxrows="4" v-model="service[`description${selectLangue?.ref}`]" class="w-[490px] textarea_backoffice_news"></UTextarea>
                       <span class="float-right text-[15px]">{{service[`description${selectLangue?.ref}`].length}}/300 caractère</span>
                     </UFormGroup>
@@ -93,7 +125,7 @@ console.log(servicesStore.data)
                   <div>
                     <div class="p-6">
                         <UFormGroup :label="'image ' + service.picture[0].id" class="mb-2">
-                          <UInput type="file" size="md" icon="i-heroicons-folder"/>
+                          <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
                         </UFormGroup>
                     </div>
                   </div>
@@ -111,16 +143,16 @@ console.log(servicesStore.data)
   <UModal v-model="isOpen">
     <div class="p-4">
       <UForm :schema="schema" :state="state">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
           <UInput v-model="servicesStore.data2.backgroundText_color_1"/>
         </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
           <UInput v-model="servicesStore.data2.backgroundText_opacity_1"/>
         </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" class="mt-3" required>
           <UInput v-model="servicesStore.data2.backgroundText_color_2"/>
         </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
+        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
           <UInput v-model="servicesStore.data2.backgroundText_opacity_2"/>
         </UFormGroup>
 

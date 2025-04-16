@@ -1,6 +1,7 @@
 <script setup>
 import Popup from './Popup.vue'
-import { ref } from 'vue'
+import {ref} from 'vue'
+import {useAuthStore} from "~/store/auth.js";
 
 const showModal = ref(false)
 
@@ -12,31 +13,36 @@ const onLangueChange = (newValue) => {
   console.log('Langue sélectionnée:', selectedLangue.value)
 }
 
+const authStore = useAuthStore()
+authStore.hydrateStore();
 </script>
 
 <template>
-    <header>
-      <section class="header">
-
-        <div class="langue">
-          <USelectMenu v-model="selectedLangue" :options="langue" option-attribute="name" class="w-full" @update:modelValue="onLangueChange">
-            <UIcon :name="selectedLangue?.icon" class="langueIcon" aria-hidden="true" />
-            <p class="text-white ml-2">{{selectedLangue?.name}}</p>
-          </USelectMenu>
-        </div>
-
-        <NuxtLink to="/site">
-          <div class="mainLogoContainer">
-            <img src="/public/Logo.png" alt="logo">
-          </div>
-        </NuxtLink>
-
-        <div class="nav">
-            <UIcon name="humbleicons:user" class="userIcon text-white" @click="showModal = true"/>
-            <Popup v-show="showModal" @close-modal="showModal = false"/>
-        </div>
-      </section>
-    </header>
+  <header>
+    <div class="langue">
+      <USelectMenu v-model="selectedLangue" :options="langue" option-attribute="name" class="w-full"
+                   @update:modelValue="onLangueChange">
+        <UIcon :name="selectedLangue?.icon" class="langueIcon" aria-hidden="true"/>
+        <p class="text-white ml-2">{{ selectedLangue?.name }}</p>
+      </USelectMenu>
+    </div>
+    <NuxtLink to="/site">
+      <div class="mainLogoContainer">
+        <img src="/public/Logo.png" alt="logo" class="logo">
+      </div>
+    </NuxtLink>
+    <div class="nav space-x-2">
+      <UIcon v-if="authStore.isAuthenticated === false" name="humbleicons:user" class="userIcon text-white"
+             @click="showModal = true"/>
+      <NuxtLink to="/site/Account">
+        <UIcon v-if="authStore.isAuthenticated === true" name="material-symbols:manage-accounts"
+               class="userIcon text-white"/>
+      </NuxtLink>
+      <UIcon v-if="authStore.isAuthenticated === true" @click="authStore.logout()" name="material-symbols:person-cancel"
+             class="userIcon text-white"/>
+      <Popup v-show="showModal" @close-modal="showModal = false"/>
+    </div>
+  </header>
 </template>
 
 <style scoped>
@@ -48,6 +54,7 @@ const onLangueChange = (newValue) => {
     justify-content: space-between;
     align-items: center;
 }
+
 .langue {
     display: flex;
     justify-content: space-between;
@@ -77,5 +84,9 @@ const onLangueChange = (newValue) => {
 }
 .text-white{
   font-size: 3rem;
+}
+
+.userIcon {
+  cursor: pointer;
 }
 </style>
