@@ -29,7 +29,6 @@ const errorMessage = ref('');
 const successMessage = ref('');
 
 async function onSubmit(user) {
-  console.log('Form submitted', user);
   // await authStore.fetchCsrfToken();
   if (user.email === undefined || user.password === undefined){
     errorMessage.value = selectLangue?.ref === 'En' ? 'Please fill in all fields !' : 'Veuillez remplir tout les champs';
@@ -37,10 +36,12 @@ async function onSubmit(user) {
   }else{
     try {
       await authStore.login(user);
-      successMessage.value = selectLangue?.ref === 'En' ? 'Login successful !' : 'Connexion reussie';
+      successMessage.value = selectLangue?.ref === 'En' ? 'Login successful !' : 'Connexion reussie !';
       errorMessage.value = '';
+      setTimeout(() => {
+        reloadNuxtApp()
+      }, 2000);
     } catch (error) {
-      console.error('Error during login:', error);
       errorMessage.value = error.message;
       successMessage.value = '';
     }

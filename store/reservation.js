@@ -83,14 +83,11 @@ export const useReservationStore = defineStore('reservation', {
                 method: 'GET',
             })).data.value
         },
-        async loadReservationDataByUserId(userId) {
-            try {
-                const response = await useApiFetch(`/reservations/user/${userId}`);
-                this.data = response.data.value;
-                console.log('Reservations:', this.data);
-            } catch (error) {
-                console.error('Erreur chargement des reservations :', error);
-            }
+        async loadReservationDataByUserId(user_id) {
+            this.data2 = (await useApiFetch(`/reservations/user/` + user_id, {
+                method: 'GET',
+            })).data.value
+
         },
         async updateReservation(reservationData) {
           await useApiFetch(`/reservation/`, + reservationData.id, {

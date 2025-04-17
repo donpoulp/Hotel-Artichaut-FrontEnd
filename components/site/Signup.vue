@@ -45,9 +45,11 @@ async function onSubmitRegister(data) {
         errorMessage.value = registrationError;
         successMessage.value = '';
       } else {
-        successMessage.value = 'Registration successful !';
+        successMessage.value = selectLangue?.ref === 'En' ? 'Registration successful !' : 'Enregistrement reussie !';
         errorMessage.value = '';
-        reloadNuxtApp()
+        setTimeout(() => {
+          reloadNuxtApp()
+        }, 2000);
       }
     } catch (error) {
       console.error('registration error:', error);
@@ -126,7 +128,7 @@ function displayPhoneBis(){
         <UIcon :name="isActiveMail ? 'material-symbols:remove' : 'material-symbols:add'"/>
       </UButton>
 
-      <UFormGroup label="Phone Number">
+      <UFormGroup label="Phone Number" required>
         <UInput v-model="stateR.phone"/>
       </UFormGroup>
 

@@ -87,12 +87,14 @@ watchEffect(() => {
 
 const resModal = ref(false)
 const notif = useToast()
+const reservationId = ref();
 
 async function createReservation(reservation) {
   // console.log(reservation)
   // console.log(authStore.user?.id)
 
   const status = await reservationStore.addReservation(reservation);
+  reservationId.value = sessionStorage.getItem('id_res');
 
   if (status === 201) {
     notif.add({
@@ -122,9 +124,11 @@ async function createReservation(reservation) {
 
   resModal.value = false
 
-  const reservationId = sessionStorage.getItem('id_res');
+  useApiFetch('http://localhost:8000/inscription/' + reservationId.value, {
+    method: 'GET',
+  });
 
-  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId.value;
   window.open(checkoutUrl, '_blank');
 }
 

@@ -48,7 +48,6 @@ const handleFileUpload = (event) => {
     reader.onloadend = () => {
       const base64Image = reader.result;
       state.picture = {'base64': base64Image, 'name': file.name};
-      console.log(state.picture)
     };
     reader.readAsDataURL(file);
   }
@@ -56,48 +55,70 @@ const handleFileUpload = (event) => {
 </script>
 
 
-<template>
-
-    <div class="flex flex-col px-20 pt-10">
-      <h1 v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'" class="text-3xl font-noto"></h1>
-      <div class="py-2">
-        <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" class="" />
-      </div>
-
-      <div class="pb-20 pt-10">
-        <h2 v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'" class="text-2xl font-noto"></h2>
-        <UForm :schema="schema" :state="state" class="flex flex-row items-center w-fit border-2">
-
-          <div class="flex flex-row p-8">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" class="custom-label" required>
-              <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" />
-            </UFormGroup>
-          </div>
-
-          <div class="flex flex-row border-r-2 border-l-2 p-8">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-              <UTextarea v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="w-[580px]"/>
-            </UFormGroup>
-
-          </div>
-
-          <div class="flex flex-row border-r-2 p-8 py-[3.2rem]">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Picture' : 'Photo'" class="custom-label">
-              <UInput class="custom-input" type="file" @change="handleFileUpload($event)"/>
-            </UFormGroup>
-          </div>
-
-          <div class="h-full flex flex-col p-4">
-            <UButton @click="onSubmit(heroStore.data[0])" type="submit" v-text="selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour'"></UButton>
-          </div>
-        </UForm>
-      </div>
+<<template>
+  <div class="flex flex-col pt-10 px-10 pb-10">
+    <h1 class="text-3xl font-noto pb-4 text-gray-800" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h1>
+    <div class="py-2">
+      <Welcome :title="heroStore.data[0][`title${selectLangue?.ref}`]" :description="heroStore.data[0].descriptionEn" :picture="heroStore.data[0].picture" />
     </div>
 
+    <div class="pt-5 mb-10">
+      <div class="flex flex-row justify-between items-center pb-2">
+        <h2 class="text-2xl font-noto text-gray-800" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
+        <UButton @click="onSubmit(heroStore.data[0])" type="submit" class="text-xl font-noto">
+          {{ selectLangue?.ref === 'En' ? 'Update' : 'Mettre à jour' }}
+        </UButton>
+      </div>
 
+      <UForm :schema="schema" :state="state" class="space-y-6">
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            {{ selectLangue?.ref === 'En' ? 'General Information' : 'Informations Générales' }}
+          </h3>
 
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+              <UInput v-model="heroStore.data[0][`title${selectLangue?.ref}`]" />
+            </UFormGroup>
+
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+              <UTextarea rows="2" maxrows="4" v-model="heroStore.data[0][`description${selectLangue?.ref}`]" class="w-full md:w-[580px]" />
+            </UFormGroup>
+          </div>
+        </div>
+
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            {{ selectLangue?.ref === 'En' ? 'Picture' : 'Photo' }}
+          </h3>
+
+          <div class="flex flex-row gap-6">
+            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Upload Image' : 'Télécharger l’image'" class="w-full">
+              <UInput class="custom-input" type="file" @change="handleFileUpload($event)" />
+            </UFormGroup>
+          </div>
+        </div>
+      </UForm>
+    </div>
+  </div>
 </template>
 
 <style scoped>
+.custom-label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #2d3748;
+}
 
+.custom-input {
+  border-radius: 8px;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  transition: border-color 0.3s ease;
+}
+
+.custom-input:focus {
+  border-color: #0D5649;
+  outline: none;
+}
 </style>

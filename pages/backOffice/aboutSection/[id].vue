@@ -138,7 +138,7 @@ const handleFileUpload = (event, params) => {
 <div v-for="about_desc in aboutDescriptionStore.data">
   <div v-if="about_desc.about_section_id == route.params.id">
     <div v-if="about_desc.id == 1">
-      <div class="px-8 pt-2 w-[100%] mb-6">
+      <div class="px-12 pt-4 w-[100%] mb-6">
         <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
         <div class="flex flex-col items-center justify-center h-[80%] bg-center font-noto relative border" :style="{backgroundImage: `url(${about_desc.picture?.[0]?.picturePath})`, backgroundRepeat: 'no-repeat', backgroundSize: 'cover'}">
           <div class="bg-black bg-opacity-50 h h-screen flex items-center">
@@ -151,29 +151,58 @@ const handleFileUpload = (event, params) => {
           </div>
         </div>
 
-        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
-        <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
-            <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
-              <div class="flex text-center items-center whitespace-nowrap p-6">
+        <h2 class="text-3xl font-noto mt-6 mb-2 text-gray-800" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
+        <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm mb-10">
+          <UForm :schema="schema" :state="state" class="space-y-6">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">
+              {{ selectLangue?.ref === 'En' ? 'About Section' : 'Section À propos' }}
+            </h3>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div class="md:col-span-2 space-y-4">
                 <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-                  <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
+                  <UInput v-model="about_desc[`title${selectLangue?.ref}`]" />
                 </UFormGroup>
-              </div>
-              <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
+
                 <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-                  <UTextarea :rows="5" :maxrows="5" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[790px] h-full textearea-strongest"/>
+                  <UTextarea
+                      :rows="5"
+                      :maxrows="5"
+                      v-model="about_desc[`description${selectLangue?.ref}`]"
+                      class="w-full"
+                  />
+                  <span class="text-sm text-gray-500 mt-1 block text-right">
+            {{ about_desc[`description${selectLangue?.ref}`].length }}/600 {{ selectLangue?.ref === 'En' ? 'characters' : 'caractères' }}
+          </span>
                 </UFormGroup>
-                <span class="ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/600 caractère</span>
               </div>
-              <div class="h-full flex flex-col w-[fit-content] px-6 py-[3.9rem] border-r-2">
-                <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
-                  <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, 0)"/>
-                </UFormGroup>
+
+              <!-- Colonne droite : Images -->
+              <div class="space-y-4">
+                <div class="space-y-2">
+                  <UFormGroup
+                      v-for="picture in about_desc.picture"
+                      :key="picture.id"
+                      :label="'Image ' + picture.id"
+                  >
+                    <UInput
+                        type="file"
+                        size="md"
+                        icon="i-heroicons-folder"
+                        @change="handleFileUpload($event, 0)"
+                    />
+                  </UFormGroup>
+                </div>
               </div>
-              <div class="h-full flex flex-col w-[fit-content] p-6">
-                <UButton block @click="onSubmit(about_desc)" class="text-center w-full">Valider</UButton>
-              </div>
-            </UForm>
+            </div>
+
+            <!-- Bouton Valider -->
+            <div class="flex justify-end pt-4">
+              <UButton @click="onSubmit(about_desc)" class="text-center buttonSubmit">
+                {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
+              </UButton>
+            </div>
+          </UForm>
         </div>
       </div>
     </div>
@@ -183,24 +212,6 @@ const handleFileUpload = (event, params) => {
         <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
           <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
           <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
-          <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="isOpen = true"/>
-          <UModal v-model="isOpen">
-            <div class="p-4">
-              <UForm :schema="schema" :state="state">
-                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
-                  <UInput v-model="about_desc.background_color"/>
-                </UFormGroup>
-                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
-                  <UInput v-model="about_desc.background_opacity"/>
-                </UFormGroup>
-                <div class="flex justify-center mt-4">
-                  <UButton @click="onSubmit(about_desc)">
-                    Valider
-                  </UButton>
-                </div>
-              </UForm>
-            </div>
-          </UModal>
         </div>
       </div>
     </div>
@@ -217,51 +228,78 @@ const handleFileUpload = (event, params) => {
               {{ about_desc?.[`description${selectLangue?.ref}`] }}
             </p>
           </div>
-          <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-2" @click="isOpen2 = true"/>
-          <UModal v-model="isOpen2">
-            <div class="p-4">
-              <UForm :schema="schema" :state="state">
-                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
-                  <UInput v-model="about_desc.background_color"/>
-                </UFormGroup>
-                <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
-                  <UInput v-model="about_desc.background_opacity"/>
-                </UFormGroup>
-                <div class="flex justify-center mt-4">
-                  <UButton @click="onSubmit(about_desc)">
-                    Valider
-                  </UButton>
-                </div>
-              </UForm>
-            </div>
-          </UModal>
         </div>
       </div>
     </div>
 
-    <div v-if="about_desc.id == 3 || about_desc.id == 4" class="p-6">
-      <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
-      <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
-        <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
-          <div class="flex text-center items-center whitespace-nowrap p-6">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-              <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
-            </UFormGroup>
+    <div v-if="about_desc.id == 3 || about_desc.id == 4" class="px-8 pt-10">
+      <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
+      <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+        <UForm :schema="schema" :state="state" class="space-y-6">
+          <h3 class="text-lg font-semibold text-gray-700 mb-4">
+            {{ selectLangue?.ref === 'En' ? 'Section Content' : 'Contenu de la section' }}
+          </h3>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Colonne gauche : Titre + Description -->
+            <div class="md:col-span-2 space-y-4">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                <UInput v-model="about_desc[`title${selectLangue?.ref}`]" />
+              </UFormGroup>
+
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+                <UTextarea
+                    :rows="about_desc.id == 3 ? 3 : 8"
+                    :maxrows="about_desc.id == 3 ? 3 : 8"
+                    v-model="about_desc[`description${selectLangue?.ref}`]"
+                    class="w-full"
+                />
+                <span class="text-sm text-gray-500 mt-1 block text-right">
+              {{ about_desc[`description${selectLangue?.ref}`].length }}/200 {{ selectLangue?.ref === 'En' ? 'characters' : 'caractères' }}
+            </span>
+              </UFormGroup>
+            </div>
+
+            <!-- Colonne droite : Images (seulement si id == 4) -->
+            <div v-if="about_desc.id == 4" class="space-y-4">
+              <div class="space-y-2">
+                <UFormGroup
+                    v-for="picture in about_desc.picture"
+                    :key="picture.id"
+                    :label="'Image ' + picture.id"
+                >
+                  <UInput
+                      type="file"
+                      size="md"
+                      icon="i-heroicons-folder"
+                      @change="handleFileUpload($event, 0)"
+                  />
+                </UFormGroup>
+              </div>
+            </div>
           </div>
-          <div class="w-[fit-content] flex flex-row border-r-2 border-l-2 p-6">
-            <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-              <UTextarea v-if="about_desc.id == 3" :rows="3" :maxrows="3" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
-              <UTextarea v-if="about_desc.id == 4" :rows="8" :maxrows="8" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[183px] h-full textearea-strongest"/>
-            </UFormGroup>
-            <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/200 caractère</span>
+
+          <div class="border-t border-gray-200 pt-6 mt-6">
+            <h4 class="font-medium text-gray-700 mb-4">
+              {{ selectLangue?.ref === 'En' ? 'Background Settings' : 'Paramètres de fond' }}
+            </h4>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background color' : 'Couleur de fond'" required>
+                <UInput v-model="about_desc.background_color" placeholder="#FFFFFF" />
+              </UFormGroup>
+
+              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" required>
+                <UInput v-model="about_desc.background_opacity" placeholder="1 ou 0.5..." />
+              </UFormGroup>
+            </div>
           </div>
-          <div v-if="about_desc.id == 4" class="h-full flex flex-col w-[fit-content] px-6 py-[5.75rem] border-r-2">
-            <UFormGroup v-for="picture in about_desc.picture" :label="'image ' + picture.id">
-              <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, 0)"/>
-            </UFormGroup>
-          </div>
-          <div class="h-full flex flex-col w-[200px] p-6">
-            <UButton block @click="onSubmit_restaurant(about_desc)" class="text-center w-full">Valider</UButton>
+
+          <!-- Bouton Valider -->
+          <div class="flex justify-end pt-4">
+            <UButton @click="onSubmit_restaurant(about_desc)" class="text-center buttonSubmit">
+              {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
+            </UButton>
           </div>
         </UForm>
       </div>
@@ -269,7 +307,6 @@ const handleFileUpload = (event, params) => {
 
     <div v-if="about_desc.id == 5">
       <div class="p-8 w-[100%]">
-        <h2 class="text-3xl font-noto mb-2" v-text="selectLangue?.ref === 'En' ? 'Preview' : 'Aperçu'"></h2>
       <div class="flex flex-col items-center justify-center py-20 px-20 border" :style="{backgroundColor: about_desc?.background_color, opacity: about_desc?.background_opacity}">
         <h1 class="font-antic title_bar">{{ about_desc?.[`title${selectLangue?.ref}`] }}</h1>
         <h2 class="font-noto text-black text-center desc_bar">{{ about_desc?.[`description${selectLangue?.ref}`] }}</h2>
@@ -283,48 +320,71 @@ const handleFileUpload = (event, params) => {
             </div>
           </div>
         </div>
-        <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-3" @click="isOpen3 = true"/>
-        <UModal v-model="isOpen3">
-          <div class="p-4">
-            <UForm :schema="schema" :state="state">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
-                <UInput v-model="about_desc.background_color"/>
-              </UFormGroup>
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
-                <UInput v-model="about_desc.background_opacity"/>
-              </UFormGroup>
-              <div class="flex justify-center mt-4">
-                <UButton @click="onSubmit(about_desc)">
-                  Valider
+      </div>
+        <div class="pt-10">
+          <h2 class="text-3xl font-noto mb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
+          <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm">
+            <UForm :schema="schema" :state="state" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="md:col-span-2 space-y-4">
+                  <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
+                    <UInput v-model="about_desc[`title${selectLangue?.ref}`]" />
+                  </UFormGroup>
+
+                  <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
+                    <UTextarea
+                        :rows="4"
+                        :maxrows="4"
+                        v-model="about_desc[`description${selectLangue?.ref}`]"
+                        type="text"
+                        class="w-full"
+                    />
+                    <span class="text-sm text-gray-500 mt-1 block text-right">
+              {{ about_desc[`description${selectLangue?.ref}`].length }}/300 {{ selectLangue?.ref === 'En' ? 'characters' : 'caractères' }}
+            </span>
+                  </UFormGroup>
+                </div>
+
+                <div class="space-y-4">
+                  <UFormGroup
+                      v-for="(picture, index) in about_desc.picture"
+                      :key="index"
+                      :label="'Image ' + picture.id"
+                      class="mt-2"
+                  >
+                    <UInput
+                        type="file"
+                        size="md"
+                        icon="i-heroicons-folder"
+                        @change="handleFileUpload($event, index)"
+                    />
+                  </UFormGroup>
+                </div>
+              </div>
+
+              <div class="border-t border-gray-200 pt-6 mt-6">
+                <h4 class="font-medium text-gray-700 mb-4">
+                  {{ selectLangue?.ref === 'En' ? 'Background Settings' : 'Paramètres de fond' }}
+                </h4>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background color' : 'Couleur de fond'" required>
+                    <UInput v-model="about_desc.background_color" placeholder="#FFFFFF" />
+                  </UFormGroup>
+
+                  <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" required>
+                    <UInput v-model="about_desc.background_opacity" placeholder="1 ou 0.5..." />
+                  </UFormGroup>
+                </div>
+              </div>
+
+              <div class="flex justify-end pt-4">
+                <UButton @click="onSubmit_spa(about_desc)" class="buttonSubmit">
+                  {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
                 </UButton>
               </div>
             </UForm>
           </div>
-        </UModal>
-      </div>
-        <h2 class="text-3xl font-noto mt-4 mb-2" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h2>
-        <div class="back-office-strongest-modify flex flex-col w-[fit-content]">
-          <UForm :schema="schema" :state="state" class="flex flex-row items-center w-[fit-content] border-2">
-            <div class="flex text-center items-center whitespace-nowrap p-6">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-                <UInput v-model="about_desc[`title${selectLangue?.ref}`]" class="w-[fit-content]"></UInput>
-              </UFormGroup>
-            </div>
-            <div class="w-[fit-content] h-full flex flex-row border-l-2 px-6 py-[4.25rem]">
-              <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-                <UTextarea :rows="4" :maxrows="4" v-model="about_desc[`description${selectLangue?.ref}`]" type="text" class="w-[500px] h-full textearea-strongest"/>
-              </UFormGroup>
-              <span class="text-right pr-2 ml-2 bottom-0 flex items-end">{{about_desc[`description${selectLangue?.ref}`].length}}/300 caractère</span>
-            </div>
-            <div class="h-full flex flex-col w-fit p-6 border-r-2 border-l-2">
-              <UFormGroup v-for="(picture, index) in about_desc.picture" :key="index" :label="'image ' + picture.id" class="mt-2">
-                <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event, index)"/>
-              </UFormGroup>
-            </div>
-            <div class="h-full flex w-[fit-content] p-6">
-              <UButton block @click="onSubmit_spa(about_desc)" class="text-center w-full">Valider</UButton>
-            </div>
-          </UForm>
         </div>
     </div>
   </div>

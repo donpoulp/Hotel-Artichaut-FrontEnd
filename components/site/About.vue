@@ -12,6 +12,7 @@ const bgOpacity = aboutStore.data[0].background_opacity
 </script>
 
 <template>
+  <div class="flex flex-row py-20 justify-between px-60" :style="{ backgroundColor: bgColor, opacity: bgOpacity / 100 }">
   <div class=" h-full flex flex-col justify-around py-20 background_about md:flex-row ">
     <Hostel/>
     <Restaurant/>
@@ -20,8 +21,5 @@ const bgOpacity = aboutStore.data[0].background_opacity
 </template>
 
 <style scoped>
-.background_about{
-  background-color: v-bind(bgColor);
-  opacity: v-bind(bgOpacity);
-}
+
 </style>

@@ -90,7 +90,6 @@ const isSmallScreen = ref(false)
                 <Button class="Button" :title="selectLangue?.ref === 'En' ? 'To book' : 'Réserver'" route='site-bedroomType-id' :route_params="{ id: bedroomType?.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>
-            <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalBedroomTypeColor(bedroomType.id)" :style="{ 'display': display }"/>
           </Slide>
           <template #addons class="addonsCarrousel">
             <Navigation />
@@ -144,6 +143,7 @@ const isSmallScreen = ref(false)
       </UForm>
     </div>
   </UModal>
+    </section>
 </template>
 
 <style scoped>
@@ -161,7 +161,7 @@ img, video {
   font-family: "Antic Didone",serif;
   font-weight: lighter;
   text-align: center;
-  background: black;
+  background: -webkit-linear-gradient(0deg, #D8D27D 30%, #726F42 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   padding-top: 2%;
