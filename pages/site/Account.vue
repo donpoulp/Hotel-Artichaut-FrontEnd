@@ -213,7 +213,7 @@ function displayPhoneBis(){
             <div class="text-sm text-gray-700 space-y-2">
               <p>
                 <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'Bedroom type :' : 'Type de chambre :' }}</span>
-                {{ reservation.bedroom_type[`name${selectLangue?.ref}`] }}
+                {{ reservation.bedroom_type }}
               </p>
               <p>
                 <span class="font-semibold text-[#072527]">{{ selectLangue?.ref === 'En' ? 'Price:' : 'Prix :' }}</span>
