@@ -83,34 +83,6 @@ function displayPhoneBis(){
 </script>
 
 <template>
-<<<<<<< HEAD
-    <div class="signup-container">
-        <div class="header">
-            <UIcon
-                name="icon-park-outline:return"
-                class="returnIcon"
-                @click="$emit('close-modal-signup')"
-            />
-        </div>
-
-        <form class="signup-form">
-            <div class="inputs">
-                <p>Sign Up</p>
-                <input type="text" placeholder="Last Name">
-                <input type="text" placeholder="First Name">
-                <input type="email" placeholder="Email">
-                <input type="email" placeholder="Email bis">
-                <input type="password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password">
-                <input type="tel" placeholder="Phone Number">
-                <input type="tel" placeholder="Phone Number bis">
-            </div>
-            <div class="buttons">
-                <button>Sign Up</button>
-                <button>Sign In</button>
-            </div>
-        </form>
-=======
   <div class="signup-container">
 
     <div class="header">
@@ -119,7 +91,6 @@ function displayPhoneBis(){
           class="returnIcon"
           @click="$emit('close-modal-signup')"
       />
->>>>>>> d3f8c4d26520901a287d12777ea49afcb02d1ac6
     </div>
 
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
