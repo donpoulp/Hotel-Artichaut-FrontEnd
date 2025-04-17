@@ -140,17 +140,17 @@ function addService(service_id) {
 
 function checkLogin() {
   const currentUser = authStore.user?.id
-  // const reservationId = sessionStorage.getItem('id_res');
+   const reservationId = sessionStorage.getItem('id_res');
   if (currentUser == undefined) {
     console.log("ereure fait ce connecter")
     notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
-    // console.log("User connected")
+    console.log("User connected")
 
     //envois mail (uniquement compte admin tristan)
 
-    // const mailUrl = 'http://localhost:8000/inscription/' + reservationId;
-    // window.open(mailUrl, '_blank');
+    const mailUrl = 'http://localhost:8000/inscription/' + reservationId;
+    window.open(mailUrl, '_blank');
 
     resModal.value = true
   }
