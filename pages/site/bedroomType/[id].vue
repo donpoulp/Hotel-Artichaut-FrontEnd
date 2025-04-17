@@ -87,12 +87,14 @@ watchEffect(() => {
 
 const resModal = ref(false)
 const notif = useToast()
+const reservationId = ref();
 
 async function createReservation(reservation) {
   // console.log(reservation)
   // console.log(authStore.user?.id)
 
   const status = await reservationStore.addReservation(reservation);
+  reservationId.value = sessionStorage.getItem('id_res');
 
   if (status === 201) {
     notif.add({
@@ -122,9 +124,11 @@ async function createReservation(reservation) {
 
   resModal.value = false
 
-  const reservationId = sessionStorage.getItem('id_res');
+  useApiFetch('http://localhost:8000/inscription/' + reservationId.value, {
+    method: 'GET',
+  });
 
-  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId;
+  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId.value;
   window.open(checkoutUrl, '_blank');
 }
 
@@ -140,18 +144,10 @@ function addService(service_id) {
 
 function checkLogin() {
   const currentUser = authStore.user?.id
-  // const reservationId = sessionStorage.getItem('id_res');
   if (currentUser == undefined) {
     console.log("ereure fait ce connecter")
     notif.add({ title: 'Veuillez vous connecter pour poursuivre la réservation.'})
   } else {
-    // console.log("User connected")
-
-    //envois mail (uniquement compte admin tristan)
-
-    // const mailUrl = 'http://localhost:8000/inscription/' + reservationId;
-    // window.open(mailUrl, '_blank');
-
     resModal.value = true
   }
 }
