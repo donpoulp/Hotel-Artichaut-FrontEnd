@@ -92,7 +92,6 @@ console.log(servicesStore.data)
               <div class="text-[64px] font-antic pl-[25%] pb-10">{{ service[`name${selectLangue.ref}`] }}</div>
               <div class="text-[28px] font-noto text-center p-2">{{ service[`description${selectLangue.ref}`] }}</div>
             </div>
-            <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalColor(service.id)"/>
           </div>
 
           <div v-else class="flex flex-row items-center bg-[#0D5649]">
@@ -101,69 +100,88 @@ console.log(servicesStore.data)
               <div class="text-[28px] font-noto text-center p-2">{{ service[`description${selectLangue.ref}`] }}</div>
             </div>
             <img class="w-[50%] z-0" :src="service.picture[0].picturePath"/>
-            <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalColor(service.id)"/>
           </div>
 
           <div class="flex flex-col pt-10 mb-20">
             <h1 class="text-3xl font-noto pb-4" v-text="selectLangue?.ref === 'En' ? 'Modify' : 'Modifier'"></h1>
-            <div class="flex flex-col w-[fit-content] mb-6">
-                <UForm :schema="schema" :state="state" class="flex flex-row items-center border-2">
-                  <div class="flex text-center items-center whitespace-nowrap py-[8.25rem] px-8 border-r-2">
-                    Section : {{service.id}}
-                  </div>
-                  <div class="flex flex-row justify-center items-center p-8">
+
+            <div class="bg-gray-50 border border-gray-200 rounded-xl p-6 shadow-sm w-full">
+              <UForm :schema="schema" :state="state" class="space-y-6">
+                <div class="text-lg font-semibold text-gray-700">
+                  Section : {{ service.id }}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <!-- Titre & Description -->
+                  <div class="md:col-span-2 space-y-4">
                     <UFormGroup :label="selectLangue?.ref === 'En' ? 'Title' : 'Titre'" required>
-                      <UInput v-model="service[`name${selectLangue?.ref}`]"></UInput>
+                      <UInput v-model="service[`name${selectLangue?.ref}`]" />
                     </UFormGroup>
-                  </div>
-                  <div class="flex flex-col p-8 py-[4.7rem] border-r-2 border-l-2">
+
                     <UFormGroup :label="selectLangue?.ref === 'En' ? 'Content' : 'Contenu'" required>
-                      <UTextarea rows="4" maxrows="4" v-model="service[`description${selectLangue?.ref}`]" class="w-[490px] textarea_backoffice_news"></UTextarea>
-                      <span class="float-right text-[15px]">{{service[`description${selectLangue?.ref}`].length}}/300 caractère</span>
+                      <UTextarea
+                          rows="4"
+                          maxrows="4"
+                          v-model="service[`description${selectLangue?.ref}`]"
+                          class="w-full"
+                      />
+                      <span class="text-sm text-gray-500 block text-right mt-1">
+              {{ service[`description${selectLangue?.ref}`].length }}/300 {{ selectLangue?.ref === 'En' ? 'characters' : 'caractères' }}
+            </span>
                     </UFormGroup>
                   </div>
-                  <div>
-                    <div class="p-6">
-                        <UFormGroup :label="'image ' + service.picture[0].id" class="mb-2">
-                          <UInput type="file" size="md" icon="i-heroicons-folder" @change="handleFileUpload($event)"/>
-                        </UFormGroup>
-                    </div>
+
+                  <!-- Image -->
+                  <div class="space-y-4">
+                    <UFormGroup :label="'Image ' + service.picture[0].id" class="mb-2">
+                      <UInput
+                          type="file"
+                          size="md"
+                          icon="i-heroicons-folder"
+                          @change="handleFileUpload($event)"
+                      />
+                    </UFormGroup>
                   </div>
-                  <div class="py-[7.80rem] px-6 border-l-2">
-                    <UButton block @click="onSubmit(service)" class="text-center h-10 w-full buttonSubmit">Valider</UButton>
+                </div>
+
+                <!-- 🎨 Couleurs de fond -->
+                <div class="border-t border-gray-200 pt-6 mt-6">
+                  <h4 class="font-medium text-gray-700 mb-4">
+                    {{ selectLangue?.ref === 'En' ? 'Background Settings' : 'Paramètres de fond' }}
+                  </h4>
+
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background color 1' : 'Couleur de fond 1'" required>
+                      <UInput v-model="service.backgroundText_color_1" placeholder="#FFFFFF" />
+                    </UFormGroup>
+
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity 1' : 'Opacité 1'" required>
+                      <UInput v-model="service.backgroundText_opacity_1" placeholder="1 ou 0.5..." />
+                    </UFormGroup>
                   </div>
-                </UForm>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Background color 2' : 'Couleur de fond 2'" required>
+                      <UInput v-model="service.backgroundText_color_2" placeholder="#FFFFFF" />
+                    </UFormGroup>
+
+                    <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity 2' : 'Opacité 2'" required>
+                      <UInput v-model="service.backgroundText_opacity_2" placeholder="1 ou 0.5..." />
+                    </UFormGroup>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex justify-end pt-4">
+                  <UButton @click="onSubmit(service)" class="buttonSubmit w-full md:w-auto">
+                    {{ selectLangue?.ref === 'En' ? 'Submit' : 'Valider' }}
+                  </UButton>
+                </div>
+              </UForm>
             </div>
           </div>
         </div>
-
     </div>
   </div>
-
-  <UModal v-model="isOpen">
-    <div class="p-4">
-      <UForm :schema="schema" :state="state">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" required>
-          <UInput v-model="servicesStore.data2.backgroundText_color_1"/>
-        </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
-          <UInput v-model="servicesStore.data2.backgroundText_opacity_1"/>
-        </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'" class="mt-3" required>
-          <UInput v-model="servicesStore.data2.backgroundText_color_2"/>
-        </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3" required>
-          <UInput v-model="servicesStore.data2.backgroundText_opacity_2"/>
-        </UFormGroup>
-
-        <div class="flex justify-center mt-4">
-          <UButton @click="onSubmit(servicesStore.data2)">
-            Valider
-          </UButton>
-        </div>
-      </UForm>
-    </div>
-  </UModal>
 </template>
 
 <style scoped>

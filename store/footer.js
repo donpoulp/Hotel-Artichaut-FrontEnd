@@ -16,7 +16,6 @@ export const useFooterStore = defineStore('footer', {
                 method: 'PUT',
                 body: JSON.stringify(newData)
             });
-            this.data = newData;
         }
     }
 })

@@ -77,33 +77,13 @@ async function onSubmit(about) {
                 <Button class="Button" :title="selectLangue?.ref === 'En' ? 'To book' : 'Réserver'" route='site-bedroomType-id' :route_params="{ id: bedroomType?.id }" width="250px" height="80px" fontSize="35px"/>
               </div>
             </div>
-            <UButton icon="material-symbols:colors" color="lime" variant="soft" class="modify-color-1" @click="openModalBedroomTypeColor(bedroomType.id)" :style="{ 'display': display }"/>
           </Slide>
           <template #addons class="addonsCarrousel">
             <Navigation />
           </template>
         </Carousel>
       </div>
-
     </section>
-
-  <UModal v-model="isOpen">
-    <div class="p-4">
-      <UForm :schema="schema" :state="state">
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Color' : 'Couleur'">
-          <UInput v-model="bedroomTypeStore.data2.background_color"/>
-        </UFormGroup>
-        <UFormGroup :label="selectLangue?.ref === 'En' ? 'Opacity' : 'Opacité'" class="mt-3">
-          <UInput v-model="bedroomTypeStore.data2.background_opacity"/>
-        </UFormGroup>
-        <div class="flex justify-center mt-4">
-          <UButton @click="onSubmit(bedroomTypeStore.data2)">
-            Valider
-          </UButton>
-        </div>
-      </UForm>
-    </div>
-  </UModal>
 </template>
 
 <style scoped>
