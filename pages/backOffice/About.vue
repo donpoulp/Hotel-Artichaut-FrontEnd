@@ -9,6 +9,7 @@ import {reactive} from "vue";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectedLangue = useState('selectedLangue');

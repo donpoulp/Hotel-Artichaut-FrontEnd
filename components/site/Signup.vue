@@ -85,15 +85,14 @@ function displayPhoneBis(){
 </script>
 
 <template>
-  <div class="signup-container">
-
-    <div class="header">
-      <UIcon
-          name="icon-park-outline:return"
-          class="returnIcon"
-          @click="$emit('close-modal-signup')"
-      />
-    </div>
+    <div class="signup-container">
+        <div class="header">
+            <UIcon
+                name="icon-park-outline:return"
+                class="returnIcon"
+                @click="$emit('close-modal-signup')"
+            />
+        </div>
 
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>

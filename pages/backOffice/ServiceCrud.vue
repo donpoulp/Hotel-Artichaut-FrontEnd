@@ -6,6 +6,7 @@ import type {FormSubmitEvent} from "#ui/types";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');
@@ -162,8 +163,8 @@ async function onSubmitAdd(event: FormSubmitEvent<Schema>) {
   }
   const formData = {
     id: event.data.id,
-    titleFr: event.data.titleFr,
-    titleEn: event.data.titleEn,
+    nameFr: event.data.nameFr,
+    nameEn: event.data.nameEn,
     descriptionEn: event.data.descriptionEn,
     descriptionFr: event.data.descriptionFr,
     duration: event.data.duration,
@@ -171,12 +172,12 @@ async function onSubmitAdd(event: FormSubmitEvent<Schema>) {
     quantity: event.data.quantity,
     time: event.data.time,
     backgroundText_color_1: event.data.backgroundText_color_1,
-    backgroundText_opacity_1: event.data.backgroundText_color_1,
+    backgroundText_opacity_1: event.data.backgroundText_opacity_1,
     backgroundText_color_2: event.data.backgroundText_color_2,
-    backgroundText_opacity_2: event.data.backgroundText_color_2,
+    backgroundText_opacity_2: event.data.backgroundText_opacity_2,
     picture: state_service.picture,
   };
-  await servicesStore.updateServiceData(formData);
+  await servicesStore.addServiceData(formData);
   reloadNuxtApp()
 }
 
@@ -207,8 +208,8 @@ async function onSubmitModify(service) {
   }
   const formData = {
     id: service.id,
-    titleFr: service.titleFr,
-    titleEn: service.titleEn,
+    nameFr: service.nameFr,
+    nameEn: service.nameEn,
     descriptionEn: service.descriptionEn,
     descriptionFr: service.descriptionFr,
     duration: service.duration,
@@ -216,9 +217,9 @@ async function onSubmitModify(service) {
     quantity: service.quantity,
     time: service.time,
     backgroundText_color_1: service.backgroundText_color_1,
-    backgroundText_opacity_1: service.backgroundText_color_1,
+    backgroundText_opacity_1: service.backgroundText_opacity_1,
     backgroundText_color_2: service.backgroundText_color_2,
-    backgroundText_opacity_2: service.backgroundText_color_2,
+    backgroundText_opacity_2: service.backgroundText_opacity_2,
     picture: state_service.picture,
   };
   await servicesStore.updateServiceData(formData);

@@ -7,6 +7,7 @@ import {forEach} from "superjson/dist/util";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');

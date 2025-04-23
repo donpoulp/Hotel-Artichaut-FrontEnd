@@ -4,9 +4,16 @@ import DropDownMenu from "~/components/backOffice/DropDownMenu.vue";
 const selectLangue = useState('selectedLangue');
 
 import { useRouter } from 'vue-router';
+import {useAuthStore} from "~/store/auth";
 
 const router = useRouter();
-console.log(router.getRoutes()); // Affiche toutes les routes
+
+const authStore = useAuthStore();
+
+onMounted(async () => {
+  await authStore.hydrateStore();
+});
+
 </script>
 
 <template>
@@ -14,8 +21,10 @@ console.log(router.getRoutes()); // Affiche toutes les routes
     <div class="top-left-side-bar">
       <img src="/public/back-office-img/fauxuser.png">
       <div class="top-left-side-bar-content">
-        <p>Admin1253</p>
-        <button class="btn-top-left-side-bar-content">Profile</button>
+        <p class="text-sm text-gray-800">{{ authStore.user?.firstName }} {{ authStore.user?.lastName }}</p>
+        <NuxtLink class="btn-top-left-side-bar-content text-center" to="/site/Account">
+          <button v-text="selectLangue?.ref === 'En' ? 'View profil' : 'Voir le profile'"></button>
+        </NuxtLink>
       </div>
     </div>
 
@@ -104,7 +113,6 @@ console.log(router.getRoutes()); // Affiche toutes les routes
   justify-content: center;
 }
 .top-left-side-bar-content p{
-  font-size: 20px;
   font-family: "Noto Serif", serif;
 }
 .btn-top-left-side-bar-content{
