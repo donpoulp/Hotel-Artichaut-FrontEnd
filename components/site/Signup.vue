@@ -94,24 +94,6 @@ function displayPhoneBis(){
             />
         </div>
 
-        <form class="signup-form">
-            <div class="inputs">
-                <p>Sign Up</p>
-                <input type="text" placeholder="Last Name">
-                <input type="text" placeholder="First Name">
-                <input type="email" placeholder="Email">
-                <input type="email" placeholder="Email bis">
-                <input type="password" placeholder="Password">
-                <input type="password" placeholder="Confirm Password">
-                <input type="tel" placeholder="Phone Number">
-                <input type="tel" placeholder="Phone Number bis">
-            </div>
-            <div class="buttons">
-                <button>Sign Up</button>
-                <button>Sign In</button>
-            </div>
-        </form>
-
     <UForm :schema="schemaR" :state="stateR" class="px-44 space-y-4">
       <p class="font-antic text-center text-3xl pt-5">Sign Up</p>
 

@@ -1,5 +1,4 @@
 <script setup lang="ts">
-// import { onMounted } from 'vue';
 import {useReservationStore} from "~/store/reservation";
 import { z } from 'zod'
 import {computed, reactive} from "vue";
@@ -11,6 +10,7 @@ import {useUserStore} from "~/store/user";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');
@@ -23,6 +23,7 @@ const userStore = useUserStore()
 onMounted(async () => {
   await reservationStore.loadReservationData();
   await serviceStore.loadServicesData();
+  await userStore.loadUserData();
 });
 
 const serviceList = serviceStore.data;
@@ -228,7 +229,7 @@ async function onSubmitModify(reservation) {
   console.log(reservationStore.data2[0].id);
 
   await reservationStore.updateReservationFromBo(reservation, reservationStore.data2[0].id)
-  //reloadNuxtApp()
+  reloadNuxtApp()
 }
 
 const page = ref(1)

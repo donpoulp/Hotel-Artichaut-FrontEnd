@@ -6,6 +6,7 @@ import {useStrongestSectionStore} from "~/store/strongest-section";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');

@@ -13,6 +13,7 @@ import {useAboutSectionStore} from "~/store/about_section.js";
 import {useAboutDescriptionStore} from "~/store/about_description.js";
 import {useBedroomTypeStore} from "~/store/bedroom-type.js";
 import {useAuthStore} from "~/store/auth.js";
+import {useDashboardStore} from "~/store/dashboard.js";
 
 export default defineNuxtPlugin(async () => {
 
@@ -30,6 +31,7 @@ export default defineNuxtPlugin(async () => {
     const bedroomStore = useBedroomStore()
     const bedroomTypeStore = useBedroomTypeStore()
     const authStore = useAuthStore()
+    const dashboardStore = useDashboardStore()
 
     await strongestSectionStore.loadStrongestSectionData()
     await strongestStore.loadStrongestData()
@@ -37,14 +39,15 @@ export default defineNuxtPlugin(async () => {
     await footerStore.loadFooterData()
     await newsStore.loadNewsData()
     await reservationStore.loadReservationData()
-    await userStore.loadUserData()
     await bedroomStore.loadBedroomData()
     await servicesStore.loadServicesData()
     await aboutStore.loadAboutData()
     await aboutSectionStore.loadAboutSectionData()
     await aboutDescriptionStore.loadAboutDescriptionData()
     await bedroomTypeStore.loadBedroomTypeData()
-
+    await userStore.loadUserData()
+    authStore.hydrateStore()
+    await dashboardStore.loadReservationsPerMonthData();
 
     return {
         provide:{
@@ -61,7 +64,8 @@ export default defineNuxtPlugin(async () => {
             aboutSection: useAboutSectionStore(),
             aboutDescription: useAboutDescriptionStore(),
             bedroomType: useBedroomTypeStore(),
-            auth: useAuthStore()
+            auth: useAuthStore(),
+            dashboard: useDashboardStore(),
         }
     }
 })
