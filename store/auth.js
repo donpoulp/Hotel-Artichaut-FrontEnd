@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
         async register(userData) {
             try {
                 // Effectuer la requête avec fetch
-                const response = await fetch(`http://163.172.156.97:8000/api/register`, {
+                const response = await fetch(`http://localhost:8000/api/register`, {
                     method: 'POST',
                     body: JSON.stringify(userData),
                     headers: {

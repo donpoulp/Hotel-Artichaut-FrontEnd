@@ -5,7 +5,7 @@ const credentials = reactive({
   password: '',
 })
 async function login() {
-  $fetch('http://163.172.156.97:8000/api/login', {
+  $fetch('http://localhost:8000/api/login', {
     method: 'POST',
     body: credentials
   })

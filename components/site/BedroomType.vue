@@ -11,7 +11,7 @@ const carouselConfig = {
 }
 const bedroomTypeStore = useBedroomTypeStore()
 
-const { status, data: bedroomsTypes } = useFetch('http://163.172.156.97:8000/api/bedroomType', {lazy: true})
+const { status, data: bedroomsTypes } = useFetch('http://localhost:8000/api/bedroomType', {lazy: true})
 
 const selectLangue = useState('selectedLangue');
 
