@@ -1,0 +1,10 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: artichaut_front
+    ports:
+      - '3000:3000'
+    environment:
+      API_URL: http://163.172.156.97:8000
