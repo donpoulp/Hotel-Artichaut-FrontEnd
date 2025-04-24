@@ -5,7 +5,8 @@ import Welcome from "~/components/site/Welcome.vue";
 import {useHeroStore} from "~/store/hero.js";
 
 definePageMeta({
-layout: 'back-office',
+  layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');

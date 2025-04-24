@@ -6,6 +6,7 @@ import type { FormSubmitEvent } from '#ui/types'
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');
@@ -213,7 +214,6 @@ function displayPhoneBis(){
   }
 }
 
-// Modal Add - select
 const selected_role = [0, 1, 2]
 const select = ref(selected_role[0])
 

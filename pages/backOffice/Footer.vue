@@ -7,6 +7,7 @@ import Welcome from "~/components/site/Welcome.vue";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');

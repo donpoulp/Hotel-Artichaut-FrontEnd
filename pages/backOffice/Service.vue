@@ -7,6 +7,7 @@ import {reactive} from "vue";
 
 definePageMeta({
   layout: 'back-office',
+  middleware: 'auth',
 })
 
 const selectLangue = useState('selectedLangue');
@@ -34,13 +35,13 @@ const state = reactive({
 })
 
 async function onSubmit(service) {
-  if (service?.[`name${selectLangue.value.ref}`]?.length > 22 || service?.[`description${selectLangue.value.ref}`]?.length > 300) {
+  if (service?.[`name${selectLangue.value.ref}`]?.length > 50 || service?.[`description${selectLangue.value.ref}`]?.length > 300) {
     alert("trop de caractere")
   }else {
     const formData = {
       id: service.id,
-      titleFr: service.nameFr,
-      titleEn: service.nameEn,
+      nameFr: service.nameFr,
+      nameEn: service.nameEn,
       descriptionFr: service.descriptionFr,
       descriptionEn: service.descriptionEn,
       backgroundText_color_1: service.backgroundText_color_1,

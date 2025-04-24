@@ -24,7 +24,7 @@ const selectLangue = useState('selectedLangue');
             <ul>
               <li><strong>Contact</strong> : 08 95 69 69 29 (0,40€ / min)</li>
                 <li><strong v-text="selectLangue?.ref === 'En' ? 'Adress' : 'Adresse'"></strong> : Rue du Président Favre</li>
-                <li><strong v-text="selectLangue?.ref === 'En' ? 'Privay policy' : 'Politique de confidentialité'"></strong></li>
+                <li class="text-center mt-2 italic"><strong class="font-normal" v-text="selectLangue?.ref === 'En' ? 'Privay policy' : 'Politique de confidentialité'"></strong></li>
             </ul>
         </div>
         <div class="sectionMap">
