@@ -1,5 +1,5 @@
 # Use the official Node.js image from the DockerHub
-FROM node:latest
+FROM node:20-slim AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -16,11 +16,16 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Expose the port the app runs on
+FROM node:20-slim AS runner
+
+WORKDIR /app
+
+# Copy build output from builder stage
+COPY --from=builder /app/.output ./.output
+COPY --from=builder /app/package.json ./
+
+RUN npm install
+
 EXPOSE 3000
 
-# Command to run the application
-CMD ["npm", "run", "dev"]
-
-
-
+CMD ["node", ".output/server/index.mjs"]

@@ -1,10 +1,14 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: artichaut_front
+    image: front:latest
+    container_name: front_test
     ports:
       - '3000:3000'
     environment:
-      API_URL: http://localhost:8000
+      API_URL: http://app:80
+    networks:
+      - artichaut-net
+
+networks:
+  artichaut-net:
+    external: true

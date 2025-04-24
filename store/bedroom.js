@@ -11,6 +11,7 @@ export const useBedroomStore = defineStore('bedroom', {
     actions: {
         async loadBedroomData(){
             this.data = (await useApiFetch(`/bedroom`)).data.value
+            console.log(this.data)
 
             this.data.forEach((bedroom) =>{
                 if (bedroom.updated_at) {

@@ -23,13 +23,22 @@ export const useAuthStore = defineStore('auth', {
         async register(userData) {
             try {
                 // Effectuer la requête avec fetch
-                const response = await fetch(`http://localhost:8000/api/register`, {
+
+                const response = await fetch(`http://app:80/api/register`, {
                     method: 'POST',
                     body: JSON.stringify(userData),
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
+
+                // const response = await fetch(`http://artichaut_back:8000/api/register`, {
+                //     method: 'POST',
+                //     body: JSON.stringify(userData),
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                // });
 
                 if (!response.ok) {
                     const errorData = await response.json();

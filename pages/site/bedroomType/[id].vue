@@ -18,7 +18,7 @@ const carouselConfig = {
 
 const serviceStore = useServicesStore();
 
-const {data: bedroomsType} = useFetch('http://localhost:8000/api/bedroomType/' + route.params.id, {lazy: true})
+const {data: bedroomsType} = useFetch(`http://app:80/api/bedroomType/` + route.params.id, {lazy: true})
 
 const selectLangue = useState('selectedLangue');
 
@@ -124,11 +124,11 @@ async function createReservation(reservation) {
 
   resModal.value = false
 
-  useApiFetch('http://localhost:8000/inscription/' + reservationId.value, {
+  useApiFetch(`http://app:80/inscription/` + reservationId.value, {
     method: 'GET',
   });
 
-  const checkoutUrl = 'http://localhost:8000/checkout/' + reservationId.value;
+  const checkoutUrl = `http://app:80/checkout/` + reservationId.value;
   window.open(checkoutUrl, '_blank');
 }
 
